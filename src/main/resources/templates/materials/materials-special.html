@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="fragments/head::materials"/>
+<body>
+<th:block th:replace="fragments/navbar"/>
+<div class="container">
+    <!-- Feature List - START -->
+    <div class="row">
+
+        <div>
+            <div class="row">
+                <form action="/special/add" method="POST">
+                    <div class="col-md-12 form-group">
+                        <input type="hidden" id="csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+                        <div class="row">
+                            <div class="col-md-3 form-group">
+                                <label>Product</label>
+                                <!--<div class=""-->
+                                <!--th:classappend="${#fields.hasErrors('name')} ? 'has-danger'"/>-->
+                                <input type="text" id="productName" name="productName" class="form-control"
+                                       placeholder="Create"/>
+                                <small>OR</small>
+                                <div class="selectContainer">
+                                    <select id="productName" name="productName"
+                                            class="form-control" title="Choose Product">
+                                        <option value="">Select</option>
+                                        <th:block th:each="specificProduct: ${specificProducts}">
+                                            <option><span th:text="${specificProduct.name}" th:value="${specificProduct.name}"/>
+                                            </option>
+                                        </th:block>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3 form-group">
+                                <label>Color</label>
+                                <!--<div class=""-->
+                                <!--th:classappend="${#fields.hasErrors('name')} ? 'has-danger'"/>-->
+                                <input type="text" id="colorName" name="colorName" class="form-control"
+                                       placeholder="Create"/>
+                                <small>OR</small>
+                                <div class="selectContainer">
+                                    <select id="colorName" name="colorName"
+                                            class="form-control" title="Choose Color">
+                                        <option value="">Select</option>
+                                        <th:block th:each="color: ${colors}">
+                                            <option><span th:text="${color.name}" th:value="${color.name}"/>
+                                            </option>
+                                        </th:block>
+                                    </select>
+                                </div>
+
+                            </div>
+                            <div class="col-md-3 form-group">
+                                <label>Manufacturer</label>
+                                <!--<div class=""-->
+                                <!--th:classappend="${#fields.hasErrors('name')} ? 'has-danger'"/>-->
+                                <input type="text" id="manufacturerName" name="manufacturerName" class="form-control"
+                                       placeholder="Create"/>
+                                <small>OR</small>
+                                <div class="selectContainer">
+                                    <select id="manufacturerName" name="manufacturerName"
+                                            class="form-control" title="Choose Color">
+                                        <option value="">Select</option>
+                                        <th:block th:each="manufactorer: ${manufactorers}">
+                                            <option><span th:text="${manufactorer.name}" th:value="${manufactorer.name}"/>
+                                            </option>
+                                        </th:block>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3 form-group">
+                                <label>Manuf Code</label>
+                                <!--<div class=""-->
+                                <!--th:classappend="${#fields.hasErrors('name')} ? 'has-danger'"/>-->
+                                <input type="text" id="manufCodeName" name="manufCodeName" class="form-control"
+                                       placeholder="Create"/>
+                                <small>OR</small>
+                                <div class="selectContainer">
+                                    <select id="manufCodeName" name="manufCodeName"
+                                            class="form-control" title="Choose Color">
+                                        <option value="">Select</option>
+                                        <th:block th:each="manufCode: ${manufCodes}">
+                                            <option><span th:text="${manufCode.name}" th:value="${manufCode.name}"/>
+                                            </option>
+                                        </th:block>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                    <div  class="page col-xs-offset-5 col-sm-4 form-group">
+                        <input class="btn btn-default btn-outline btn-circle" type="submit"
+                               value="Create Specific Material"/>
+                    </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div id="positionMaterials" class="row">
+            <div id="Navigation">
+                <ul class="Navigation">
+                    <li>
+                        <a th:href="@{'/materials/frame'}">
+                            <h5>Frame</h5><b class="caret"></b>
+                        </a>
+                        <ul th:each="frame : ${frames}">
+                            <li>
+                                <a th:href="@{/materials/frame/{product}(product=${frame.material})}">
+                                    <span th:text="${frame.material}"/>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a th:href="@{'/materials/finish'}">
+                            <h5>Finish</h5><b class="caret"></b>
+                        </a>
+                        <ul th:each="fin : ${finish}">
+                            <li>
+                                <a th:href="@{/materials/finish/{product}(product=${fin.material})}">
+                                    <span th:text="${fin.material}"/>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a th:href="@{'/materials/top'}">
+                            <h5>Tops-Seats</h5><b class="caret"></b>
+                        </a>
+                        <ul th:each="top : ${tops}">
+                            <li>
+                                <a th:href="@{/materials/top/{product}(product=${top.material})}">
+                                    <span th:text="${top.material}"/>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a th:href="@{'/materials/special'}">
+                            <h5>Materials Tops/Seats</h5><b class="caret"></b>
+                        </a>
+                        <ul>
+                            <li>
+                                <a th:href="@{/materials/special/product}">
+                                    <span>Product</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a th:href="@{/materials/special/color}">
+                                    <span>Color</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a th:href="@{/materials/special/manufacturer}">
+                                    <span>Manufaturer</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a th:href="@{/materials/special/manufcode}">
+                                    <span>Manuf Code</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="conteiner">
+            <table class="text-center table table-hover">
+                <thead>
+                <tr>
+                    <td>
+                        <span>Product</span>
+                    </td>
+                    <td>
+                        <span>Color</span>
+                    </td>
+                    <td>
+                        <span>Manufacturer</span>
+                    </td>
+                    <td>
+                        <span>Manuf Code</span>
+                    </td>
+                    <td>
+                        <span>Edit</span>
+                    </td>
+                    <td>
+                        <span>Delete</span>
+                    </td>
+                </tr>
+                </thead>
+                    <tbody th:each="material : ${materials}">
+                    <tr>
+                        <td>
+                            <span th:text="${material.specificProductName}"/>
+                        </td>
+                        <td>
+                            <span th:text="${material.colorName}"/>
+                        </td>
+                        <td>
+                            <span th:text="${material.manufacturerName}"/>
+                        </td>
+                        <td>
+                            <span th:text="${material.manufCodeName}"/>
+                        </td>
+                        <td>
+                            <a th:href="'/materials/special/edit/' + ${material.id}">
+                                <small><span>Edit</span></small>
+                            </a>
+                        </td>
+                        <td>
+                            <a th:href="'/materials/special/delete/' + ${material.id}">
+                                <small><span>Delete</span></small>
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<th:block th:replace="scripts/script::home"/>
+</body>
+<th:block th:replace="fragments/footer::products"/>
+</html>

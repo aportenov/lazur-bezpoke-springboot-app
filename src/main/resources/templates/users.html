@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="fragments/head::products"/>
+<body>
+<th:block th:replace="fragments/navbar"/>
+<div class="container">
+    <div class="container">
+        <div class="row">
+            <form method="POST" action="/users/add">
+                <th:block th:object="${user}">
+                    <input type="hidden" id="csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                    <div class="row">
+                        <div class="col-md-12 form-group">
+                            <div class="col-md-3">
+                                <input class="list-group-item" type="text" name="username" th:value="${user.username}"
+                                       placeholder="Username"/>
+                            </div>
+                            <div class="col-md-3">
+                                <input class="list-group-item" type="password" name="password" placeholder="Password"/>
+                            </div>
+                            <div class="col-md-3">
+                                <input class="list-group-item" type="password" name="confirmPassword"
+                                       placeholder="Confirm password"/>
+                            </div>
+                            <div class="col-md-2">
+                                <select class="list-group-item" name="role">
+                                    <option disabled="true" selected="selected" th:text="${user.role}"
+                                            th:value="${user.role}"></option>
+                                    <th:block th:each="role: ${roles}">
+                                        <option th:text="${role.authority}" th:value="${role.authority}"/>
+                                    </th:block>
+                                </select>
+                            </div>
+                            <div class="col-md-1">
+                                <input class="btn btn-default btn-outline btn-circle" type="submit" value="Create"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 form-group">
+                            <div class="col-md-3 form-group"
+                                 th:classappend="${#fields.hasErrors('username')} ? 'has-danger'">
+                                <div class="feedback" th:each="error : ${#fields.errors('username')}"
+                                     th:text="|Username ${error}|"/>
+                            </div>
+                            <div class="col-md-3 form-group"
+                                 th:classappend="${#fields.hasErrors('password')} ? 'has-danger'">
+                                <div class="feedback" th:each="error : ${#fields.errors('password')}"
+                                     th:text="|Password ${error}|">
+
+                                </div>
+                            </div>
+                            <div class="col-md-3 form-group"
+                                 th:classappend="${#fields.hasErrors('global')} ? 'has-danger'">
+                                <div class="feedback" th:each="error : ${#fields.errors('global')}"
+                                     th:text="|Password ${error}|">
+
+                                </div>
+                            </div>
+                            <div class="col-md-3 form-group"
+                                 th:classappend="${#fields.hasErrors('role')} ? 'has-danger'">
+                                <div class="feedback" th:each="error : ${#fields.errors('role')}"
+                                     th:text="${error}">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </th:block>
+            </form>
+            <div class="col-md-10">
+                <div>
+                    <table class="text-center table table-hover">
+                        <thead>
+                        <tr>
+                            <td>
+                                <span>Username</span>
+                            </td>
+                            <td>
+                                <span>Role</span>
+                            </td>
+                            <td>
+                                <span>Edit</span>
+                            </td>
+                            <td>
+                                <span>Delete</span>
+                            </td>
+                        </tr>
+                        </thead>
+                        <tbody th:each="user : ${users}">
+                        <tr>
+                            <td>
+                                <span th:text="${user.username}"/>
+                            </td>
+                            <td>
+                                <span th:text="${user.role}"/>
+                            </td>
+                            <td>
+                                <a th:href="'/users?id=' + ${user.id}" class="btn btn-default btn-outline btn-circle">
+                                    <span>Edit</span>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="/users" class="btn btn-default btn-outline btn-circle">
+                                    <span>Delete</span>
+                                </a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block th:replace="scripts/script::home"/>
+</body>
+</html>

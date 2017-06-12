@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="fragments/head::materials"/>
+<body>
+<th:block th:replace="fragments/navbar"/>
+<div class="container">
+    <!-- Feature List - START -->
+    <div id="positionMaterials" class="row">
+
+        <div id="Navigation">
+            <ul class="Navigation">
+                <li>
+                    <a th:href="@{'/materials/Frame'}">
+                        <h5>Frame</h5><b class="caret"></b>
+                    </a>
+                    <ul th:each="frame : ${frames}">
+                        <li>
+                            <a th:href="@{/materials/Frame/{product}(product=${frame.material})}">
+                                <span th:text="${frame.material}"/>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a th:href="@{'/materials/Finish'}">
+                        <h5>Finish</h5><b class="caret"></b>
+                    </a>
+                    <ul th:each="fin : ${finish}">
+                        <li>
+                            <a th:href="@{/materials/Finish/{product}(product=${fin.material})}">
+                                <span th:text="${fin.material}"/>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a th:href="@{'/materials/Top'}">
+                        <h5>Tops-Seats</h5><b class="caret"></b>
+                    </a>
+                    <ul th:each="top : ${tops}">
+                        <li>
+                            <a th:href="@{/materials/Top/{product}(product=${top.material})}">
+                                <span th:text="${top.material}"/>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a th:href="@{'/materials/special'}">
+                        <h5>Materials Tops/Seats</h5><b class="caret"></b>
+                    </a>
+                    <ul>
+                        <li>
+                            <a th:href="@{/materials/special/product}">
+                                <span>Product</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a th:href="@{/materials/special/color}">
+                                <span>Color</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a th:href="@{/materials/special/manufacturer}">
+                                <span>Manufaturer</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a th:href="@{/materials/special/manufcode}">
+                                <span>Manuf Code</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<th:block th:replace="scripts/script::home"/>
+</body>
+<th:block th:replace="fragments/footer::products"/>
+</html>

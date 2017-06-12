@@ -1,0 +1,110 @@
+
+html{
+    min-height:100%;
+}
+
+.Navigation{
+    text-align: center;
+    min-width: 250px;
+    padding: 0;
+    margin: 0;
+    padding-right: 10%;
+    padding-left: 10%;
+    position: absolute;
+    padding-bottom: 40px;
+    /*border-bottom: 1px solid #d5d5d5;*/
+    z-index: 999;
+}
+
+.Navigation li 	{
+    width: 150px;
+    float: left;
+    text-align: center;
+    list-style: none;
+    font:16px "Bonveno", "Century Gothic", bold;
+    padding: 0;
+    margin: 0;
+    background-color: #eee;
+    border: 1px solid #ccc;
+    box-shadow: 0 1px 0 rgba(255,255,255, .9) inset, 0 1px 3px rgba(0,0,0, .1);
+    border-radius: 3px;
+    margin-left:10px;
+}
+
+.Navigation a{
+    height: 50px;
+    text-decoration: none;
+    color:#333;
+    text-shadow: 0 1px #fff;
+    display: block;
+
+}
+.Navigation li ul{
+    display: none;
+    margin-left: -11px;
+    padding: 0;
+}
+
+.Navigation li:hover ul{
+    display: block;
+
+}
+
+.Navigation li ul li {
+    height: 50px;
+    text-align: center;
+    background-color:#eee;
+    border: 1px solid #ccc;
+}
+
+.Navigation li:hover, a:hover {
+    background: #8d8d8d;
+}
+
+select:hover {
+    cursor: pointer;
+    cursor: hand;
+}
+
+.Navigation  li ul li .dropdown{
+    display: none;
+    padding: 0;
+    background-color:#eee;
+    margin-left: 138px;
+    margin-top: -50px;
+
+}
+
+.Navigation  li ul li:hover .dropdown{
+    display: block;
+
+}
+
+
+.dropdown:before,
+.dropdown:after{
+    content: " ";
+    display: table;
+}
+
+.table {
+    width:80%;
+    margin-bottom:70px;
+    margin-top: 150px;
+}
+
+#editMaterial {
+    background-color: rgba(44, 147, 255, 0.35);
+}
+
+#deleteMaterial {
+    background-color: rgba(255, 0, 0, 0.35);
+}
+
+#editMode {
+    float: right;
+}
+
+#create{
+    margin-bottom:50px;
+}

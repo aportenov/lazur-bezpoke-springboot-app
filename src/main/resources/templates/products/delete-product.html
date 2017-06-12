@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="fragments/head::products"/>
+<body>
+<th:block th:replace="fragments/navbar"/>
+<form method="POST" enctype="multipart/form-data" th:action="@{'/product/delete/' + ${product.id}}">
+    <input type="hidden" id="csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+    <div class="conteiner col-sm-offset-3" th:object="${product}">
+        <div class="row">
+            <div class="col-md-8">
+                <div>
+                    <input id="type" name="type" th:value="${type}" hidden="hidden"/>
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <img id="productImage" th:attr="src=@{${product.image}}" class="img-thumbnail"/>
+                        </div>
+                        <div class="col-md-7">
+                            <div>
+                                <div class="col-md-12 form-group">
+                                    <label>Category</label>
+                                    <!--<div class=""-->
+                                    <!--th:classappend="${#fields.hasErrors('name')} ? 'has-danger'"/>-->
+                                    <div class="selectContainer">
+                                        <select id="deleteMaterial" onchange="loadModelsBasedOnCategory()" name="category"
+                                                class="form-control" title="Choose Category">
+                                            <option th:text="${product.categoryName}" th:value="${product.categoryName}"/>
+                                            <option value=""><span>Select Category</span></option>
+                                            <th:block th:each="category: ${categories}">
+                                                <option><span th:text="${category.name}" th:value="${category.name}"/>
+                                                </option>
+                                            </th:block>
+                                        </select>
+                                    </div>
+                                    <!--<div class="feedback"-->
+                                    <!--th:each="error : ${#fields.errors('name')}"-->
+                                    <!--th:text="|Name ${error}|"/>-->
+                                </div>
+                                <div>
+                                    <div class="col-md-12 form-group">
+                                        <label>Model</label>
+                                        <!--<div class=""-->
+                                        <!--th:classappend="${#fields.hasErrors('name')} ? 'has-danger'"/>-->
+                                        <div class="selectContainer">
+                                            <select id="deleteMaterial" onchange="loadFamiliesBasedOnModel()" name="model"
+                                                    class="form-control" title="Choose Model">
+                                                <option th:text="${product.modelName}" th:value="${product.modelName}"/>
+                                                <option value=""><span>Select Model</span></option>
+                                            </select>
+                                        </div>
+                                        <!--<div class="feedback"-->
+                                        <!--th:each="error : ${#fields.errors('name')}"-->
+                                        <!--th:text="|Name ${error}|"/>-->
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="col-md-12 form-group">
+                                        <label>Image</label>
+                                        <input type="file" id="file" class="filestyle" data-input="false" name="file"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <br/>
+                        </div>
+
+                        <div>
+                            <div class="col-md-12 form-group">
+                                <label>Name</label>
+                                <!--<div class=""-->
+                                <!--th:classappend="${#fields.hasErrors('name')} ? 'has-danger'"/>-->
+                                <input id="deleteMaterial" type="text" name="name" class="form-control"
+                                       placeholder="Specify Name" th:value="${product.name}"/>
+                                <br/>
+                                <!--<div class="feedback"-->
+                                <!--th:each="error : ${#fields.errors('name')}"-->
+                                <!--th:text="|Name ${error}|"/>-->
+                            </div>
+                        </div>
+                        <div class="col-md-12 form-group">
+                            <label>Family</label>
+                            <!--<div class=""-->
+                            <!--th:classappend="${#fields.hasErrors('name')} ? 'has-danger'"/>-->
+                            <div class="selectContainer">
+                                <select id="deleteMaterial" name="family"
+                                        class="form-control" title="Choose Family">
+                                    <option th:text="${product.familyName}" th:value="${product.familyName}"/>
+                                    <option value="">Select Family</option>
+                                    <th:block th:each="family: ${families}">
+                                        <option><span th:text="${family.name}" th:value="${family.name}"/>
+                                        </option>
+                                    </th:block>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="col-md-12 form-group">
+                                <label>Frame</label>
+                                <!--<div class=""-->
+                                <!--th:classappend="${#fields.hasErrors('name')} ? 'has-danger'"/>-->
+                                <div class="selectContainer">
+                                    <select id="deleteMaterial" onchange="loadFrameTypes()" name="frameMaterial"
+                                            class="form-control" title="Choose Frame">
+                                        <option th:text="${product.frameMaterial}" th:value="${product.frameMaterial}"/>
+                                        <option value="">Select Frame</option>
+                                        <th:block th:each="frame: ${frames}">
+                                            <option><span th:text="${frame.material}" th:value="${frame.material}"/>
+                                            </option>
+                                        </th:block>
+                                    </select>
+                                </div>
+                                <br/>
+                                <div class="selectContainer">
+                                    <select id="deleteMaterial" name="frameType" class="form-control" title="Choose Frame">
+                                        <option th:text="${product.frameType}" th:value="${product.frameType}"/>
+                                    </select>
+                                </div>
+                                <!--<div class="feedback"-->
+                                <!--th:each="error : ${#fields.errors('name')}"-->
+                                <!--th:text="|Name ${error}|"/>-->
+                            </div>
+                        </div>
+                        <div>
+                            <div class="col-md-12 form-group">
+                                <label>Finish</label>
+                                <!--<div class=""-->
+                                <!--th:classappend="${#fields.hasErrors('name')} ? 'has-danger'"/>-->
+                                <div class="selectContainer">
+                                    <select id="deleteMaterial" onchange="loadFinishTypes()" name="finishMaterial"
+                                            class="form-control" title="Choose Finish">
+                                        <option th:text="${product.finishMaterial}" th:value="${product.finishMaterial}"/>
+                                        <option value="">Select Finish</option>
+                                        <th:block th:each="finish: ${finishes}">
+                                            <option><span th:text="${finish.material}" th:value="${finish.material}"/>
+                                            </option>
+                                        </th:block>
+                                    </select>
+                                </div>
+                                <br/>
+                                <div class="selectContainer">
+                                    <select id="deleteMaterial" name="finishType" class="form-control"
+                                            title="Choose Finish">
+                                        <option th:text="${product.finishType}" th:value="${product.finishType}"/>
+                                    </select>
+                                </div>
+                                <!--<div class="feedback"-->
+                                <!--th:each="error : ${#fields.errors('name')}"-->
+                                <!--th:text="|Name ${error}|"/>-->
+                            </div>
+                        </div>
+                        <div>
+                            <div class="col-md-12 form-group">
+                                <label>Tops/Seats</label>
+                                <!--<div class=""-->
+                                <!--th:classappend="${#fields.hasErrors('name')} ? 'has-danger'"/>-->
+                                <div class="selectContainer">
+                                    <select id="deleteMaterial" onchange="loadTopTypes()" name="topMaterial"
+                                            class="form-control" title="Choose Top">
+                                        <option th:text="${product.topMaterial}" th:value="${product.topMaterial}"/>
+                                        <option value="">Select Tops/Seat</option>
+                                        <th:block th:each="top: ${tops}">
+                                            <option><span th:text="${top.material}" th:value="${top.material}"/>
+                                            </option>
+                                        </th:block>
+                                    </select>
+                                </div>
+                                <br/>
+                                <div class="selectContainer">
+                                    <select id="deleteMaterial" name="topType" class="form-control" title="Choose Top">
+                                        <option th:text="${product.topType}" th:value="${product.topType}"/>
+                                    </select>
+                                </div>
+                                <!--<div class="feedback"-->
+                                <!--th:each="error : ${#fields.errors('name')}"-->
+                                <!--th:text="|Name ${error}|"/>-->
+                            </div>
+                        </div>
+                        <div>
+                            <div class="col-md-12 form-group">
+                                <label>Specific Materials</label>
+                                <!--<div class=""-->
+                                <!--th:classappend="${#fields.hasErrors('name')} ? 'has-danger'"/>-->
+                                <div class="selectContainer">
+                                    <select id="deleteMaterial" name="specificMaterial" class="form-control"
+                                            title="Choose specific materials">
+                                        <option th:text="${product.specificMaterial}" th:value="${product.specificMaterial}"/>
+                                        <option value="">Select Specific Material</option>
+                                        <th:block th:each="specificMatterial : ${specificMaterials}">
+                                            <option th:value="${specificMatterial.id}">
+                                                <span th:text="|${specificMatterial.specificProductName},
+                                                ${specificMatterial.colorName},
+                                                ${specificMatterial.manufacturerName},
+                                                ${specificMatterial.manufCodeName}|"/>
+                                            </option>
+                                        </th:block>
+                                    </select>
+                                </div>
+                                <!--<div class="feedback"-->
+                                <!--th:each="error : ${#fields.errors('name')}"-->
+                                <!--th:text="|Name ${error}|"/>-->
+                            </div>
+                        </div>
+                        <div>
+                            <div class="col-md-12 form-group">
+                                <label>Barcode EU/US</label>
+                                <!--<div class=""-->
+                                <!--th:classappend="${#fields.hasErrors('name')} ? 'has-danger'"/>-->
+                                <input id="deleteMaterial" name="barcodeEU" class="list-group-item col-md-12" type="text"
+                                       placeholder="EU" th:field="${product.barcodeEU}" />
+
+                                <input id="deleteMaterial" name="barcodeUS" class="list-group-item col-md-12" type="text"
+                                       placeholder="US" th:field="${product.barcodeUS}"/>
+                                <!--<div class="feedback"-->
+                                <!--th:each="error : ${#fields.errors('name')}"-->
+                                <!--th:text="|Name ${error}|"/>-->
+                            </div>
+                        </div>
+                        <div>
+                            <div class="col-md-12 form-group">
+                                <label>Description</label>
+                                <!--<div class=""-->
+                                <!--th:classappend="${#fields.hasErrors('name')} ? 'has-danger'"/>-->
+                                <div class="textbox">
+                                    <textarea id="deleteMaterial" class="form-control" name="description" type="text"
+                                              row="5" placeholder="Write Product Description" th:field="${product.description}"/>
+                                </div>
+                                <!--<div class="feedback"-->
+                                <!--th:each="error : ${#fields.errors('name')}"-->
+                                <!--th:text="|Name ${error}|"/>-->
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-3">
+                                <label>Length</label>
+                            </div>
+                            <div class="col-md-3">
+                                <label>Width</label>
+                            </div>
+                            <div class="col-md-3">
+                                <label>Height</label>
+                            </div>
+                            <div class="col-md-3">
+                                <label>Weight</label>
+                            </div>
+
+                            <div>
+                                <input type="number" step="0.01" id="deleteMaterial" class="list-group-item  col-md-2"
+                                       name="length" th:field="${product.length}"/>
+                            </div>
+                            <div>
+                                <input type="number" step="0.01" id="deleteMaterial"
+                                       class="list-group-item col-md-offset-1 col-md-2" name="width" th:field="${product.width}"/>
+                            </div>
+                            <div>
+                                <input type="number" step="0.01" id="deleteMaterial"
+                                       class="list-group-item col-md-offset-1  col-md-2" name="height" th:field="${product.height}"/>
+                            </div>
+                            <div>
+                                <input type="number" step="0.01" id="deleteMaterial"
+                                       class="list-group-item col-md-offset-1 col-md-2" name="weight" th:field="${product.weight}"/>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <button id="create" type="submit"
+                                    class="btn-hover btn btn-default btn-outline btn-circle col-md-11">Delete product
+                            </button>
+                        </div>
+                    </div>
+                    <br/>
+                </div>
+                <!-- End -->
+            </div>
+        </div>
+    </div>
+</form>
+
+<th:block th:replace="scripts/script::products"/>
+</body>
+</html>

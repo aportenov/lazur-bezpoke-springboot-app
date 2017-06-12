@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="fragments/head::products"/>
+<body>
+<th:block th:replace="fragments/navbar"/>
+<div class="container">
+    <!-- Feature List - START -->
+    <div class="row">
+        <div class="page">
+            <div class="row">
+                <form th:action="@{'/categories/update/' + ${currCategory.id}}" method="POST">
+                    <div class="col-md-12">
+                        <input type="hidden" id="csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                        <div class="col-md-3">
+                            <input id="editMaterial" class="list-group-item" type="text" name="name"
+                                   placeholder="Category" th:field="${currCategory.name}"/>
+                        </div>
+                        <div class="col-md-3  selectContainer">
+                            <select id="editMaterial" name="oldCode"
+                                    class="list-group-item" title="Choose Color">
+                                <option>Select Code for edit</option>
+                                <th:block th:each="code: ${currCategory.code}">
+                                    <option><span th:text="${code}" th:value="${code}"/>
+                                    </option>
+                                </th:block>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <input id="editMaterial" class="list-group-item" type="text" name="code"
+                                   placeholder="New Code"/>
+                        </div>
+                        <div class="col-md-3">
+                            <input class="btn btn-default btn-outline btn-circle" type="submit"
+                                   value="Update Category"/>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <br/>
+        <div id="Navigation">
+            <ul class="Navigation">
+                <li th:each="category : ${categories}">
+                    <a th:href="@{'/categories/' + ${category.name}}">
+                        <h5><span th:text="${category.name}"/></h5><b class="caret"></b>
+                    </a>
+                    <ul th:each="model : ${category.models}">
+                        <li>
+                            <a th:href="@{/categories/{category}/{model}(category=${category.name},model=${model.name})}"><span
+                                    th:text="${model.name}"/> </a>
+                            <ul class="dropdown" th:each="family : ${model.families}">
+                                <li>
+                                    <a th:href="@{/categories/{category}/{model}/{family}(category=${category.name},model=${model.name},family=${family.name})}">
+                                        <span th:text="${family.name}"/>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="conteiner">
+        <table class="text-center table table-hover">
+            <thead>
+            <tr>
+                <td>
+                    <span>Category</span>
+                </td>
+                <td>
+                    <span>Codes</span>
+                </td>
+                <td>
+                    <span>Edit</span>
+                </td>
+                <td>
+                    <span>Delete</span>
+                </td>
+            </tr>
+            </thead>
+            <tbody th:each="category : ${categories}">
+            <tr>
+                <td>
+                    <span th:text="${category.name}"/>
+                </td>
+                <td>
+                    <span th:text="${category.code}"/>
+                </td>
+                <td>
+                    <a class="btn btn-default btn-outline btn-circle" th:href="@{/categories/edit/{category}(category=${category.name})}">
+                        <small><span th:text="${category.name}"></span></small>
+                    </a>
+                </td>
+                <td>
+                    <th:block th:if="${category.models.size()} == 0">
+                        <a class="btn btn-default btn-outline btn-circle" th:href="@{/categories/delete/{category}(category=${category.name})}">
+                            <small><span th:text="${category.name}"></span></small>
+                        </a>
+                    </th:block>
+                    <th:block th:if="${category.models.size()} > 0">
+                        <sub>Cannot delete non empty Category</sub>
+                    </th:block>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<th:block th:replace="scripts/script::home"/>
+</body>
+</html>

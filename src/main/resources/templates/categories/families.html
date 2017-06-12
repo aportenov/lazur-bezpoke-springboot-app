@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="fragments/head::products"/>
+<body>
+<th:block th:replace="fragments/navbar"/>
+<div class="container">
+    <!-- Feature List - START -->
+    <div class="row">
+
+        <div class="page">
+            <div class="row">
+                <form action="/family/add" method="POST">
+                    <div class="col-md-12 form-group">
+                        <input type="hidden" id="category" name="category" th:value="${currCategory}"/>
+                        <input type="hidden" id="type" name="type" th:value="${type}"/>
+                        <input type="hidden" id="csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                        <div class="col-md-6">
+                            <input class="list-group-item" type="text" name="name"
+                                   placeholder="Family"/>
+                        </div>
+                        <div class="col-md-6">
+                            <input class="btn btn-default btn-outline btn-circle" type="submit"
+                                   th:value="|Add in ${type} / ${currCategory}|"/>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="Navigation">
+            <ul class="Navigation">
+                <input type="hidden" id="type" name="type" th:value="${type}"/>
+                <li th:each="category : ${categories}">
+                    <a th:href="@{'/categories/' + ${category.name}}">
+                        <h5><span th:text="${category.name}"/></h5><b class="caret"></b>
+                    </a>
+                    <ul th:each="model : ${category.models}">
+                        <li>
+                            <a th:href="@{/categories/{category}/{model}(category=${category.name},model=${model.name})}"><span
+                                    th:text="${model.name}"/> </a>
+                            <ul class="dropdown" th:each="family : ${model.families}">
+                                <li>
+                                    <a th:href="@{/categories/{category}/{model}/{family}(category=${category.name},model=${model.name},family=${family.name})}">
+                                        <span th:text="${family.name}"/>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div class="conteiner">
+            <table class="text-center table table-hover">
+                <thead>
+                <tr>
+                    <td>
+                        <span>Category</span>
+                    </td>
+                    <td>
+                        <span>Codes</span>
+                    </td>
+                    <td>
+                        <span>Model</span>
+                    </td>
+                    <td>
+                        <span>Code</span>
+                    </td>
+                    <td>
+                        <span>Family</span>
+                    </td>
+                    <td>
+                        <span>Code</span>
+                    </td>
+                    <td>
+                        <span>Edit</span>
+                    </td>
+                    <td>
+                        <span>Delete</span>
+                    </td>
+                </tr>
+                </thead>
+                <th:block th:each="model : ${category.models}">
+                    <th:block th:if="${#strings.equalsIgnoreCase(model.name,type)}">
+                        <tbody th:each="family : ${model.families}">
+                        <tr>
+                            <td>
+                                <span th:text="${category.name}"/>
+                            </td>
+                            <td>
+                                <span th:text="${category.code}"/>
+                            </td>
+                            <td>
+                                <span th:text="${model.name}"/>
+                            </td>
+                            <td>
+                                <span th:text="${model.code}"/>
+                            </td>
+                            <td>
+                                <span th:text="${family.name}"/>
+                            </td>
+                            <td>
+                                <span th:text="${family.code}"/>
+                            </td>
+                            <td>
+                                <a class="btn btn-default btn-outline btn-circle"
+                                   th:href="@{/categories/edit/{category}/{model}/{family}/{id}(category=${category.name}, model=${model.name}, family=${family.name}, id=${family.id})}">
+                                    <small><span th:text="${family.name}"></span></small>
+                                </a>
+                            </td>
+                            <td>
+                                <th:block th:if="${family.products.size()} == 0">
+                                    <a class="btn btn-default btn-outline btn-circle"
+                                       th:href="@{/categories/delete/{category}/{model}/{family}/{id}(category=${category.name}, model=${model.name},family=${family.name}, id=${family.id})}">
+                                        <small><span th:text="${family.name}"></span></small>
+                                    </a>
+                                </th:block>
+                                <th:block th:if="${family.products.size()} > 0">
+                                    <sub>Cannot delete non empty Family</sub>
+                                </th:block>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </th:block>
+                </th:block>
+            </table>
+        </div>
+    </div>
+</div>
+<th:block th:replace="scripts/script::home"/>
+</body>
+<th:block th:replace="fragments/footer::products"/>
+</html>

@@ -1,0 +1,55 @@
+<div lang="en"
+     xmlns:th="http://www.thymeleaf.org"
+     xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <nav class="navbar navbar-default">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                        data-target="#navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <img class="navbar-brand" id="logoImage"
+                     src="https://lh5.googleusercontent.com/-8XmyiNABpkQ/AAAAAAAAAAI/AAAAAAAAACY/mqz_Id2Qlx0/photo.jpg"/>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li id="search" sec:authorize="isAuthenticated()">
+                        <form method="GET" action="/products/search">
+                            <input type="text" name="searchedWord" class="form-control form-rounded"
+                                   placeholder="Search..."/>
+                        </form>
+                    </li>
+                    <li>
+                        <a href="/products" class="btn btn-default btn-outline btn-circle">Products</a>
+                    </li>
+                    <!--<th:block sec:authorize="hasRole('ROLE_ADMIN')">-->
+                    <li>
+                        <a href="/products/create" class="btn btn-default btn-outline btn-circle">New Product</a>
+                    </li>
+                    <li>
+                        <a href="/categories" class="btn btn-default btn-outline btn-circle">Categories</a>
+                    </li>
+                    <li>
+                        <a href="/materials" class="btn btn-default btn-outline btn-circle">Materials</a>
+                    </li>
+                    <li>
+                        <a href="/users" class="btn btn-default btn-outline btn-circle">Users</a>
+                    </li>
+                    <!--</th:block>-->
+                    <li sec:authorize="isAnonymous()">
+                        <a href="/login" class="btn btn-default btn-outline btn-circle">Log In</a>
+                    </li>
+                    <li sec:authorize="isAuthenticated()">
+                        <a href="/logout" class="btn btn-default btn-outline btn-circle">Log Out</a>
+                    </li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container -->
+    </nav><!-- /.navbar -->
+</div>
