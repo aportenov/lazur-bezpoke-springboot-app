@@ -5,7 +5,9 @@ import com.lazur.entities.Product;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -33,12 +35,12 @@ public class SpecificMaterial implements Serializable{
     private Manufacturer manufacturer;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "specificMaterial")
-    private Set<Product> products;
+    private List<Product> products;
 
     private String code;
 
     public SpecificMaterial() {
-        this.products = new HashSet<>();
+        this.products = new ArrayList<>();
     }
 
     public Long getId() {
@@ -89,11 +91,11 @@ public class SpecificMaterial implements Serializable{
         this.code = code;
     }
 
-    public Set<Product> getProducts() {
+    public List<Product> getProducts() {
         return products;
     }
 
-    public void setProducts(Set<Product> products) {
+    public void setProducts(List<Product> products) {
         this.products = products;
     }
 }

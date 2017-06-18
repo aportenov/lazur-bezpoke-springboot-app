@@ -40,6 +40,16 @@ public interface ProductRepository extends JpaRepository<Product , Long> {
                                                   @Param("modelName") String modelName,
                                                   @Param("category") String category,
                                                   Pageable pageable);
+
+    @Query(value = "SELECT p FROM Product AS p WHERE p.sku LIKE CONCAT(:searchedWord, '%')")
+    Page<Product> findAllBySku(@Param("searchedWord") String searchedWord, Pageable pageable);
+
+    @Query(value = "SELECT p FROM Product AS p WHERE p.name LIKE CONCAT('%', :searchOptions, '%')")
+    Page<Product> findAllByName(@Param("searchOptions") String searchOptions, Pageable pageable);
+
+    @Query(value = "SELECT p FROM Product AS p WHERE p.sku = :sku")
+    Product findOneBySkuNumber(@Param("sku") String sku);
 }
+
 
 

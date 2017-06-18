@@ -29,8 +29,8 @@ public class MaterialServiceImpl implements MaterialService{
     }
 
     @Override
-    public List<MaterialViewBasicModel> findAllByMaterial(String currMaterial) {
-        List<Material> materials = this.materialRepository.findAllWhereNameIs(currMaterial.toLowerCase());
+    public List<MaterialViewBasicModel> findAllByMaterial(String currMaterial, String noneParam) {
+        List<Material> materials = this.materialRepository.findAllWhereNameIsAndNone(currMaterial.toLowerCase(), noneParam);
         List<MaterialViewBasicModel> materialViewBasicModels = new ArrayList<>();
         for (Material material : materials) {
             MaterialViewBasicModel materialViewBasicModel = this.modelMapper.map(material, MaterialViewBasicModel.class);

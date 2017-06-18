@@ -15,7 +15,7 @@
                         <input  type="hidden" id="csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                         <div class="col-md-4">
                             <input id="deleteMaterial" class="list-group-item" type="text" name="name"
-                                   placeholder="Category" th:field="${currCategory.name}"/>
+                               readonly="readonly"    placeholder="Category" th:field="${currCategory.name}"/>
                         </div>
                         <div class="col-md-4">
                             <input id="deleteMaterial" class="list-group-item" type="text" name="code"

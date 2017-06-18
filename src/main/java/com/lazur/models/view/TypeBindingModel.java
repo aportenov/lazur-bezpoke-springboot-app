@@ -1,9 +1,13 @@
 package com.lazur.models.view;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 public class TypeBindingModel {
 
+    @NotBlank(message = "Material name cannot be empty")
     private String name;
 
+    @NotBlank(message = "Type name cannot be empty")
     private String type;
 
     public String getName() {

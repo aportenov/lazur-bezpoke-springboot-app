@@ -1,43 +1,59 @@
 package com.lazur.models.view;
 
+import com.lazur.validations.IsBarcodeCorrect;
+import com.lazur.validations.IsProductExist;
+import org.hibernate.validator.constraints.NotBlank;
+
 import javax.validation.constraints.NotNull;
 
+@IsProductExist
+@IsBarcodeCorrect
 public class ProductBiningModel {
 
     private Long id;
 
-    @NotNull(message = "Please specify category")
+    @NotBlank(message = "Please specify category")
     private String categoryName;
 
+    @NotBlank(message = "field Model Name cannot be empty")
     private String modelName;
 
-    @NotNull(message = "Product Name may not be empty")
+    @NotBlank(message = "field Product Name cannot be empty")
     private String name;
 
+    @NotBlank(message = "field Family Name cannot be empty")
     private String familyName;
 
     private String image;
 
     private String finishMaterial;
 
+    @NotBlank(message = "Select Finish to choose material")
     private String finishType;
 
     private String frameMaterial;
 
+    @NotBlank(message = "Select Frame to choose material")
     private String frameType;
 
     private String topMaterial;
 
+    @NotBlank(message = "Select Top to choose material")
     private String topType;
 
+    @NotNull(message = "Please specify length")
     private Float length;
 
+    @NotNull(message = "Please specify width")
     private Float width;
 
+    @NotNull(message = "Please specify height")
     private Float height;
 
+    @NotNull(message = "Please specify weight")
     private Float weight;
 
+    @NotNull(message = "Please specify product")
     private Long specificMaterial;
 
     private String barcodeEU;

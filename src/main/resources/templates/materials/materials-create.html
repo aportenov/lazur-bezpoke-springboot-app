@@ -16,10 +16,12 @@
                         <input type="hidden" id="csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                         <div class="col-md-4">
                             <input class="list-group-item" type="text" name="material"
+                                   th:field="${currMaterial.material}"
                                    placeholder="Material"/>
                         </div>
                         <div class="col-md-4">
                             <input class="list-group-item" type="text" name="abbreviation"
+                                   th:field="${currMaterial.abbreviation}"
                                    placeholder="Abbreviation"/>
                         </div>
                         <div class="col-md-4">

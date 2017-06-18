@@ -68,16 +68,24 @@
                     </tbody>
                 </table>
             </div>
-            <div class="text-center col-md-5">
-                <a class="btn btn-default btn-outline btn-circle" th:text="|Barcode EU: ${product.barcodeEU}|"/>
-            </div>
-            <div id="barcodeButton" class="text-center col-md-5">
-                <a class="btn btn-default btn-outline btn-circle" th:text="|Barcode US: ${product.barcodeUS}|"/>
-            </div>
-            <!--<button id="qrCodeButton"  th:onclick="'javascript:showBarcode(\'' + ${product.qrCode} + '\');'"-->
-            <!--class="btn btn-default btn-outline btn-circle">Print QR Barcode</button>-->
-            <!--<button id="barcodeButton" th:onclick="'javascript:showBarcode(\'' + ${product.barcode} + '\',\'' + 'barcodeButton'+ '\');'"-->
-            <!--class="btn btn-default btn-outline btn-circle">Print Barcode</button>-->
+            <th:block th:if="! ${#strings.isEmpty(product.barcodeEU)}">
+                <div id="barcodeButton" class="text-center col-md-4" style="float: right">
+                    <button id="barcodeButtonEU" th:onclick="'javascript:showBarcode(\'' + ${product.barcodeEU} + '\',\'' + '' + '\');'"
+                            class="btn btn-default btn-outline btn-circle" th:text="|Barcode EU|"/>
+                </div>
+            </th:block>
+            <th:block th:if="${product.qrCode} != null">
+                <div id="barcodeButton" class="text-center col-md-4">
+                    <button id="barcodeButtonQR"  th:onclick="'javascript:showBarcode(\'' + ${product.qrCode} + '\',\'' + 'qrCode'+ '\');'"
+                            class="btn btn-default btn-outline btn-circle" th:text="|Barcode QR|"/>
+                </div>
+            </th:block>
+            <th:block th:if="! ${#strings.isEmpty(product.barcodeUS)}">
+                <div id="barcodeButton" class="text-center col-md-4" style="float: left">
+                    <button id="barcodeButtonUS" th:onclick="'javascript:showBarcode(\'' + ${product.barcodeUS} + '\',\'' + '' + '\');'"
+                            class="btn btn-default btn-outline btn-circle" th:text="|Barcode US|"/>
+                </div>
+            </th:block>
         </div>
     </div>
 </div>

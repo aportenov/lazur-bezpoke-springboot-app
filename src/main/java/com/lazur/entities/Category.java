@@ -2,9 +2,7 @@ package com.lazur.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "categories")
@@ -17,19 +15,20 @@ public class Category implements Serializable{
     private String name;
 
     @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
-    private Set<Model> models;
+    private List<Model> models;
 
     @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
-    private Set<Product> products;
+    private List<Product> products;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "category_id")
-    private Set<CategoryCode> categoryCodes;
+    @OrderBy("id ASC")
+    private List<CategoryCode> categoryCodes;
 
     public Category() {
-        this.categoryCodes = new LinkedHashSet<>();
-        this.products = new LinkedHashSet<>();
-        this.models = new LinkedHashSet<>();
+        this.categoryCodes = new ArrayList<>();
+        this.products = new ArrayList<>();
+        this.models = new ArrayList<>();
     }
 
     public Long getId() {
@@ -48,7 +47,7 @@ public class Category implements Serializable{
         this.name = name;
     }
 
-    public Set<Product> getProducts() {
+    public List<Product> getProducts() {
         return products;
     }
 
@@ -57,7 +56,7 @@ public class Category implements Serializable{
     }
 
 
-    public Set<CategoryCode> getCategoryCodes() {
+    public List<CategoryCode> getCategoryCodes() {
         return categoryCodes;
     }
 
@@ -65,15 +64,15 @@ public class Category implements Serializable{
         this.getCategoryCodes().add(categoryCodes);
     }
 
-    public Set<Model> getModels() {
+    public List<Model> getModels() {
         return models;
     }
 
-    public void setModels(Set<Model> models) {
+    public void setModels(List<Model> models) {
         this.models = models;
     }
 
-    public void setProducts(Set<Product> products) {
+    public void setProducts(List<Product> products) {
         this.products = products;
     }
 }

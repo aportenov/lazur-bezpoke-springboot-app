@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface MaterialService {
 
-    List<MaterialViewBasicModel> findAllByMaterial(String currMaterial);
+    List<MaterialViewBasicModel> findAllByMaterial(String currMaterial, String noneParam);
 
     Material findByMaterialAndType(String finishMaterial, String finishType);
 

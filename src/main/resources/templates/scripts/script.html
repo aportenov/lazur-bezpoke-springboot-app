@@ -28,21 +28,22 @@
         }());
 
         function showBarcode(barcode, style) {
-            if (style == 'barcodeButton') {
-                let newWindow = window.open(barcode, 'Print barcode', 'width = 256, height = 148');
-                newWindow.addEventListener("click", printBarcode);
+            var image = new Image();
+            image.src = barcode;
+            if (style == 'qrCode') {
+                var w = window.open('', 'New Page', 'width = 280, height = 300');
+                w.document.write(image.outerHTML);
+                w.focus();
+                w.print();
+
             } else {
-                let newWindow = window.open(barcode, 'Print barcode', 'width = 256, height = 276');
-                newWindow.addEventListener("click", printBarcode(newWindow));
+                let w = window.open('', 'Print barcode', 'width = 350, height = 280');
+                w.document.write(image.outerHTML);
+                w.focus();
+                w.print();
             }
 
         }
-
-
-        function printBarcode(newWindow) {
-            newWindow.print();
-        }
-
     </script>
 </th:block>
 
@@ -110,70 +111,91 @@
         function loadFinishTypes() {
             $('#finishType').empty();
             let finishName = $('#finishMaterial').val();
-            $.ajax({
-                type: 'GET',
-                url: '/finish/' + finishName,
-                data: 'json',
-                success: function (finishes) {
-                    $('#finishType').append(
-                        $("<option></option>")
-                            .attr('value', "")
-                            .text("Select Type"));
-                    $.each(finishes, function (i, finish) {
-                        let finishName = finish.name;
+            if (finishName == 'None') {
+                $('#finishType').append(
+                    $("<option></option>")
+                        .attr('value', "none")
+                        .text("None"));
+            } else {
+                $.ajax({
+                    type: 'GET',
+                    url: '/finish/' + finishName,
+                    data: 'json',
+                    success: function (finishes) {
                         $('#finishType').append(
                             $("<option></option>")
-                                .attr('value', finishName)
-                                .text(finishName));
-                    })
-                }
-            })
+                                .attr('value', "")
+                                .text("Select Type"));
+                        $.each(finishes, function (i, finish) {
+                            let finishName = finish.name;
+                            $('#finishType').append(
+                                $("<option></option>")
+                                    .attr('value', finishName)
+                                    .text(finishName));
+                        })
+                    }
+                })
+            }
         }
 
         function loadFrameTypes() {
             $('#frameType').empty();
             let frameName = $('#frameMaterial').val();
-            $.ajax({
-                type: 'GET',
-                url: '/frame/' + frameName,
-                data: 'json',
-                success: function (frmaes) {
-                    $('#frameType').append(
-                        $("<option></option>")
-                            .attr('value', "")
-                            .text("Select Type"));
-                    $.each(frmaes, function (i, frame) {
-                        let frameName = frame.name;
+            if (frameName == "None") {
+                $('#frameType').append(
+                    $("<option></option>")
+                        .attr('value', "none")
+                        .text("None"));
+            } else {
+                $.ajax({
+                    type: 'GET',
+                    url: '/frame/' + frameName,
+                    data: 'json',
+                    success: function (frmaes) {
                         $('#frameType').append(
                             $("<option></option>")
-                                .attr('value', frameName)
-                                .text(frameName));
-                    })
-                }
-            })
+                                .attr('value', "")
+                                .text("Select Type"));
+                        $.each(frmaes, function (i, frame) {
+                            let frameName = frame.name;
+                            $('#frameType').append(
+                                $("<option></option>")
+                                    .attr('value', frameName)
+                                    .text(frameName));
+                        })
+                    }
+                })
+            }
         }
 
         function loadTopTypes() {
             $('#topType').empty();
             let topName = $('#topMaterial').val();
-            $.ajax({
-                type: 'GET',
-                url: '/top/' + topName,
-                data: 'json',
-                success: function (tops) {
-                    $('#topType').append(
-                        $("<option></option>")
-                            .attr('value', "")
-                            .text("Select Type"));
-                    $.each(tops, function (i, top) {
-                        let topName = top.name;
+            if (topName == "None") {
+                $('#topType').append(
+                    $("<option></option>")
+                        .attr('value', "none")
+                        .text("None"));
+            } else {
+                $.ajax({
+                    type: 'GET',
+                    url: '/top/' + topName,
+                    data: 'json',
+                    success: function (tops) {
                         $('#topType').append(
                             $("<option></option>")
-                                .attr('value', topName)
-                                .text(topName));
-                    })
-                }
-            })
+                                .attr('value', "")
+                                .text("Select Type"));
+                        $.each(tops, function (i, top) {
+                            let topName = top.name;
+                            $('#topType').append(
+                                $("<option></option>")
+                                    .attr('value', topName)
+                                    .text(topName));
+                        })
+                    }
+                })
+            }
         }
 
     </script>

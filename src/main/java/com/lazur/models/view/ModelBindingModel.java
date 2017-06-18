@@ -1,9 +1,15 @@
 package com.lazur.models.view;
 
+import com.lazur.validations.IsCodeHasAvailableNumbers;
+import org.hibernate.validator.constraints.NotBlank;
+
+@IsCodeHasAvailableNumbers
 public class ModelBindingModel {
 
+    @NotBlank(message =  "field Model cannot be empty")
     private String name;
 
+    @NotBlank(message = "no Category selected")
     private String type;
 
     public String getName() {

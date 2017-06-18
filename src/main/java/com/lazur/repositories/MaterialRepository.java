@@ -15,7 +15,8 @@ import java.util.List;
 public interface MaterialRepository extends JpaRepository<Material, Long>{
 
     @Query(value = "SELECT m FROM Material AS m " +
-            "WHERE LOWER(m.name) = LOWER(:material) ORDER BY m.material ASC")
+            "WHERE LOWER(m.name) = LOWER(:material) " +
+            "ORDER BY m.material ASC")
     List<Material> findAllWhereNameIs(@Param("material") String material);
 
     @Query("SELECT m FROM Material AS m LEFT JOIN m.types AS t " +
@@ -36,4 +37,10 @@ public interface MaterialRepository extends JpaRepository<Material, Long>{
             "WHERE LOWER(m.name) = LOWER(:name) " +
             "AND LOWER(m.material) LIKE LOWER(:product)")
     Page<Material> findAllPageWhereMaterialAndTypeAre(@Param("name") String name, @Param("product") String product, Pageable pageable);
+
+    @Query(value = "SELECT m FROM Material AS m " +
+            "WHERE LOWER(m.name) = LOWER(:material) " +
+            "OR LOWER(m.name) = LOWER(:none) " +
+            "ORDER BY m.material ASC")
+    List<Material> findAllWhereNameIsAndNone(@Param("material") String material, @Param("none") String none);
 }

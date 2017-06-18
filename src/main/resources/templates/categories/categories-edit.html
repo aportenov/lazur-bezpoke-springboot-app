@@ -10,26 +10,35 @@
     <div class="row">
         <div class="page">
             <div class="row">
-                <form th:action="@{'/categories/update/' + ${currCategory.id}}" method="POST">
+                <form th:action="@{'/categories/update/' + ${currCategory.id}}" method="POST" th:object="${currCategory}">
                     <div class="col-md-12">
                         <input type="hidden" id="csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-                        <div class="col-md-3">
+                        <div class="col-md-3" th:classappend="${#fields.hasErrors('name')} ? 'has-danger'">
                             <input id="editMaterial" class="list-group-item" type="text" name="name"
                                    placeholder="Category" th:field="${currCategory.name}"/>
+                            <div class="feedback" th:each="error : ${#fields.errors('name')}"
+                                 th:text="|${error}|"/>
                         </div>
-                        <div class="col-md-3  selectContainer">
-                            <select id="editMaterial" name="oldCode"
-                                    class="list-group-item" title="Choose Color">
-                                <option>Select Code for edit</option>
-                                <th:block th:each="code: ${currCategory.code}">
-                                    <option><span th:text="${code}" th:value="${code}"/>
-                                    </option>
-                                </th:block>
-                            </select>
-                        </div>
-                        <div class="col-md-3">
+                        <th:block th:if="${errorModel} == null">
+                            <div class="col-md-3  selectContainer">
+                                <select id="editMaterial" name="oldCode"
+                                        class="list-group-item" title="Choose Color">
+                                    <option value="">Select Code for edit</option>
+                                    <th:block th:each="code: ${currCategory.code}">
+                                        <option><span th:text="${code}" th:value="${code}"/>
+                                        </option>
+                                    </th:block>
+                                </select>
+                            </div>
+                        </th:block>
+                        <div class="col-md-3" th:classappend="${#fields.hasErrors('code')} ? 'has-danger'">
                             <input id="editMaterial" class="list-group-item" type="text" name="code"
                                    placeholder="New Code"/>
+                            <div class="feedback" th:each="error : ${#fields.errors('code')}"
+                                 th:text="|${error}|"/>
+                            <th:block th:if="${errorModel} != null">
+                                <div class="feedback">You need to add new Code for current Category</div>
+                            </th:block>
                         </div>
                         <div class="col-md-3">
                             <input class="btn btn-default btn-outline btn-circle" type="submit"
@@ -90,13 +99,15 @@
                     <span th:text="${category.code}"/>
                 </td>
                 <td>
-                    <a class="btn btn-default btn-outline btn-circle" th:href="@{/categories/edit/{category}(category=${category.name})}">
+                    <a class="btn btn-default btn-outline btn-circle"
+                       th:href="@{/categories/edit/{category}(category=${category.name})}">
                         <small><span th:text="${category.name}"></span></small>
                     </a>
                 </td>
                 <td>
                     <th:block th:if="${category.models.size()} == 0">
-                        <a class="btn btn-default btn-outline btn-circle" th:href="@{/categories/delete/{category}(category=${category.name})}">
+                        <a class="btn btn-default btn-outline btn-circle"
+                           th:href="@{/categories/delete/{category}(category=${category.name})}">
                             <small><span th:text="${category.name}"></span></small>
                         </a>
                     </th:block>

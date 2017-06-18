@@ -12,7 +12,7 @@ public class CategoryCode {
 
     private String code;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
     private Category category;
 
     public CategoryCode() {

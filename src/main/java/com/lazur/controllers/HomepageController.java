@@ -27,7 +27,7 @@ public class HomepageController {
 //        List<ProductViewBasicModel> productViewBasicModels = this.productService.findAllProductImages();
 //        int randomId = ThreadLocalRandom.current().nextInt(0, productViewBasicModels.size());
 //        model.addAttribute("product", productViewBasicModels.get(randomId));
-        return "login";
+        return "redirect:/products/products";
 
     }
 }

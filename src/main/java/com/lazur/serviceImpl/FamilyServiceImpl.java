@@ -52,7 +52,7 @@ public class FamilyServiceImpl implements FamilyService {
         Family family = new Family();
         family.setName(familyBidnignModel.getName());
         family.setModel(model);
-        long count = this.familyRepository.count();
+        long count = this.familyRepository.countFamiliesByModelAndCategory(familyBidnignModel.getType(), familyBidnignModel.getCategory());
         family.setCode(String.format("%02d", count+1));
         this.familyRepository.save(family);
     }
@@ -79,5 +79,27 @@ public class FamilyServiceImpl implements FamilyService {
 
         FamilyViewModel familyViewModel = this.modelMapper.map(family, FamilyViewModel.class);
         return familyViewModel;
+    }
+
+    @Override
+    public void delete(Long familyId) {
+        Family family = this.familyRepository.findOne(familyId);
+        if (family == null){
+//            throw new FamilyNotFoundExeption();
+        }
+
+        this.familyRepository.delete(family);
+    }
+
+    @Override
+    public void update(Long familyId, FamilyViewModel familyViewModel) {
+        Family family = this.familyRepository.findOne(familyId);
+        if (family == null){
+//            throw FamilyNotFoundExeption();
+        }
+
+        family.setCode(String.format("%02d",familyViewModel.getCode()));
+        family.setName(familyViewModel.getName());
+        this.familyRepository.save(family);
     }
 }

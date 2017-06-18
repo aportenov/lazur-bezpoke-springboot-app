@@ -19,7 +19,10 @@ public interface ModelService {
     void updateCodes(String category, String oldCode, String code);
 
     void update(Long modelId, CategoryAndModelUpdateModel categoryAndModelUpdateModel);
+
+    void delete(Long modelId);
 }
+
 
 
 

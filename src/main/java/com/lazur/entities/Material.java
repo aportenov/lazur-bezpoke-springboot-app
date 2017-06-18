@@ -2,9 +2,7 @@ package com.lazur.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -19,26 +17,31 @@ public abstract class Material implements Serializable {
     private String name;
 
     @ManyToMany(cascade = CascadeType.REMOVE, mappedBy = "materials")
-    private Set<Type> types;
+    private List<Type> types;
 
     private String material;
 
     private String abbreviation;
 
     @OneToMany(mappedBy = "finish")
-    private Set<Product> productFinish;
+    private List<Product> productFinish;
 
     @OneToMany(mappedBy = "frame")
-    private Set<Product> productFrame;
+    private List<Product> productFrame;
 
     @OneToMany(mappedBy = "top")
-    private Set<Product> productTop;
+    private List<Product> productTop;
 
     public Material() {
-        this.productFinish = new HashSet<>();
-        this.productFrame = new HashSet<>();
-        this.types = new LinkedHashSet<>();
-        this.productTop = new HashSet<>();
+        this.productFinish = new ArrayList<>();
+        this.productFrame = new ArrayList<>();
+        this.types = new ArrayList<>();
+        this.productTop = new ArrayList<>();
+    }
+
+    public Material(String material, String abbreviation) {
+        this.material = material;
+        this.abbreviation = abbreviation;
     }
 
     public Long getId() {
@@ -73,32 +76,35 @@ public abstract class Material implements Serializable {
         this.abbreviation = abbreviation;
     }
 
-    public Set<Type> getTypes() {
+    public List<Type> getTypes() {
         return types;
     }
 
+    public void addTypes(Type types) {
+        this.getTypes().add(types);
+    }
 
-    public Set<Product> getProductFinish() {
+    public List<Product> getProductFinish() {
         return productFinish;
     }
 
-    public void setProductFinish(Set<Product> productFinish) {
+    public void setProductFinish(List<Product> productFinish) {
         this.productFinish = productFinish;
     }
 
-    public Set<Product> getProductFrame() {
+    public List<Product> getProductFrame() {
         return productFrame;
     }
 
-    public void setProductFrame(Set<Product> productFrame) {
+    public void setProductFrame(List<Product> productFrame) {
         this.productFrame = productFrame;
     }
 
-    public Set<Product> getProductTop() {
+    public List<Product> getProductTop() {
         return productTop;
     }
 
-    public void setProductTop(Set<Product> productTop) {
+    public void setProductTop(List<Product> productTop) {
         this.productTop = productTop;
     }
 }

@@ -1,18 +1,17 @@
 package com.lazur.utils;
 
-import com.google.zxing.WriterException;
+import com.lazur.entities.Product;
+import org.apache.avalon.framework.configuration.ConfigurationException;
+import org.krysalis.barcode4j.BarcodeException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 
 public interface BarcodeService {
-//
-//    String getEAN13Barcode(Product product) throws WriterException, IOException;
-//
-//    String getSKUNumber(Product product);
-//
-//    String getBarcode(Product productId) throws WriterException, IOException;
-//
-//    String getQRCode(HttpServletRequest request) throws WriterException, IOException;
+
+    String getEAN13Barcode(String barcode, String sku) throws IOException, BarcodeException, ConfigurationException;
+
+    String getSKUNumber(Product product);
+
 }

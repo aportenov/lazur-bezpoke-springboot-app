@@ -1,18 +1,25 @@
 package com.lazur.controllers;
 
+//import com.google.zxing.WriterException;
+import com.google.zxing.WriterException;
 import com.lazur.models.view.*;
 import com.lazur.services.*;
+import org.apache.avalon.framework.configuration.ConfigurationException;
+import org.krysalis.barcode4j.BarcodeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
 
@@ -69,8 +76,9 @@ public class ProductController {
                               @PathVariable("family")String family,
                               @PathVariable("product")String product,
                               @PathVariable("productId")Long productId,
-                              Model model) {
-        ProductViewDetailsModel productBiningModel = this.productService.findProductById(productId);
+                              HttpServletRequest request,
+                              Model model) throws IOException, BarcodeException, ConfigurationException, WriterException {
+        ProductViewDetailsModel productBiningModel = this.productService.findProductById(productId, request);
         addMaterials(model);
         model.addAttribute("product", productBiningModel);
         return "/products/edit-product";
@@ -82,8 +90,9 @@ public class ProductController {
                               @PathVariable("family")String family,
                               @PathVariable("product")String product,
                               @PathVariable("productId")Long productId,
-                              Model model) {
-        ProductViewDetailsModel productBiningModel = this.productService.findProductById(productId);
+                               HttpServletRequest request,
+                               Model model) throws IOException, BarcodeException, ConfigurationException, WriterException {
+        ProductViewDetailsModel productBiningModel = this.productService.findProductById(productId, request);
         addMaterials(model);
         model.addAttribute("product", productBiningModel);
         return "/products/delete-product";
@@ -118,10 +127,18 @@ public class ProductController {
 
     @PostMapping("/products/add")
     public String addProduct(@RequestParam("file") MultipartFile file,
-                             @ModelAttribute ProductBiningModel productBiningModel) throws IOException {
+                             @Valid @ModelAttribute ProductBiningModel productBiningModel,
+                             BindingResult bindingResult,
+                             RedirectAttributes redirectAttributes) throws IOException {
         if (!file.isEmpty()) {
             String image = "data:image/png;base64," + Base64.getEncoder().encodeToString(file.getBytes());
             productBiningModel.setImage(image);
+        }
+
+        if (bindingResult.hasErrors()){
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.product", bindingResult);
+            redirectAttributes.addFlashAttribute("product", productBiningModel);
+            return String.format("redirect:/products/create");
         }
 
         this.productService.save(productBiningModel);
@@ -129,8 +146,10 @@ public class ProductController {
     }
 
     @GetMapping("/product/details/{productId}")
-    public String getProductDetailsPage(@PathVariable("productId") long productId, Model model){
-        ProductViewDetailsModel productViewDetailsModel = this.productService.findProductById(productId);
+    public String getProductDetailsPage(@PathVariable("productId") long productId,
+                                        HttpServletRequest request,
+                                        Model model) throws IOException, BarcodeException, ConfigurationException, WriterException {
+        ProductViewDetailsModel productViewDetailsModel = this.productService.findProductById(productId, request);
         model.addAttribute("product", productViewDetailsModel);
 
         return "products/product-details";
@@ -160,9 +179,9 @@ public class ProductController {
 
 
     private void addMaterials(Model model) {
-        List<MaterialViewBasicModel> finishViewModels = this.materialService.findAllByMaterial("finish");
-        List<MaterialViewBasicModel> materialViewBasicModels = this.materialService.findAllByMaterial("frame");
-        List<MaterialViewBasicModel> topMaterialViewBasicModels = this.materialService.findAllByMaterial("top");
+        List<MaterialViewBasicModel> finishViewModels = this.materialService.findAllByMaterial("finish", "none");
+        List<MaterialViewBasicModel> materialViewBasicModels = this.materialService.findAllByMaterial("frame", "none");
+        List<MaterialViewBasicModel> topMaterialViewBasicModels = this.materialService.findAllByMaterial("top", "none");
         List<SpecificMaterialViewBasicModel> specificMaterialViewModels = this.specificMaterialService.findAll();
         List<CategoryViewModel> categoryList = this.categoryService.getCategories();
 

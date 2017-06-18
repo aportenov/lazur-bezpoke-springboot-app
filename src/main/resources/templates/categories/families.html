@@ -11,16 +11,25 @@
 
         <div class="page">
             <div class="row">
-                <form action="/family/add" method="POST">
+                <form action="/family/add" method="POST" th:object="${family}">
                     <div class="col-md-12 form-group">
                         <input type="hidden" id="category" name="category" th:value="${currCategory}"/>
                         <input type="hidden" id="type" name="type" th:value="${type}"/>
                         <input type="hidden" id="csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                         <div class="col-md-6">
-                            <input class="list-group-item" type="text" name="name"
-                                   placeholder="Family"/>
+                            <div class=""
+                                 th:classappend="${#fields.hasErrors('name')} ? 'has-danger'">
+                                <div class="col-md-10">
+                                    <input class="col-md-12 list-group-item" type="text" name="name"
+                                           th:field="${family.name}"
+                                           placeholder="Family"/>
+                                    <div class="feedback"
+                                         th:each="error : ${#fields.errors('name')}"
+                                         th:text="|${error}|"/>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <input class="btn btn-default btn-outline btn-circle" type="submit"
                                    th:value="|Add in ${type} / ${currCategory}|"/>
                         </div>

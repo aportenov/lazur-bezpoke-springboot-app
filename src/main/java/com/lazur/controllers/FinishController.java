@@ -9,8 +9,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -24,9 +27,9 @@ public class FinishController {
 
 
     @GetMapping("/finish/{material}")
-    public ResponseEntity<ViewTypeModel> getFrames(@PathVariable("material") String material){
+    public ResponseEntity<ViewTypeModel> getFrames(@PathVariable("material") String material) {
         List<ViewTypeModel> viewTypeModels = this.typeService.findAllByMaterial(material);
-        if(viewTypeModels == null){
+        if (viewTypeModels == null) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
 
@@ -37,10 +40,12 @@ public class FinishController {
     }
 
     @PostMapping("/finish/add")
-    public String addFinish(@ModelAttribute MaterialBindingModel materialBindingModel, Model model){
-//        if (true){
-//
-//        }
+    public String addFinish(@Valid @ModelAttribute MaterialBindingModel materialBindingModel,
+                            BindingResult bindingResult,
+                            RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+
+        }
 
         this.finishService.save(materialBindingModel);
         return "redirect:/materials";
@@ -48,12 +53,13 @@ public class FinishController {
 
     @PostMapping("/finish/add/{product}")
     public String addToFinish(@PathVariable("product") String product,
-                             @ModelAttribute TypeBindingModel typeBindingModel, Model model){
-//        if (true){
-//
-//        }
+                              @Valid @ModelAttribute TypeBindingModel typeBindingModel,
+                              BindingResult bindingResult,
+                              RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()){
+        }
 
-        this.typeService.save(product,typeBindingModel);
+        this.typeService.save(product, typeBindingModel);
         return "redirect:/materials";
     }
 
@@ -61,27 +67,27 @@ public class FinishController {
     @PostMapping("/finish/update/{materialId}")
     public String updateFinishMaterialPage(@PathVariable("materialId") Long materialId,
                                            @ModelAttribute MaterialUpdateModel materialUpdateModel,
-                                           Model model){
+                                           Model model) {
 //        if (true){
 //
 //        }
 
-        this.finishService.update(materialId,materialUpdateModel);
+        this.finishService.update(materialId, materialUpdateModel);
         return "redirect:/materials";
     }
 
     @PostMapping("/finish/delete/{materialId}")
     public String deleteFinishMaterialPage(@PathVariable("materialId") Long materialId,
-                                           Model model){
+                                           Model model) {
         this.finishService.delete(materialId);
         return "redirect:/materials";
     }
 
     @PostMapping("/finish/update/{type}/{materialId}")
     public String updateFinishMaterialTypePage(@PathVariable("materialId") Long materialId,
-                                              @PathVariable("type") String type,
-                                              @ModelAttribute TypeUpdateModel typeUpdateModel,
-                                              Model model) {
+                                               @PathVariable("type") String type,
+                                               @ModelAttribute TypeUpdateModel typeUpdateModel,
+                                               Model model) {
 //        if (true) {
 //
 //        }
@@ -93,8 +99,8 @@ public class FinishController {
 
     @PostMapping("/finish/delete/{type}/{materialId}")
     public String deleteFinishMaterialTypePage(@PathVariable("materialId") Long materialId,
-                                              @PathVariable("type") String type,
-                                              Model model) {
+                                               @PathVariable("type") String type,
+                                               Model model) {
         this.typeService.delete(materialId);
         return "redirect:/materials";
     }

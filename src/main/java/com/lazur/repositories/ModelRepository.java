@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface ModelRepository extends JpaRepository<Model,Long>{
 
-    @Query("SELECT m FROM Model AS m WHERE SUBSTRING(m.code, 1,1) LIKE :codes")
+    @Query("SELECT m FROM Model AS m WHERE SUBSTRING(m.code, 1,1) IN :codes")
     List<Model> findAllByType(@Param("codes") List<String> codes);
 
     @Query("SELECT m FROM Model AS m " +

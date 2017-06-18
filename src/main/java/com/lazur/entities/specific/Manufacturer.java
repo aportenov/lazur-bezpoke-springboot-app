@@ -2,7 +2,9 @@ package com.lazur.entities.specific;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -16,10 +18,10 @@ public class Manufacturer implements Serializable{
     private String name;
 
     @OneToMany(mappedBy = "manufacturer")
-    private Set<SpecificMaterial> specificMaterials;
+    private List<SpecificMaterial> specificMaterials;
 
     public Manufacturer() {
-        this.specificMaterials = new HashSet<>();
+        this.specificMaterials = new ArrayList<>();
     }
 
     public Long getId() {
@@ -38,11 +40,11 @@ public class Manufacturer implements Serializable{
         this.name = name;
     }
 
-    public Set<SpecificMaterial> getSpecificMaterials() {
+    public List<SpecificMaterial> getSpecificMaterials() {
         return specificMaterials;
     }
 
-    public void setSpecificMaterials(Set<SpecificMaterial> specificMaterials) {
+    public void setSpecificMaterials(List<SpecificMaterial> specificMaterials) {
         this.specificMaterials = specificMaterials;
     }
 }

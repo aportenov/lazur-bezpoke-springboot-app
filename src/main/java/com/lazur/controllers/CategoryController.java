@@ -6,8 +6,11 @@ import com.lazur.services.FamilyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -31,9 +34,16 @@ public class CategoryController {
     }
 
     @PostMapping("/category/add")
-    public String addCategory(@ModelAttribute CategoryBindingModel categoryBindingModel){
-        this.categoryService.save(categoryBindingModel);
+    public String addCategory(@Valid @ModelAttribute CategoryBindingModel categoryBindingModel,
+                              BindingResult bindingResult,
+                              RedirectAttributes redirectAttributes){
+        if (bindingResult.hasErrors()){
+            redirectAttributes.addFlashAttribute("category", categoryBindingModel);
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.category", bindingResult);
+            return "redirect:/categories";
+        }
 
+        this.categoryService.save(categoryBindingModel);
         return "redirect:/categories";
     }
 
@@ -42,6 +52,9 @@ public class CategoryController {
         addCategoryToTable(category, model);
         addCategoryToDropDown(model);
         model.addAttribute("type", category);
+            if (! model.containsAttribute("currModel")){
+            model.addAttribute("currModel", new ModelBindingModel());
+        }
 
         return "/categories/models";
     }
@@ -54,8 +67,8 @@ public class CategoryController {
         addCategoryToTable(category, model);
         model.addAttribute("currCategory", category);
         model.addAttribute("type", modelName);
-        if (!model.containsAttribute("category")) {
-            model.addAttribute("currModel", new ModelViewModel());
+        if (!model.containsAttribute("family")) {
+            model.addAttribute("family", new FamilyBidnignModel());
         }
 
         return "/categories/families";
@@ -131,6 +144,20 @@ public class CategoryController {
         return "/categories/models-edit";
     }
 
+    @GetMapping("/categories/delete/{category}/{modelName}/{id}")
+    public String getDeleteCategoryModelPage(@PathVariable("category") String category,
+                                           @PathVariable("modelName") String modelName,
+                                           @PathVariable("id") Long id,
+                                           Model model){
+        ModelEditModel categoryEditModel = this.categoryService.findByModel(id);
+        addCategoryToDropDown(model);
+        addCategoryToTable(category, model);
+        model.addAttribute("type", modelName);
+        model.addAttribute("currModel", categoryEditModel);
+
+        return "/categories/models-delete";
+    }
+
     @GetMapping("/categories/edit/{category}/{modelName}/{familyName}/{id}")
     public String getEditCategoryFamilyPage(@PathVariable("category") String category,
                                            @PathVariable("modelName") String modelName,
@@ -145,6 +172,22 @@ public class CategoryController {
         model.addAttribute("currFamily", familyViewModel);
 
         return "/categories/families-edit";
+    }
+
+    @GetMapping("/categories/delete/{category}/{modelName}/{familyName}/{id}")
+    public String getDeleteCategoryFamilyPage(@PathVariable("category") String category,
+                                            @PathVariable("modelName") String modelName,
+                                            @PathVariable("familyName") String familyName,
+                                            @PathVariable("id") Long id,
+                                            Model model){
+        FamilyViewModel familyViewModel = this.familyService.findByFamily(id);
+        addCategoryToDropDown(model);
+        addCategoryToTable(category, model);
+        model.addAttribute("type", familyName);
+        model.addAttribute("familyType", modelName);
+        model.addAttribute("currFamily", familyViewModel);
+
+        return "/categories/families-delete";
     }
 
 

@@ -98,5 +98,15 @@ public class ModelServiceImpl implements ModelService{
         this.modelRepository.save(model);
     }
 
+    @Override
+    public void delete(Long modelId) {
+        Model model = this.modelRepository.findOne(modelId);
+        if (model == null){
+            throw new ModelNotFoundExeption();
+        }
+
+        this.modelRepository.delete(model);
+    }
+
 
 }

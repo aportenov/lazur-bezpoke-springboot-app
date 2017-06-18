@@ -2,6 +2,7 @@ package com.lazur.serviceImpl;
 
 import com.lazur.entities.Material;
 import com.lazur.entities.Top;
+import com.lazur.exeptions.TopNotFoundExeption;
 import com.lazur.models.view.MaterialBindingModel;
 import com.lazur.models.view.MaterialUpdateModel;
 import com.lazur.models.view.MaterialViewBasicModel;
@@ -65,6 +66,11 @@ public class TopServiceImpl implements TopService{
 
     @Override
     public void delete(Long materialId) {
-        this.materialRepository.delete(materialId);
+        Material top = this.materialRepository.findOne(materialId);
+        if (top == null){
+            throw new TopNotFoundExeption();
+        }
+
+        this.materialRepository.delete(top);
     }
 }

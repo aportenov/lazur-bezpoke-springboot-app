@@ -1,13 +1,17 @@
 package com.lazur.models.view;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 import java.util.List;
 
 public class FamilyViewModel {
 
     private Long id;
 
+    @NotBlank(message = "Family Name cannot be empty")
     private String name;
 
+    @NotBlank(message = "Family Code cannot be empty")
     private Long code;
 
     public Long getId() {

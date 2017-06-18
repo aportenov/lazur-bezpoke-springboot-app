@@ -62,37 +62,4 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
         return repository;
     }
 
-//    @Override
-//    protected void configure(HttpSecurity http) throws Exception {
-//        http
-//                .authorizeRequests()
-//                .antMatchers("/images/**", "/bootstrap/**", "/js/**","/css/**", "/plugins/**","/fonts/**").permitAll()
-//                .antMatchers("/","/countries","/login/**","/register/**","/connect/**","/twitter/**", "/facebook/**").permitAll()
-//                .anyRequest().authenticated()
-//             .and()
-//                .formLogin().loginPage("/login").permitAll()
-//                .usernameParameter("username")
-//                .passwordParameter("password")
-//                .and()
-//                .rememberMe()
-//                .rememberMeCookieName("RememberMe")
-//                .rememberMeParameter("rememberMe")
-//                .key("VolunteerDatabase")
-//                .tokenValiditySeconds(1000)
-//                .and()
-//                .logout().logoutSuccessUrl("/").logoutRequestMatcher(new AntPathRequestMatcher("/logout")).permitAll()
-//                .deleteCookies("JSESSIONID")
-//                .and()
-//                .exceptionHandling().accessDeniedPage("/error")
-//                .and()
-//        .csrf().csrfTokenRepository(csrfTokenRepository()).ignoringAntMatchers("/connect/**");
-//
-//    }
-//
-//    public CsrfTokenRepository csrfTokenRepository() {
-//        HttpSessionCsrfTokenRepository repository = new HttpSessionCsrfTokenRepository();
-//        repository.setSessionAttributeName("_csrf");
-//        return repository;
-//    }
-
 }

@@ -2,9 +2,7 @@ package com.lazur.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "models")
@@ -18,19 +16,20 @@ public class Model implements Serializable{
 
     private String code;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "category_id")
     private Category category;
 
     @OneToMany(mappedBy = "model", fetch = FetchType.LAZY)
-    private Set<Product> products;
+    private List<Product> products;
 
     @OneToMany(mappedBy = "model", fetch = FetchType.LAZY)
-    private Set<Family> families;
+    @OrderBy("code ASC")
+    private List<Family> families;
 
     public Model() {
-        this.products = new LinkedHashSet<>();
-        this.families = new LinkedHashSet<>();
+        this.products = new ArrayList<>();
+        this.families = new ArrayList<>();
     }
 
     public Long getId() {
@@ -57,7 +56,7 @@ public class Model implements Serializable{
         this.code = code;
     }
 
-    public Set<Product> getProducts() {
+    public List<Product> getProducts() {
         return products;
     }
 
@@ -73,7 +72,7 @@ public class Model implements Serializable{
         this.category = category;
     }
 
-    public Set<Family> getFamilies() {
+    public List<Family> getFamilies() {
         return families;
     }
 

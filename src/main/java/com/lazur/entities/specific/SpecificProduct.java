@@ -1,7 +1,9 @@
 package com.lazur.entities.specific;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -15,10 +17,10 @@ public class SpecificProduct {
     private String name;
 
     @OneToMany(mappedBy = "specificProduct")
-    private Set<SpecificMaterial> specificMaterials;
+    protected List<SpecificMaterial> specificMaterials;
 
     public SpecificProduct() {
-        this.specificMaterials = new HashSet<>();
+        this.specificMaterials = new ArrayList<>();
     }
 
     public Long getId() {
@@ -35,5 +37,13 @@ public class SpecificProduct {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<SpecificMaterial> getSpecificMaterials() {
+        return specificMaterials;
+    }
+
+    public void setSpecificMaterials(List<SpecificMaterial> specificMaterials) {
+        this.specificMaterials = specificMaterials;
     }
 }

@@ -10,22 +10,21 @@
     <div class="row">
         <div class="page">
             <div class="row">
-                <form action="/model/add" method="POST">
+                <form th:action="@{'/models/delete/' + ${currModel.modelId}}" method="POST">
                     <div class="col-md-12 form-group">
-                        <input type="hidden" id="model" name="model" th:value="${type}"/>
-                        <input type="hidden" id="csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-                        <div class="col-md-4">
-                            <input class="list-group-item" type="text" name="name"
-                                   placeholder="Model name" th:value="${category.name}"/>
+                        <input  type="hidden" id="csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                        <div class="col-md-3">
+                            <input id="deleteMaterial"  readonly="readonly" class="list-group-item" type="text" name="name"
+                               placeholder="Model" th:value="${currModel.modelName}"/>
                         </div>
-                        <div class="col-md-4">
-                            <input class="list-group-item" type="text" name="code"
-                                   placeholder="Model code" th:value="${category.code}"/>
+                        <div  class="col-md-3">
+                            <input  id="deleteMaterial" readonly="readonly" class="list-group-item" type="text" name="code"
+                                   placeholder="Code" th:value="${currModel.modelCode}"/>
                         </div>
 
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <input class="btn btn-default btn-outline btn-circle" type="submit"
-                                   th:value="|Create ${type}|"/>
+                                   th:value="|Delete ${type}|"/>
                         </div>
                     </div>
                 </form>
@@ -41,8 +40,7 @@
                     <ul th:each="model : ${category.models}">
                         <li>
                             <a th:href="@{/categories/{category}/{model}(category=${category.name},model=${model.name})}"><span
-                                    th:text="${model.name}"/>
-                            </a>
+                                    th:text="${model.name}"/> </a>
                             <ul class="dropdown" th:each="family : ${model.families}">
                                 <li>
                                     <a th:href="@{/categories/{category}/{model}/{family}(category=${category.name},model=${model.name},family=${family.name})}">
@@ -100,7 +98,7 @@
                     </td>
                     <td>
                         <th:block th:if="${model.families.size()} == 0">
-                            <a class="btn btn-default btn-outline btn-circle" th:href="@{/categories/edit/{category}/{model}/{id}(category=${category.name}, model=${model.name}, id=${model.id})}">
+                            <a class="btn btn-default btn-outline btn-circle" th:href="@{/categories/delete/{category}/{model}/{id}(category=${category.name}, model=${model.name}, id=${model.id})}">
                                 <small><span th:text="${model.name}"></span></small>
                             </a>
                         </th:block>
@@ -115,7 +113,6 @@
     </div>
 
 </div>
-
 <th:block th:replace="scripts/script::home"/>
 </body>
 </html>

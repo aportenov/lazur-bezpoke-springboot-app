@@ -27,6 +27,7 @@ public class SpecificMaterialServiceImpl implements SpecificMaterialService {
     private final ManufacturerService manufacturerService;
     private final ManufCodeService manufCodeService;
     private int LETTER = 65;
+    private static final String NONE_CODE = "00";
 
     @Autowired
     public SpecificMaterialServiceImpl(SpecificMaterialRepository specificMaterialRepository,
@@ -77,7 +78,7 @@ public class SpecificMaterialServiceImpl implements SpecificMaterialService {
 
     @Override
     public Page<SpecificMaterialViewBasicModel> findAllPageable(Pageable pageable) {
-        Page<SpecificMaterial> specificMaterials = this.specificMaterialRepository.findAll(pageable);
+        Page<SpecificMaterial> specificMaterials = this.specificMaterialRepository.findAll(NONE_CODE, pageable);
         List<SpecificMaterialViewBasicModel> materialViewBasicModels = new ArrayList<>();
         for (SpecificMaterial specificMaterial : specificMaterials) {
             SpecificMaterialViewBasicModel specificMaterialViewBasicModel = this.modelMapper.map(specificMaterial, SpecificMaterialViewBasicModel.class);

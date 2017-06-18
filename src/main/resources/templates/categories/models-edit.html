@@ -109,7 +109,7 @@
                     </td>
                     <td>
                         <th:block th:if="${model.families.size()} == 0">
-                            <a class="btn btn-default btn-outline btn-circle" th:href="@{/categories/edit/{category}/{model}/{id}(category=${category.name}, model=${model.name}, id=${model.id})}">
+                            <a class="btn btn-default btn-outline btn-circle" th:href="@{/categories/delete/{category}/{model}/{id}(category=${category.name}, model=${model.name}, id=${model.id})}">
                                 <small><span th:text="${model.name}"></span></small>
                             </a>
                         </th:block>

@@ -89,7 +89,7 @@ public class UserServiceImpl implements UserService {
         } else if (role.equalsIgnoreCase("ROLE_GUEST")) {
             newRole = "GUEST";
         } else if (role.equalsIgnoreCase("GUEST")) {
-            newRole = "ROLE__GUEST";
+            newRole = "ROLE_GUEST";
         } else if (role.equalsIgnoreCase("ADMIN")) {
             newRole = "ROLE_ADMIN";
         }

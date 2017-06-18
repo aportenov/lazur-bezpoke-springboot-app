@@ -122,11 +122,18 @@ public class CategoryServiceImpl implements CategoryService {
             //throw new CategoryNotFoundExeption();
         }
 
-        CategoryCode categoryCode = this.categoryCodeService.getCode(categoryId, categoryUpdateModel.getOldCode());
-        category.setName(categoryUpdateModel.getName());
-        categoryCode.setCode(categoryUpdateModel.getCode());
-        this.categoryCodeService.update(categoryCode);
-        this.modelService.updateCodes(category.getName(), categoryUpdateModel.getOldCode(), categoryUpdateModel.getCode());
+        if (categoryUpdateModel.getOldCode()== null || categoryUpdateModel.getOldCode().isEmpty()){
+            CategoryCode  categoryCode = new CategoryCode();
+            categoryCode.setCode(categoryUpdateModel.getCode());
+            category.addCategoryCodes(categoryCode);
+            this.categoryRepository.save(category);
+        }else {
+            CategoryCode categoryCode = this.categoryCodeService.getCode(categoryId, categoryUpdateModel.getOldCode());
+            category.setName(categoryUpdateModel.getName());
+            categoryCode.setCode(categoryUpdateModel.getCode());
+            this.categoryCodeService.update(categoryCode);
+            this.modelService.updateCodes(category.getName(), categoryUpdateModel.getOldCode(), categoryUpdateModel.getCode());
+        }
     }
 
     @Override

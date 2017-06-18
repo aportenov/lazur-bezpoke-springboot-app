@@ -1,10 +1,16 @@
 package com.lazur.models.view;
 
 
+import com.lazur.validations.IsCodeHasAvailableNumbers;
+import org.hibernate.validator.constraints.NotBlank;
+
+
 public class CategoryBindingModel {
 
+    @NotBlank(message = "field Name cannot be empty")
     private String name;
 
+    @NotBlank(message = "You need to add a Code for the Category")
     private String code;
 
     public String getName() {
@@ -20,6 +26,6 @@ public class CategoryBindingModel {
     }
 
     public void setCode(String code) {
-        this.code = code;
+        this.code = code.toUpperCase();
     }
 }

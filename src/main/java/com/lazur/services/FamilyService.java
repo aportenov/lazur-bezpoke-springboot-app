@@ -16,5 +16,9 @@ public interface FamilyService {
     List<FamilyViewModel> findAllByCategoryAndModel(String category, String model);
 
     FamilyViewModel findByFamily(Long id);
+
+    void delete(Long familyId);
+
+    void update(Long familyId, FamilyViewModel familyBidnignModel);
 }
 

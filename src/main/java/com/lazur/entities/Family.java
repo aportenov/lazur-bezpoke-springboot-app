@@ -17,14 +17,14 @@ public class Family implements Serializable{
     private String code;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "family")
-    private Set<Product> products;
+    private List<Product> products;
 
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "model_id")
     private Model model;
 
     public Family() {
-        this.products = new LinkedHashSet<>();
+        this.products = new ArrayList<>();
     }
 
     public Long getId() {
@@ -59,7 +59,7 @@ public class Family implements Serializable{
         this.code = code;
     }
 
-    public Set<Product> getProducts() {
+    public List<Product> getProducts() {
         return products;
     }
 

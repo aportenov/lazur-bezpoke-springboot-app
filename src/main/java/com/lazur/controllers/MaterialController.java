@@ -59,6 +59,10 @@ public class MaterialController {
         addMaterialsToModel(model);
         model.addAttribute("materials", materialViewModels);
         model.addAttribute("type", name);
+        if (! model.containsAttribute("currMaterial")){
+            model.addAttribute("currMaterial", new MaterialBindingModel());
+        }
+
         return "/materials/materials-create";
 
     }
@@ -289,7 +293,7 @@ public class MaterialController {
     }
 
     private List<MaterialViewBasicModel> getMaterials(String material) {
-        return this.materialService.findAllByMaterial(material);
+        return this.materialService.findAllByMaterial(material, "");
 
     }
 
