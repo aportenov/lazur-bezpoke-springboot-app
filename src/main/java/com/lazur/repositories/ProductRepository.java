@@ -49,6 +49,11 @@ public interface ProductRepository extends JpaRepository<Product , Long> {
 
     @Query(value = "SELECT p FROM Product AS p WHERE p.sku = :sku")
     Product findOneBySkuNumber(@Param("sku") String sku);
+
+    @Query(value = "SELECT p FROM Product AS p " +
+            "WHERE p.barcodeEU = :searchedWord " +
+            "OR p.barcodeUS = :searchedWord")
+    Product findByBarcode(@Param("searchedWord") String searchedWord);
 }
 
 

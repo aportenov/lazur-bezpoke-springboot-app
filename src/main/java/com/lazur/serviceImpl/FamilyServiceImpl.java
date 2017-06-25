@@ -2,8 +2,9 @@ package com.lazur.serviceImpl;
 
 import com.lazur.entities.Family;
 import com.lazur.entities.Model;
-import com.lazur.models.view.FamilyBidnignModel;
-import com.lazur.models.view.FamilyViewModel;
+import com.lazur.exeptions.FamilyNotFoundExeption;
+import com.lazur.models.families.FamilyBidnignModel;
+import com.lazur.models.families.FamilyViewModel;
 import com.lazur.repositories.FamilyRepository;
 import com.lazur.services.CategoryService;
 import com.lazur.services.FamilyService;
@@ -39,7 +40,7 @@ public class FamilyServiceImpl implements FamilyService {
     public Family findFamily(String name, String productModel, String productCategory) {
         Family family = this.familyRepository.findByNameModelAndCategory(name, productModel, productCategory);
         if (family == null) {
-            //throw exeption
+            throw new FamilyNotFoundExeption();
         }
 
         return family;
@@ -74,7 +75,7 @@ public class FamilyServiceImpl implements FamilyService {
     public FamilyViewModel findByFamily(Long id) {
         Family family = this.familyRepository.findOne(id);
         if (family == null){
-            //throw new FamilyNotFoundExeption();
+            throw new FamilyNotFoundExeption();
         }
 
         FamilyViewModel familyViewModel = this.modelMapper.map(family, FamilyViewModel.class);
@@ -85,7 +86,7 @@ public class FamilyServiceImpl implements FamilyService {
     public void delete(Long familyId) {
         Family family = this.familyRepository.findOne(familyId);
         if (family == null){
-//            throw new FamilyNotFoundExeption();
+            throw new FamilyNotFoundExeption();
         }
 
         this.familyRepository.delete(family);
@@ -95,7 +96,7 @@ public class FamilyServiceImpl implements FamilyService {
     public void update(Long familyId, FamilyViewModel familyViewModel) {
         Family family = this.familyRepository.findOne(familyId);
         if (family == null){
-//            throw FamilyNotFoundExeption();
+            throw new FamilyNotFoundExeption();
         }
 
         family.setCode(String.format("%02d",familyViewModel.getCode()));

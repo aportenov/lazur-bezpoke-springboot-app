@@ -1,7 +1,6 @@
 package com.lazur.repositories;
 
-import com.lazur.entities.Frame;
-import com.lazur.entities.Material;
+import com.lazur.entities.materials.Material;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,7 +15,7 @@ public interface MaterialRepository extends JpaRepository<Material, Long>{
 
     @Query(value = "SELECT m FROM Material AS m " +
             "WHERE LOWER(m.name) = LOWER(:material) " +
-            "ORDER BY m.material ASC")
+            "ORDER BY m.id ASC")
     List<Material> findAllWhereNameIs(@Param("material") String material);
 
     @Query("SELECT m FROM Material AS m LEFT JOIN m.types AS t " +

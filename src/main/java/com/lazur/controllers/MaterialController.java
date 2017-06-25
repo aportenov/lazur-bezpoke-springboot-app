@@ -1,11 +1,14 @@
 package com.lazur.controllers;
 
+import com.lazur.exeptions.SpecialSubMaterialNotFound;
+import com.lazur.models.materials.*;
 import com.lazur.models.view.*;
 import com.lazur.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +18,35 @@ import java.util.List;
 
 @Controller
 public class MaterialController {
+
+    private static final String EMPTY_STRING = "";
+    private static final String NAME = "name";
+    private static final String TYPE = "type";
+    private static final String MATERIALS = "materials";
+    private static final String CURR_MATERIAL = "currMaterial";
+    private static final String SPECIAL = "special";
+    private static final String PRODUCT = "product";
+    private static final String SUB_MATERIAL = "subMaterial";
+    private static final String MATERIAL_ID = "materialId";
+    private static final String MATERIAL = "material";
+    private static final String TYPE_ID = "typeId";
+    private static final String UPDATE_NAME = "updateName";
+    private static final String ID = "id";
+    private static final String SPECIAL_PRODUCT = "specialProduct";
+    private static final String COLOR = "color";
+    private static final String MANUFACTURER = "manufacturer";
+    private static final String MANUF_CODE = "manufcode";
+    private static final String FRAME = "frame";
+    private static final String FINISH = "finish";
+    private static final String TOP = "top";
+    private static final String PRODUCTS = "products";
+    private static final String TOPS = "tops";
+    private static final String FRAMES = "frames";
+    private static final String COLORS = "colors";
+    private static final String MANUF_CODES = "manufCodes";
+    private static final String SPECIFIC_PRODUCTS = "specificProducts";
+    private static final String MANUFACTURERS = "manufacturers";
+    private static final int PAGE_SIZE = 20;
 
 
     private final MaterialService materialService;
@@ -52,15 +84,15 @@ public class MaterialController {
 
 
     @GetMapping("/materials/{name}")
-    public String getAddFramePage(@PathVariable("name") String name,
-                                  @PageableDefault(size = 20) Pageable pageable, Model model) {
+    public String getAddFramePage(@PathVariable(NAME) String name,
+                                  @PageableDefault(size = PAGE_SIZE) Pageable pageable, Model model) {
 
         Page<MaterialViewModel> materialViewModels = getMaterials(name, pageable);
         addMaterialsToModel(model);
-        model.addAttribute("materials", materialViewModels);
-        model.addAttribute("type", name);
-        if (! model.containsAttribute("currMaterial")){
-            model.addAttribute("currMaterial", new MaterialBindingModel());
+        model.addAttribute(MATERIALS, materialViewModels);
+        model.addAttribute(TYPE, name);
+        if (!model.containsAttribute(CURR_MATERIAL)) {
+            model.addAttribute(CURR_MATERIAL, new MaterialBindingModel());
         }
 
         return "/materials/materials-create";
@@ -69,106 +101,130 @@ public class MaterialController {
 
 
     @GetMapping("/materials/special")
-    public String getAddSpecialPage(@PageableDefault(size = 20) Pageable pageable, Model model) {
+    public String getAddSpecialPage(@PageableDefault(size = PAGE_SIZE) Pageable pageable, Model model) {
         addMaterialsToModel(model);
         Page<SpecificMaterialViewBasicModel> materialViewModels = this.specificMaterialService.findAllPageable(pageable);
-        model.addAttribute("materials", materialViewModels);
+        model.addAttribute(MATERIALS, materialViewModels);
         getSpecificProductMaterials(model);
+        if (!model.containsAttribute(SPECIAL)){
+            model.addAttribute(SPECIAL, new SpecificBindingModel());
+        }
+
         return "/materials/materials-special";
 
     }
 
 
     @GetMapping("/materials/{name}/{product}")
-    public String getAddToMaterialPage(@PathVariable("name") String name,
-                                       @PathVariable("product") String product,
-                                       @PageableDefault(size = 20) Pageable pageable, Model model) {
+    public String getAddToMaterialPage(@PathVariable(NAME) String name,
+                                       @PathVariable(PRODUCT) String product,
+                                       @PageableDefault(size = PAGE_SIZE) Pageable pageable, Model model) {
         Page<MaterialViewModel> materialViewModels = getMaterialTypes(name, product, pageable);
         addMaterialsToModel(model);
-        model.addAttribute("materials", materialViewModels);
-        model.addAttribute("product", product);
-        model.addAttribute("type", name);
+        model.addAttribute(MATERIALS, materialViewModels);
+        model.addAttribute(PRODUCT, product);
+        model.addAttribute(TYPE, name);
+        if (!model.containsAttribute(SUB_MATERIAL)) {
+            model.addAttribute(SUB_MATERIAL, new TypeBindingModel());
+        }
+
         return "/materials/materials-add";
 
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/materials/edit/{name}/{materialId}")
-    public String editMaterialPage(@PathVariable("name") String name,
-                                   @PathVariable("materialId") Long materialId,
-                                   @PageableDefault(size = 20) Pageable pageable, Model model) {
+    public String editMaterialPage(@PathVariable(NAME) String name,
+                                   @PathVariable(MATERIAL_ID) Long materialId,
+                                   @PageableDefault(size = PAGE_SIZE) Pageable pageable, Model model) {
         MaterialUpdateModel materialViewModel = this.materialService.findMaterialById(materialId);
         Page<MaterialViewModel> materialViewModels = getMaterials(name, pageable);
         addMaterialsToModel(model);
-        model.addAttribute("material", materialViewModel);
-        model.addAttribute("materials", materialViewModels);
-        model.addAttribute("type", name);
+        model.addAttribute(MATERIALS, materialViewModels);
+        model.addAttribute(TYPE, name);
+        model.addAttribute(UPDATE_NAME, materialViewModel.getName());
+        if (!model.containsAttribute(MATERIAL)) {
+            model.addAttribute(MATERIAL, materialViewModel);
+        }
+
         return "/materials/materials-edit";
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/materials/delete/{name}/{materialId}")
-    public String deleteMaterialPage(@PathVariable("name") String name,
-                                   @PathVariable("materialId") Long materialId,
-                                   @PageableDefault(size = 20) Pageable pageable, Model model) {
+    public String deleteMaterialPage(@PathVariable(NAME) String name,
+                                     @PathVariable(MATERIAL_ID) Long materialId,
+                                     @PageableDefault(size = PAGE_SIZE) Pageable pageable, Model model) {
         MaterialUpdateModel materialViewModel = this.materialService.findMaterialById(materialId);
         Page<MaterialViewModel> materialViewModels = getMaterials(name, pageable);
         addMaterialsToModel(model);
-        model.addAttribute("material", materialViewModel);
-        model.addAttribute("materials", materialViewModels);
-        model.addAttribute("type", name);
+        model.addAttribute(MATERIAL, materialViewModel);
+        model.addAttribute(MATERIALS, materialViewModels);
+        model.addAttribute(TYPE, name);
         return "/materials/materials-delete";
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/materials/edit/{name}/{product}/{typeId}")
-    public String editMaterialTypePage(@PathVariable("name") String name,
-                                       @PathVariable("product") String product,
-                                       @PathVariable("typeId") Long typeId,
-                                       @PageableDefault(size = 20) Pageable pageable, Model model) {
-        TypeViewModel typeViewModel = this.typeService.findOneById(typeId);
-        Page<MaterialViewModel> materialViewModels = getMaterialTypes(name,product, pageable);
+    public String editMaterialTypePage(@PathVariable(NAME) String name,
+                                       @PathVariable(PRODUCT) String product,
+                                       @PathVariable(TYPE_ID) Long typeId,
+                                       @PageableDefault(size = PAGE_SIZE) Pageable pageable, Model model) {
+
+        Page<MaterialViewModel> materialViewModels = getMaterialTypes(name, product, pageable);
         addMaterialsToModel(model);
-        model.addAttribute("material", typeViewModel);
-        model.addAttribute("materials", materialViewModels);
-        model.addAttribute("type", name);
+        if (!model.containsAttribute(MATERIAL)) {
+            TypeViewModel typeViewModel = this.typeService.findOneById(typeId);
+            model.addAttribute(MATERIAL, typeViewModel);
+        }
+        model.addAttribute(MATERIALS, materialViewModels);
+        model.addAttribute(TYPE, name);
         return "/materials/materials-edit-type";
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/materials/delete/{name}/{product}/{typeId}")
-    public String deleteMaterialTypePage(@PathVariable("name") String name,
-                                       @PathVariable("product") String product,
-                                       @PathVariable("typeId") Long typeId,
-                                       @PageableDefault(size = 20) Pageable pageable, Model model) {
+    public String deleteMaterialTypePage(@PathVariable(NAME) String name,
+                                         @PathVariable(PRODUCT) String product,
+                                         @PathVariable(TYPE_ID) Long typeId,
+                                         @PageableDefault(size = PAGE_SIZE) Pageable pageable, Model model) {
         TypeViewModel typeViewModel = this.typeService.findOneById(typeId);
-        Page<MaterialViewModel> materialViewModels = getMaterialTypes(name,product, pageable);
+        Page<MaterialViewModel> materialViewModels = getMaterialTypes(name, product, pageable);
         addMaterialsToModel(model);
-        model.addAttribute("material", typeViewModel);
-        model.addAttribute("materials", materialViewModels);
-        model.addAttribute("type", name);
+        model.addAttribute(MATERIAL, typeViewModel);
+        model.addAttribute(MATERIALS, materialViewModels);
+        model.addAttribute(TYPE, name);
         return "/materials/materials-delete-type";
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/materials/special/edit/{id}")
-    public String getEditSpecialPage(@PathVariable("id") Long id,
-                                     @PageableDefault(size = 20) Pageable pageable,
+    public String getEditSpecialPage(@PathVariable(ID) Long id,
+                                     @PageableDefault(size = PAGE_SIZE) Pageable pageable,
                                      Model model) {
         SpecificMaterialViewBasicModel specificMaterialViewBasicModel = this.specificMaterialService.findOneById(id);
-        addMaterialsToModel(model);
         Page<SpecificMaterialViewBasicModel> materialViewModels = this.specificMaterialService.findAllPageable(pageable);
-        model.addAttribute("material", specificMaterialViewBasicModel);
-        model.addAttribute("materials", materialViewModels);
+        model.addAttribute(MATERIALS, materialViewModels);
         getSpecificProductMaterials(model);
+        addMaterialsToModel(model);
+        if (! model.containsAttribute(SPECIAL)) {
+            model.addAttribute(SPECIAL, specificMaterialViewBasicModel);
+        }
+
         return "/materials/materials-special-edit";
 
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/materials/special/delete/{id}")
-    public String getDeleteSpecialPage(@PathVariable("id") Long id,
-                                     @PageableDefault(size = 20) Pageable pageable,
-                                     Model model) {
+    public String getDeleteSpecialPage(@PathVariable(ID) Long id,
+                                       @PageableDefault(size = PAGE_SIZE) Pageable pageable,
+                                       Model model) {
         SpecificMaterialViewBasicModel specificMaterialViewBasicModel = this.specificMaterialService.findOneById(id);
         addMaterialsToModel(model);
         Page<SpecificMaterialViewBasicModel> materialViewModels = this.specificMaterialService.findAllPageable(pageable);
-        model.addAttribute("material", specificMaterialViewBasicModel);
-        model.addAttribute("materials", materialViewModels);
+        model.addAttribute(SPECIAL, specificMaterialViewBasicModel);
+        model.addAttribute(MATERIALS, materialViewModels);
         getSpecificProductMaterials(model);
         return "/materials/materials-special-delete";
 
@@ -176,58 +232,67 @@ public class MaterialController {
 
 
     @GetMapping("/materials/special/{product}")
-    public String getSubMaterialPage(@PathVariable("product") String product,
-                                       @PageableDefault(size = 20) Pageable pageable, Model model) {
-        getSpecialMaterial(product, pageable,model);
+    public String getSubMaterialPage(@PathVariable(PRODUCT) String product,
+                                     @PageableDefault(size = PAGE_SIZE) Pageable pageable, Model model) {
+        getSpecialMaterial(product, pageable, model);
         addMaterialsToModel(model);
-        model.addAttribute("type", product);
+        if (! model.containsAttribute(SPECIAL)){
+            model.addAttribute(SPECIAL, new SpecialSubMaterialBindingModel());
+        }
+
+        model.addAttribute(TYPE, product);
         return "/materials/materials-add-special";
 
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/materials/special/edit/{product}/{id}")
-    public String editSubMaterialPage(@PathVariable("product") String product,
-                                      @PathVariable("id") Long id,
-                                      @PageableDefault(size = 20) Pageable pageable, Model model) {
-        SpecialSubMaterialViewModel specialSubMaterialViewModel = getSpecialSubMaterial(product,id);
-        getSpecialMaterial(product, pageable,model);
+    public String editSubMaterialPage(@PathVariable(PRODUCT) String product,
+                                      @PathVariable(ID) Long id,
+                                      @PageableDefault(size = PAGE_SIZE) Pageable pageable, Model model) {
+        SpecialSubMaterialViewModel specialSubMaterialViewModel = getSpecialSubMaterial(product, id);
+        getSpecialMaterial(product, pageable, model);
         addMaterialsToModel(model);
-        model.addAttribute("specialProduct",specialSubMaterialViewModel);
-        model.addAttribute("type", product);
+        if (!model.containsAttribute(SPECIAL)) {
+            model.addAttribute(SPECIAL, specialSubMaterialViewModel);
+        }
+
+        model.addAttribute(TYPE, product);
         return "/materials/materials-edit-special";
 
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/materials/special/delete/{product}/{id}")
-    public String deleteSubMaterialPage(@PathVariable("product") String product,
-                                      @PathVariable("id") Long id,
-                                      @PageableDefault(size = 20) Pageable pageable, Model model) {
-        SpecialSubMaterialViewModel specialSubMaterialViewModel = getSpecialSubMaterial(product,id);
-        getSpecialMaterial(product, pageable,model);
+    public String deleteSubMaterialPage(@PathVariable(PRODUCT) String product,
+                                        @PathVariable(ID) Long id,
+                                        @PageableDefault(size = PAGE_SIZE) Pageable pageable, Model model) {
+        SpecialSubMaterialViewModel specialSubMaterialViewModel = getSpecialSubMaterial(product, id);
+        getSpecialMaterial(product, pageable, model);
         addMaterialsToModel(model);
-        model.addAttribute("specialProduct",specialSubMaterialViewModel);
-        model.addAttribute("type", product);
+        model.addAttribute(SPECIAL_PRODUCT, specialSubMaterialViewModel);
+        model.addAttribute(TYPE, product);
         return "/materials/materials-delete-special";
 
     }
 
     private SpecialSubMaterialViewModel getSpecialSubMaterial(String product, Long id) {
         SpecialSubMaterialViewModel specialSubMaterialViewModel = null;
-        switch (product.toLowerCase()){
-            case "product":
+        switch (product.toLowerCase()) {
+            case PRODUCT:
                 specialSubMaterialViewModel = this.specificProductService.findById(id);
                 break;
-            case "color":
+            case COLOR:
                 specialSubMaterialViewModel = this.colorService.findById(id);
                 break;
-            case "manufacturer":
+            case MANUFACTURER:
                 specialSubMaterialViewModel = this.manufacturerService.findById(id);
                 break;
-            case "manufcode":
+            case MANUF_CODE:
                 specialSubMaterialViewModel = this.manufCodeService.findById(id);
                 break;
             default:
-                //throw SpecialSubMaterialNotFound();
+                throw new SpecialSubMaterialNotFound();
         }
 
         return specialSubMaterialViewModel;
@@ -237,13 +302,13 @@ public class MaterialController {
     private Page<MaterialViewModel> getMaterials(String name, Pageable pageable) {
         Page<MaterialViewModel> materialViewModels = null;
         switch (name.toLowerCase()) {
-            case "frame":
+            case FRAME:
                 materialViewModels = this.materialService.findAllByMaterialPage(name, pageable);
                 break;
-            case "finish":
+            case FINISH:
                 materialViewModels = this.materialService.findAllByMaterialPage(name, pageable);
                 break;
-            case "top":
+            case TOP:
                 materialViewModels = this.materialService.findAllByMaterialPage(name, pageable);
                 break;
             default:
@@ -256,13 +321,13 @@ public class MaterialController {
     private Page<MaterialViewModel> getMaterialTypes(String name, String product, Pageable pageable) {
         Page<MaterialViewModel> materialViewModels = null;
         switch (name.toLowerCase()) {
-            case "frame":
+            case FRAME:
                 materialViewModels = this.materialService.findAllByMaterialAndTypePage(name, product, pageable);
                 break;
-            case "finish":
+            case FINISH:
                 materialViewModels = this.materialService.findAllByMaterialAndTypePage(name, product, pageable);
                 break;
-            case "top":
+            case TOP:
                 materialViewModels = this.materialService.findAllByMaterialAndTypePage(name, product, pageable);
                 break;
             default:
@@ -276,47 +341,47 @@ public class MaterialController {
         List<SpecialSubMaterialViewModel> specialProductViewModels = this.specificProductService.findAllProducts();
         List<SpecialSubMaterialViewModel> manufacturerViewModels = this.manufacturerService.findAllManufactorers();
         List<SpecialSubMaterialViewModel> manufCodeViewModels = this.manufCodeService.findAllManufCodes();
-        model.addAttribute("colors", specialSubMaterialViewModels);
-        model.addAttribute("manufactorers", manufacturerViewModels);
-        model.addAttribute("manufCodes", manufCodeViewModels);
-        model.addAttribute("specificProducts", specialProductViewModels);
+        model.addAttribute(COLORS, specialSubMaterialViewModels);
+        model.addAttribute(MANUFACTURERS, manufacturerViewModels);
+        model.addAttribute(MANUF_CODES, manufCodeViewModels);
+        model.addAttribute(SPECIFIC_PRODUCTS, specialProductViewModels);
     }
 
 
     private void addMaterialsToModel(Model model) {
-        List<MaterialViewBasicModel> finishMateriaLlist = getMaterials("finish");
-        List<MaterialViewBasicModel> frameMateriaLlist = getMaterials("frame");
-        List<MaterialViewBasicModel> topMateriaLlist = getMaterials("top");
-        model.addAttribute("frames", frameMateriaLlist);
-        model.addAttribute("finish", finishMateriaLlist);
-        model.addAttribute("tops", topMateriaLlist);
+        List<MaterialViewBasicModel> finishMateriaLlist = getMaterials(FINISH);
+        List<MaterialViewBasicModel> frameMateriaLlist = getMaterials(FRAME);
+        List<MaterialViewBasicModel> topMateriaLlist = getMaterials(TOP);
+        model.addAttribute(FRAMES, frameMateriaLlist);
+        model.addAttribute(FINISH, finishMateriaLlist);
+        model.addAttribute(TOPS, topMateriaLlist);
     }
 
     private List<MaterialViewBasicModel> getMaterials(String material) {
-        return this.materialService.findAllByMaterial(material, "");
+        return this.materialService.findAllByMaterial(material, EMPTY_STRING);
 
     }
 
-    private void getSpecialMaterial(String material, Pageable pageable, Model model){
+    private void getSpecialMaterial(String material, Pageable pageable, Model model) {
         Page<SpecialSubMaterialViewModel> specialSubMaterialViewModel = null;
-        switch (material.toLowerCase()){
-            case "product":
+        switch (material.toLowerCase()) {
+            case PRODUCT:
                 specialSubMaterialViewModel = this.specificProductService.findAllPageable(pageable);
                 break;
-            case "color":
+            case COLOR:
                 specialSubMaterialViewModel = this.colorService.findAllPageable(pageable);
                 break;
-            case "manufacturer":
+            case MANUFACTURER:
                 specialSubMaterialViewModel = this.manufacturerService.findAllPageable(pageable);
                 break;
-            case "manufcode":
+            case MANUF_CODE:
                 specialSubMaterialViewModel = this.manufCodeService.findAllPageable(pageable);
                 break;
             default:
-                //throw SpecialSubMaterialNotFound();
+                throw new SpecialSubMaterialNotFound();
         }
 
-        model.addAttribute("products", specialSubMaterialViewModel);
+        model.addAttribute(PRODUCTS, specialSubMaterialViewModel);
     }
 
 }

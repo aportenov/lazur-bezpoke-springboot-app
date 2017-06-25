@@ -3,9 +3,8 @@ package com.lazur.serviceImpl;
 import com.lazur.entities.Role;
 import com.lazur.entities.User;
 import com.lazur.massages.Errors;
-import com.lazur.models.view.UserBindingModel;
-import com.lazur.models.view.UserEditBindingModel;
-import com.lazur.models.view.UserViewModel;
+import com.lazur.models.users.UserBindingModel;
+import com.lazur.models.users.UserViewModel;
 import com.lazur.repositories.UserRepository;
 import com.lazur.services.RoleService;
 import com.lazur.services.UserService;
@@ -25,6 +24,11 @@ import java.util.Set;
 
 @Service
 public class UserServiceImpl implements UserService {
+
+    private static final String ADMIN = "ADMIN";
+    private static final String ROLE_ADMIN = "ROLE_ADMIN";
+    private static final String GUEST = "GUEST";
+    private static final String ROLE_GUEST = "ROLE_GUEST";
 
     private final ModelMapper modelMapper;
     private final RoleService roleService;
@@ -83,15 +87,15 @@ public class UserServiceImpl implements UserService {
     }
 
     private <E> E format(String role) {
-        String newRole = "null";
-        if (role.equalsIgnoreCase("ROLE_ADMIN")) {
-            newRole = "ADMIN";
-        } else if (role.equalsIgnoreCase("ROLE_GUEST")) {
-            newRole = "GUEST";
-        } else if (role.equalsIgnoreCase("GUEST")) {
-            newRole = "ROLE_GUEST";
-        } else if (role.equalsIgnoreCase("ADMIN")) {
-            newRole = "ROLE_ADMIN";
+        String newRole = null;
+        if (role.equalsIgnoreCase(ROLE_ADMIN)) {
+            newRole = ADMIN;
+        } else if (role.equalsIgnoreCase(ROLE_GUEST)) {
+            newRole = GUEST;
+        } else if (role.equalsIgnoreCase(GUEST)) {
+            newRole = ROLE_GUEST;
+        } else if (role.equalsIgnoreCase(ADMIN)) {
+            newRole = ROLE_ADMIN;
         }
 
             return (E) newRole;
@@ -111,13 +115,14 @@ public class UserServiceImpl implements UserService {
         }
 
         @Override
-        public void updateUser (Long id, UserEditBindingModel userEditBindingModel) throws RoleNotFoundException {
+        public void updateUser (Long id, UserBindingModel userBindingModel) throws RoleNotFoundException {
             User user = this.userRepository.findOne(id);
-            if (userEditBindingModel.getPassword() != null) {
-                user.setPassword(this.bCryptPasswordEncoder.encode(userEditBindingModel.getPassword()));
+            if (userBindingModel.getPassword() != null) {
+                user.setPassword(this.bCryptPasswordEncoder.encode(userBindingModel.getPassword()));
             }
-            user.setUsername(userEditBindingModel.getUsername());
-            Role role = this.roleService.getCurrentRole(userEditBindingModel.getRole());
+
+            user.setUsername(userBindingModel.getUsername());
+            Role role = this.roleService.getCurrentRole(format(userBindingModel.getRole()));
             Set<Role> roleSet = new HashSet<>();
             roleSet.add(role);
             user.setRoles(roleSet);
@@ -125,4 +130,14 @@ public class UserServiceImpl implements UserService {
             this.userRepository.save(user);
         }
 
+    @Override
+    public void deleteUser(Long id) throws NotFoundException {
+        User user = this.userRepository.findOne(id);
+        if (user == null){
+            throw new UsernameNotFoundException(Errors.USER_NOT_FOUND);
+        }
+
+        this.userRepository.delete(user);
     }
+
+}

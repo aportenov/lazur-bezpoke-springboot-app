@@ -1,9 +1,9 @@
 package com.lazur.serviceImpl;
 
 import com.lazur.entities.specific.*;
-import com.lazur.exeptions.SpecificMaterialNotExeption;
-import com.lazur.models.view.SpecificBindingModel;
-import com.lazur.models.view.SpecificMaterialViewBasicModel;
+import com.lazur.exeptions.SpecificMaterialNotFoundExeption;
+import com.lazur.models.materials.SpecificBindingModel;
+import com.lazur.models.materials.SpecificMaterialViewBasicModel;
 import com.lazur.repositories.SpecificMaterialRepository;
 import com.lazur.services.*;
 import org.modelmapper.ModelMapper;
@@ -20,14 +20,14 @@ import java.util.List;
 @Service
 public class SpecificMaterialServiceImpl implements SpecificMaterialService {
 
+    private static final String NONE_CODE = "00";
+
     private final SpecificMaterialRepository specificMaterialRepository;
     private final ModelMapper modelMapper;
     private final SpecificProductService specificProductService;
     private final ColorService colorService;
     private final ManufacturerService manufacturerService;
     private final ManufCodeService manufCodeService;
-    private int LETTER = 65;
-    private static final String NONE_CODE = "00";
 
     @Autowired
     public SpecificMaterialServiceImpl(SpecificMaterialRepository specificMaterialRepository,
@@ -60,7 +60,7 @@ public class SpecificMaterialServiceImpl implements SpecificMaterialService {
     @Override
     @Transactional
     public void save(SpecificBindingModel specificBindingModel) {
-        SpecificProduct specificProduct = this.specificProductService.findByName(specificBindingModel.getProductName());
+        SpecificProduct specificProduct = this.specificProductService.findByName(specificBindingModel.getSpecificProductName());
         Color color = this.colorService.findByName(specificBindingModel.getColorName());
         Manufacturer manufacturer = this.manufacturerService.findByName(specificBindingModel.getManufacturerName());
         ManufCode manufCode = this.manufCodeService.findByName(specificBindingModel.getManufCodeName());
@@ -68,10 +68,8 @@ public class SpecificMaterialServiceImpl implements SpecificMaterialService {
         specificMaterial.setColor(color);
         specificMaterial.setManufacturer(manufacturer);
         specificMaterial.setManufCode(manufCode);
-        specificMaterial.setSpecificProduct(specificProduct);
-        long count = this.specificMaterialRepository.count();
-        String code = getCode(count);
-        specificMaterial.setCode(code);
+        specificMaterial.setSpecificProduct(specificProduct);;
+        specificMaterial.setCode(specificBindingModel.getCode());
         this.specificMaterialRepository.save(specificMaterial);
 
     }
@@ -92,7 +90,7 @@ public class SpecificMaterialServiceImpl implements SpecificMaterialService {
     public SpecificMaterialViewBasicModel findOneById(Long id) {
        SpecificMaterial specificMaterial = this.specificMaterialRepository.findOne(id);
        if (specificMaterial == null){
-           // throw exeption
+           throw new SpecificMaterialNotFoundExeption();
        }
        SpecificMaterialViewBasicModel specificMaterialViewBasicModel = this.modelMapper.map(specificMaterial, SpecificMaterialViewBasicModel.class);
        return specificMaterialViewBasicModel;
@@ -102,10 +100,10 @@ public class SpecificMaterialServiceImpl implements SpecificMaterialService {
     public void update(Long id, SpecificBindingModel specificBindingModel) {
         SpecificMaterial specificMaterial = this.specificMaterialRepository.findOne(id);
         if (specificMaterial == null) {
-            //throw exeption
+            throw new SpecificMaterialNotFoundExeption();
         }
 
-        SpecificProduct specificProduct = this.specificProductService.findByName(specificBindingModel.getProductName());
+        SpecificProduct specificProduct = this.specificProductService.findByName(specificBindingModel.getSpecificProductName());
         Color color = this.colorService.findByName(specificBindingModel.getColorName());
         Manufacturer manufacturer = this.manufacturerService.findByName(specificBindingModel.getManufacturerName());
         ManufCode manufCode = this.manufCodeService.findByName(specificBindingModel.getManufCodeName());
@@ -113,6 +111,7 @@ public class SpecificMaterialServiceImpl implements SpecificMaterialService {
         specificMaterial.setManufacturer(manufacturer);
         specificMaterial.setManufCode(manufCode);
         specificMaterial.setSpecificProduct(specificProduct);
+        specificMaterial.setCode(specificBindingModel.getCode());
         this.specificMaterialRepository.save(specificMaterial);
     }
 
@@ -125,24 +124,10 @@ public class SpecificMaterialServiceImpl implements SpecificMaterialService {
     public SpecificMaterial findEntityById(Long specificMaterialId) {
         SpecificMaterial specificMaterial = this.specificMaterialRepository.findOne(specificMaterialId);
         if (specificMaterial == null){
-            throw new SpecificMaterialNotExeption();
+            throw new SpecificMaterialNotFoundExeption();
         }
 
         return specificMaterial;
     }
-
-
-    private String getCode(long count) {
-        long digit = (count % 9);
-        if (digit == 0 && count > 0){
-            LETTER++;
-        }
-
-        digit++;
-        return String.format("%s%d",(char) LETTER, digit);
-
-
-    }
-
 
 }

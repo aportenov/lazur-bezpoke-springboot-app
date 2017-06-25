@@ -2,8 +2,8 @@ package com.lazur.services;
 
 
 import com.lazur.entities.Family;
-import com.lazur.models.view.FamilyBidnignModel;
-import com.lazur.models.view.FamilyViewModel;
+import com.lazur.models.families.FamilyBidnignModel;
+import com.lazur.models.families.FamilyViewModel;
 
 import java.util.List;
 

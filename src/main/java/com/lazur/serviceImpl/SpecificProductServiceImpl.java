@@ -1,8 +1,9 @@
 package com.lazur.serviceImpl;
 
 import com.lazur.entities.specific.SpecificProduct;
-import com.lazur.models.view.SpecialSubMaterialBindingModel;
-import com.lazur.models.view.SpecialSubMaterialViewModel;
+import com.lazur.exeptions.SpecificProductNotFoundExeption;
+import com.lazur.models.materials.SpecialSubMaterialBindingModel;
+import com.lazur.models.materials.SpecialSubMaterialViewModel;
 import com.lazur.repositories.SpecificProductRepository;
 import com.lazur.services.SpecificProductService;
 import org.modelmapper.ModelMapper;
@@ -18,6 +19,8 @@ import java.util.List;
 
 @Service
 public class SpecificProductServiceImpl implements SpecificProductService {
+
+    private static final String COMA_SEPARATOR = ",";
 
     private final SpecificProductRepository specificProductRepository;
     private final ModelMapper modelMapper;
@@ -43,7 +46,7 @@ public class SpecificProductServiceImpl implements SpecificProductService {
 
     @Override
     public SpecificProduct findByName(String productName) {
-        String[] product = productName.split(",");
+        String[] product = productName.split(COMA_SEPARATOR);
         productName = Arrays.stream(product).filter(e -> !e.isEmpty()).findFirst().get();
         SpecificProduct specificProduct = this.specificProductRepository.findByName(productName);
         if (specificProduct == null){
@@ -78,7 +81,7 @@ public class SpecificProductServiceImpl implements SpecificProductService {
     public SpecialSubMaterialViewModel findById(Long id) {
         SpecificProduct specificProduct = this.specificProductRepository.findOne(id);
         if (specificProduct == null) {
-            //throw SpecificProductNotFoundExeption();
+            throw new SpecificProductNotFoundExeption();
         }
 
         SpecialSubMaterialViewModel specialSubMaterialViewModel = this.modelMapper.map(specificProduct,SpecialSubMaterialViewModel.class);

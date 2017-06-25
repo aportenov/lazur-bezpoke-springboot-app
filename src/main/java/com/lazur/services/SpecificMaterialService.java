@@ -1,8 +1,8 @@
 package com.lazur.services;
 
 import com.lazur.entities.specific.SpecificMaterial;
-import com.lazur.models.view.SpecificBindingModel;
-import com.lazur.models.view.SpecificMaterialViewBasicModel;
+import com.lazur.models.materials.SpecificBindingModel;
+import com.lazur.models.materials.SpecificMaterialViewBasicModel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -23,6 +23,7 @@ public interface SpecificMaterialService {
     void delete(Long id);
 
     SpecificMaterial findEntityById(Long specificMaterial);
+
 }
 
 

@@ -1,6 +1,7 @@
 package com.lazur.serviceImpl;
 
 import com.lazur.entities.CategoryCode;
+import com.lazur.exeptions.CategoryCodeNotFoundExeption;
 import com.lazur.repositories.CategoryCodeRepository;
 import com.lazur.services.CategoryCodeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ public class CategoryCodeServiceImpl implements CategoryCodeService{
     public CategoryCode getCode(Long categoryId, String code) {
        CategoryCode categoryCode = this.categoryCodeRepository.findByCategoryAndCode(categoryId,code);
        if (categoryCode == null){
-           //throw exeption
+           throw new CategoryCodeNotFoundExeption();
        }
 
        return categoryCode;

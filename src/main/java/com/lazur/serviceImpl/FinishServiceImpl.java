@@ -1,10 +1,11 @@
 package com.lazur.serviceImpl;
 
-import com.lazur.entities.Finish;
-import com.lazur.entities.Material;
-import com.lazur.models.view.MaterialBindingModel;
-import com.lazur.models.view.MaterialUpdateModel;
-import com.lazur.models.view.MaterialViewBasicModel;
+import com.lazur.entities.materials.Finish;
+import com.lazur.entities.materials.Material;
+import com.lazur.exeptions.FinishNotFoundExeption;
+import com.lazur.models.materials.MaterialBindingModel;
+import com.lazur.models.materials.MaterialUpdateModel;
+import com.lazur.models.materials.MaterialViewBasicModel;
 import com.lazur.repositories.MaterialRepository;
 import com.lazur.services.FinishService;
 import org.modelmapper.ModelMapper;
@@ -46,17 +47,17 @@ public class FinishServiceImpl implements FinishService{
         Finish finish = this.modelMapper.map(materialBindingModel,Finish.class);
         Material isExist = this.materialRepository.findOneByMaterialAndName(materialBindingModel.getMaterial(), "finish");
         if (isExist == null){
-
+            this.materialRepository.save(finish);
         }
 
-        this.materialRepository.save(finish);
+
     }
 
     @Override
     public void update(Long materialId, MaterialUpdateModel materialUpdateModel) {
         Material material = this.materialRepository.findOne(materialId);
         if (material == null){
-            //throw exeption
+            throw new FinishNotFoundExeption();
         }
 
         material.setAbbreviation(materialUpdateModel.getAbbreviation());

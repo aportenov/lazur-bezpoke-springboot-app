@@ -1,9 +1,9 @@
 package com.lazur.services;
 
-import com.lazur.models.view.TypeBindingModel;
-import com.lazur.models.view.TypeUpdateModel;
-import com.lazur.models.view.TypeViewModel;
-import com.lazur.models.view.ViewTypeModel;
+import com.lazur.models.materials.TypeBindingModel;
+import com.lazur.models.materials.TypeUpdateModel;
+import com.lazur.models.materials.TypeViewModel;
+import com.lazur.models.materials.ViewTypeModel;
 
 import java.util.List;
 

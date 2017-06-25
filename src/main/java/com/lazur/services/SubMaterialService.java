@@ -1,6 +1,6 @@
 package com.lazur.services;
 
-import com.lazur.models.view.SpecialSubMaterialBindingModel;
+import com.lazur.models.materials.SpecialSubMaterialBindingModel;
 
 public interface SubMaterialService {
 

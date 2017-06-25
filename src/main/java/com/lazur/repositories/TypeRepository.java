@@ -1,6 +1,6 @@
 package com.lazur.repositories;
 
-import com.lazur.entities.Type;
+import com.lazur.entities.types.Type;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

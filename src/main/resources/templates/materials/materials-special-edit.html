@@ -11,10 +11,17 @@
 
         <div>
             <div class="row">
-                <form th:action="'/special/update/' + ${material.id}" method="POST">
+                <form th:action="'/special/update/' + ${special.id}" method="POST" th:object="${special}">
                     <div class="col-md-12 form-group">
+                        <th:block th:if="${#fields.hasErrors('global')}">
+                            <div class="alert alert-danger fade in">
+                                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                <th:block th:each="error : ${#fields.errors('global')}">
+                                    <span th:text="|${error}|"/>
+                                </th:block>
+                            </div>
+                        </th:block>
                         <input type="hidden" id="csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-
                         <div class="row">
                             <div class="col-md-3 form-group">
                                 <label>Product</label>
@@ -24,11 +31,14 @@
                                        placeholder="Create"/>
                                 <small>OR</small>
                                 <div class="selectContainer">
-                                    <select id="editMaterial" name="productName"
+                                    <select id="editMaterial" name="specificProductName"
                                             class="form-control" title="Choose Product">
-                                        <option th:text="${material.specificProductName}" th:value="${material.specificProductName}">Select</option>
+                                        <option th:text="${special.specificProductName}"
+                                                th:value="${special.specificProductName}">Select
+                                        </option>
                                         <th:block th:each="specificProduct: ${specificProducts}">
-                                            <option><span th:text="${specificProduct.name}" th:value="${specificProduct.name}"/>
+                                            <option><span th:text="${specificProduct.name}"
+                                                          th:value="${specificProduct.name}"/>
                                             </option>
                                         </th:block>
                                     </select>
@@ -44,7 +54,9 @@
                                 <div class="selectContainer">
                                     <select id="editMaterial" name="colorName"
                                             class="form-control" title="Choose Color">
-                                        <option th:text="${material.colorName}" th:value="${material.colorName}">Select</option>
+                                        <option th:text="${special.colorName}" th:value="${special.colorName}">
+                                            Select
+                                        </option>
                                         <th:block th:each="color: ${colors}">
                                             <option><span th:text="${color.name}" th:value="${color.name}"/>
                                             </option>
@@ -63,9 +75,12 @@
                                 <div class="selectContainer">
                                     <select id="editMaterial" name="manufacturerName"
                                             class="form-control" title="Choose Color">
-                                        <option th:text="${material.manufacturerName}" th:value="${material.manufacturerName}">Select</option>
-                                        <th:block th:each="manufactorer: ${manufactorers}">
-                                            <option><span th:text="${manufactorer.name}" th:value="${manufactorer.name}"/>
+                                        <option th:text="${special.manufacturerName}"
+                                                th:value="${special.manufacturerName}">Select
+                                        </option>
+                                        <th:block th:each="manufacturer: ${manufacturers}">
+                                            <option><span th:text="${manufacturer.name}"
+                                                          th:value="${manufacturer.name}"/>
                                             </option>
                                         </th:block>
                                     </select>
@@ -81,7 +96,9 @@
                                 <div class="selectContainer">
                                     <select id="editMaterial" name="manufCodeName"
                                             class="form-control" title="Choose Color">
-                                        <option th:text="${material.manufCodeName}" th:value="${material.manufCodeName}">Select</option>
+                                        <option th:text="${special.manufCodeName}"
+                                                th:value="${special.manufCodeName}">Select
+                                        </option>
                                         <th:block th:each="manufCode: ${manufCodes}">
                                             <option><span th:text="${manufCode.name}" th:value="${manufCode.name}"/>
                                             </option>
@@ -90,11 +107,21 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="page col-xs-offset-4 col-sm-4 form-group">
+                            <div class=""
+                                 th:classappend="${#fields.hasErrors('code')} ? 'has-danger'">
+                                <input type="text" id="code" name="code" class="form-control"
+                                       th:field="${special.code}" placeholder="Code"/>
+                                <div class="feedback"
+                                     th:each="error : ${#fields.errors('code')}"
+                                     th:text="|${error}|"/>
+                            </div>
+                        </div>
 
-                    <div  class="page col-xs-offset-5 col-sm-4 form-group">
-                        <input class="btn btn-default btn-outline btn-circle" type="submit"
-                               value="Update Specific Material"/>
-                    </div>
+                        <div class="page col-xs-offset-5 col-sm-4 form-group">
+                            <input class="btn btn-default btn-outline btn-circle" type="submit"
+                                   value="Update Specific Material"/>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -185,6 +212,9 @@
                         <span>Manuf Code</span>
                     </td>
                     <td>
+                        <span>Code</span>
+                    </td>
+                    <td>
                         <span>Edit</span>
                     </td>
                     <td>
@@ -192,32 +222,35 @@
                     </td>
                 </tr>
                 </thead>
-                    <tbody th:each="material : ${materials}">
-                    <tr>
-                        <td>
-                            <span th:text="${material.specificProductName}"/>
-                        </td>
-                        <td>
-                            <span th:text="${material.colorName}"/>
-                        </td>
-                        <td>
-                            <span th:text="${material.manufacturerName}"/>
-                        </td>
-                        <td>
-                            <span th:text="${material.manufCodeName}"/>
-                        </td>
-                        <td>
-                            <a th:href="'/materials/special/edit/' + ${material.id}">
-                                <small><span>Edit</span></small>
-                            </a>
-                        </td>
-                        <td>
-                            <a th:href="'/materials/special/delete/' + ${material.id}">
-                                <small><span>Delete</span></small>
-                            </a>
-                        </td>
-                    </tr>
-                    </tbody>
+                <tbody th:each="material : ${materials}">
+                <tr>
+                    <td>
+                        <span th:text="${material.specificProductName}"/>
+                    </td>
+                    <td>
+                        <span th:text="${material.colorName}"/>
+                    </td>
+                    <td>
+                        <span th:text="${material.manufacturerName}"/>
+                    </td>
+                    <td>
+                        <span th:text="${material.manufCodeName}"/>
+                    </td>
+                    <td>
+                        <span th:text="${material.code}"/>
+                    </td>
+                    <td>
+                        <a th:href="'/materials/special/edit/' + ${material.id}">
+                            <small><span>Edit</span></small>
+                        </a>
+                    </td>
+                    <td>
+                        <a th:href="'/materials/special/delete/' + ${material.id}">
+                            <small><span>Delete</span></small>
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
             </table>
         </div>
     </div>

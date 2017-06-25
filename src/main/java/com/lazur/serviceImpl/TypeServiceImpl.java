@@ -1,12 +1,13 @@
 package com.lazur.serviceImpl;
 
 
-import com.lazur.entities.Material;
-import com.lazur.entities.Type;
-import com.lazur.models.view.TypeBindingModel;
-import com.lazur.models.view.TypeUpdateModel;
-import com.lazur.models.view.TypeViewModel;
-import com.lazur.models.view.ViewTypeModel;
+import com.lazur.entities.materials.Material;
+import com.lazur.entities.types.Type;
+import com.lazur.exeptions.TypeNotFoundExeption;
+import com.lazur.models.materials.TypeBindingModel;
+import com.lazur.models.materials.TypeUpdateModel;
+import com.lazur.models.materials.TypeViewModel;
+import com.lazur.models.materials.ViewTypeModel;
 import com.lazur.repositories.TypeRepository;
 import com.lazur.services.MaterialService;
 import com.lazur.services.TypeService;
@@ -20,6 +21,11 @@ import java.util.List;
 
 @Service
 public class TypeServiceImpl implements TypeService{
+
+    private static final String FRAME = "frame";
+    private static final int FIRST_LETTER = 65;
+    private static final int FIRST_NUMBER = 49;
+    private static final int TOTAL_CODE_LENGHT = 9;
 
     private final TypeRepository typeRepository;
     private final ModelMapper modelMapper;
@@ -68,7 +74,7 @@ public class TypeServiceImpl implements TypeService{
     public TypeViewModel findOneById(Long typeId) {
         Type type = this.typeRepository.findOne(typeId);
         if (type == null){
-            //throw exeption
+            throw new TypeNotFoundExeption();
         }
 
         TypeViewModel typeViewModel = this.modelMapper.map(type, TypeViewModel.class);
@@ -84,7 +90,7 @@ public class TypeServiceImpl implements TypeService{
     public void update(Long materialId, TypeUpdateModel typeUpdateModel) {
         Type type = this.typeRepository.findOne(materialId);
         if (type == null){
-            //throw exeption
+            throw new TypeNotFoundExeption();
         }
 
         type.setName(typeUpdateModel.getName());
@@ -95,10 +101,10 @@ public class TypeServiceImpl implements TypeService{
 
     private char getCode(int size, String type) {
         char typeCode;
-        if (type.equalsIgnoreCase("frame")){
-            typeCode = (char)(size + 65);
+        if (type.equalsIgnoreCase(FRAME)){
+            typeCode = (char)(size + FIRST_LETTER);
         }else {
-           typeCode = (char)((size % 9) + 49);
+           typeCode = (char)((size % TOTAL_CODE_LENGHT) + FIRST_NUMBER);
         }
 
         return typeCode;

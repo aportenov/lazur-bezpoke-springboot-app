@@ -1,7 +1,7 @@
 package com.lazur.serviceImpl;
 
 import com.lazur.entities.Role;
-import com.lazur.models.view.RoleViewModel;
+import com.lazur.models.users.RoleViewModel;
 import com.lazur.repositories.RoleRepository;
 import com.lazur.services.RoleService;
 import org.modelmapper.ModelMapper;
@@ -14,6 +14,11 @@ import java.util.List;
 
 @Service
 public class RoleServiceImpl implements RoleService {
+
+    private static final String ADMIN = "ADMIN";
+    private static final String ROLE_ADMIN = "ROLE_ADMIN";
+    private static final String GUEST = "GUEST";
+    private static final String ROLE_GUEST = "ROLE_GUEST";
 
     private final ModelMapper modelMapper;
     private final RoleRepository roleRepository;
@@ -38,11 +43,11 @@ public class RoleServiceImpl implements RoleService {
     }
 
     private String formatRole(String role) {
-        String newRole = "null";
-        if (role.equalsIgnoreCase("ROLE_ADMIN")){
-            newRole = "ADMIN";
-        }else if(role.equalsIgnoreCase("ROLE_GUEST")){
-            newRole = "GUEST";
+        String newRole = null;
+        if (role.equalsIgnoreCase(ROLE_ADMIN)){
+            newRole = ADMIN;
+        }else if(role.equalsIgnoreCase(ROLE_GUEST)){
+            newRole = GUEST;
         }
 
         return newRole;

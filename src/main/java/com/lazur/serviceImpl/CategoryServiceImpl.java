@@ -3,6 +3,10 @@ package com.lazur.serviceImpl;
 import com.lazur.entities.Category;
 import com.lazur.entities.CategoryCode;
 import com.lazur.entities.Model;
+import com.lazur.exeptions.CategoryNotFoundExeption;
+import com.lazur.exeptions.ModelNotFoundExeption;
+import com.lazur.models.categories.*;
+import com.lazur.models.models.ModelEditModel;
 import com.lazur.models.view.*;
 import com.lazur.repositories.CategoryRepository;
 import com.lazur.services.CategoryCodeService;
@@ -10,10 +14,6 @@ import com.lazur.services.CategoryService;
 import com.lazur.services.ModelService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -71,13 +71,13 @@ public class CategoryServiceImpl implements CategoryService {
     public ModelEditModel findByModel(Long id) {
         Category category = this.categoryRepository.findCategoryByModelId(id);
         if (category == null) {
-            //throw exeption
+            throw new CategoryNotFoundExeption();
         }
 
         ModelEditModel modelEditModel = new ModelEditModel();
         Model model = category.getModels().stream().filter(e -> e.getId().equals(id)).findFirst().orElse(null);
-        if (model == null){
-            //throw new ModelNotFoundExeption();
+        if (model == null) {
+            throw new ModelNotFoundExeption();
         }
 
         modelEditModel.setModelId(model.getId());
@@ -104,7 +104,7 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryEditViewModel findCategoryByName(String categoryName) {
         Category category = this.categoryRepository.findByName(categoryName);
         if (category == null) {
-            //throw exeption
+            throw new CategoryNotFoundExeption();
         }
 
         CategoryEditViewModel categoryEditViewModel = this.modelMapper.map(category, CategoryEditViewModel.class);
@@ -118,29 +118,22 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void update(Long categoryId, CategoryAndModelUpdateModel categoryUpdateModel) {
         Category category = this.categoryRepository.findOne(categoryId);
-        if (category == null){
-            //throw new CategoryNotFoundExeption();
+        if (category == null) {
+            throw new CategoryNotFoundExeption();
         }
 
-        if (categoryUpdateModel.getOldCode()== null || categoryUpdateModel.getOldCode().isEmpty()){
-            CategoryCode  categoryCode = new CategoryCode();
-            categoryCode.setCode(categoryUpdateModel.getCode());
-            category.addCategoryCodes(categoryCode);
-            this.categoryRepository.save(category);
-        }else {
-            CategoryCode categoryCode = this.categoryCodeService.getCode(categoryId, categoryUpdateModel.getOldCode());
-            category.setName(categoryUpdateModel.getName());
-            categoryCode.setCode(categoryUpdateModel.getCode());
-            this.categoryCodeService.update(categoryCode);
-            this.modelService.updateCodes(category.getName(), categoryUpdateModel.getOldCode(), categoryUpdateModel.getCode());
-        }
+        CategoryCode categoryCode = this.categoryCodeService.getCode(categoryId, categoryUpdateModel.getOldCode());
+        category.setName(categoryUpdateModel.getName());
+        categoryCode.setCode(categoryUpdateModel.getCode());
+        this.categoryCodeService.update(categoryCode);
+        this.modelService.updateCodes(category.getName(), categoryUpdateModel.getOldCode(), categoryUpdateModel.getCode());
     }
 
     @Override
     public CategoryEditModel findDeleteCategoryByName(String categoryName) {
         Category category = this.categoryRepository.findByName(categoryName);
         if (category == null) {
-            //throw exeption
+            throw new CategoryNotFoundExeption();
         }
 
         CategoryEditModel categoryEditModel = this.modelMapper.map(category, CategoryEditModel.class);

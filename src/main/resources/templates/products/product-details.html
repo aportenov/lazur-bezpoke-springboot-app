@@ -33,15 +33,30 @@
                     </tr>
                     <tr>
                         <td>Frame:</td>
-                        <td><span th:text="|${product.frameMaterial} ${product.frameType}| "/></td>
+                        <th:block th:if="${#strings.equalsIgnoreCase(product.frameMaterial,'NONE')}">
+                            <td><span th:text="|${product.frameMaterial}| "/></td>
+                        </th:block>
+                        <th:block th:if="!${#strings.equalsIgnoreCase(product.frameMaterial,'NONE')}">
+                            <td><span th:text="|${product.frameMaterial} ${product.frameType}| "/></td>
+                        </th:block>
                     </tr>
                     <tr>
                         <td>Finish:</td>
-                        <td><span th:text="|${product.finishMaterial} ${product.finishType}|"/></td>
+                        <th:block th:if="${#strings.equalsIgnoreCase(product.finishMaterial,'NONE')}">
+                            <td><span th:text="|${product.finishMaterial}"/></td>
+                        </th:block>
+                        <th:block th:if="!${#strings.equalsIgnoreCase(product.finishMaterial,'NONE')}">
+                            <td><span th:text="|${product.finishMaterial} ${product.finishType}|"/></td>
+                        </th:block>
                     </tr>
                     <tr>
                         <td>Tops-Seats:</td>
-                        <td><span th:text="|${product.topMaterial} ${product.topType}|"/></td>
+                        <th:block th:if="${#strings.equalsIgnoreCase(product.topMaterial,'NONE')}">
+                            <td><span th:text="|${product.topMaterial}"/></td>
+                        </th:block>
+                        <th:block th:if="!${#strings.equalsIgnoreCase(product.topMaterial,'NONE')}">
+                            <td><span th:text="|${product.topMaterial} ${product.topType}|"/></td>
+                        </th:block>
                     </tr>
                     <tr>
                         <td>Materials Tops Seats:</td>
@@ -70,19 +85,22 @@
             </div>
             <th:block th:if="! ${#strings.isEmpty(product.barcodeEU)}">
                 <div id="barcodeButton" class="text-center col-md-4" style="float: right">
-                    <button id="barcodeButtonEU" th:onclick="'javascript:showBarcode(\'' + ${product.barcodeEU} + '\',\'' + '' + '\');'"
+                    <button id="barcodeButtonEU"
+                            th:onclick="'javascript:showBarcode(\'' + ${product.barcodeEU} + '\',\'' + '' + '\');'"
                             class="btn btn-default btn-outline btn-circle" th:text="|Barcode EU|"/>
                 </div>
             </th:block>
             <th:block th:if="${product.qrCode} != null">
                 <div id="barcodeButton" class="text-center col-md-4">
-                    <button id="barcodeButtonQR"  th:onclick="'javascript:showBarcode(\'' + ${product.qrCode} + '\',\'' + 'qrCode'+ '\');'"
+                    <button id="barcodeButtonQR"
+                            th:onclick="'javascript:showBarcode(\'' + ${product.qrCode} + '\',\'' + 'qrCode'+ '\');'"
                             class="btn btn-default btn-outline btn-circle" th:text="|Barcode QR|"/>
                 </div>
             </th:block>
             <th:block th:if="! ${#strings.isEmpty(product.barcodeUS)}">
                 <div id="barcodeButton" class="text-center col-md-4" style="float: left">
-                    <button id="barcodeButtonUS" th:onclick="'javascript:showBarcode(\'' + ${product.barcodeUS} + '\',\'' + '' + '\');'"
+                    <button id="barcodeButtonUS"
+                            th:onclick="'javascript:showBarcode(\'' + ${product.barcodeUS} + '\',\'' + '' + '\');'"
                             class="btn btn-default btn-outline btn-circle" th:text="|Barcode US|"/>
                 </div>
             </th:block>

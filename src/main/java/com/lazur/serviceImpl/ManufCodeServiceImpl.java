@@ -1,8 +1,9 @@
 package com.lazur.serviceImpl;
 
 import com.lazur.entities.specific.ManufCode;
-import com.lazur.models.view.SpecialSubMaterialBindingModel;
-import com.lazur.models.view.SpecialSubMaterialViewModel;
+import com.lazur.exeptions.ManufCodeNotFoundExeption;
+import com.lazur.models.materials.SpecialSubMaterialBindingModel;
+import com.lazur.models.materials.SpecialSubMaterialViewModel;
 import com.lazur.repositories.ManufCodeRepository;
 import com.lazur.services.ManufCodeService;
 import org.modelmapper.ModelMapper;
@@ -78,7 +79,7 @@ public class ManufCodeServiceImpl implements ManufCodeService{
     public SpecialSubMaterialViewModel findById(Long id) {
         ManufCode manufCode = this.manufCodeRepository.findOne(id);
         if (manufCode == null) {
-            //throw ManufCodeNotFoundExeption();
+            throw new ManufCodeNotFoundExeption();
         }
 
         SpecialSubMaterialViewModel specialSubMaterialViewModel = this.modelMapper.map(manufCode,SpecialSubMaterialViewModel.class);

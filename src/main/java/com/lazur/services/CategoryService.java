@@ -2,9 +2,9 @@ package com.lazur.services;
 
 
 import com.lazur.entities.Category;
+import com.lazur.models.categories.*;
+import com.lazur.models.models.ModelEditModel;
 import com.lazur.models.view.*;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 

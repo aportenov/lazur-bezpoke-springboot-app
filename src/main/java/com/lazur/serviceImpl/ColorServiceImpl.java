@@ -1,8 +1,9 @@
 package com.lazur.serviceImpl;
 
 import com.lazur.entities.specific.Color;
-import com.lazur.models.view.SpecialSubMaterialBindingModel;
-import com.lazur.models.view.SpecialSubMaterialViewModel;
+import com.lazur.exeptions.ColorNotFoundExeption;
+import com.lazur.models.materials.SpecialSubMaterialBindingModel;
+import com.lazur.models.materials.SpecialSubMaterialViewModel;
 import com.lazur.repositories.ColorRepository;
 import com.lazur.services.ColorService;
 import org.modelmapper.ModelMapper;
@@ -78,7 +79,7 @@ public class ColorServiceImpl implements ColorService{
     public SpecialSubMaterialViewModel findById(Long id) {
         Color color = this.colorRepository.findOne(id);
         if (color == null) {
-            //throw ColorNotFoundExeption();
+            throw new ColorNotFoundExeption();
         }
 
         SpecialSubMaterialViewModel specialSubMaterialViewModel = this.modelMapper.map(color,SpecialSubMaterialViewModel.class);

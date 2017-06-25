@@ -11,18 +11,30 @@
 
         <div class="page">
             <div class="row">
-                <form th:action="@{/{material}/add(material=${type})}" method="POST">
+                <form th:action="@{/{material}/add(material=${type})}" method="POST" th:object="${currMaterial}">
                     <div class="col-md-12 form-group">
                         <input type="hidden" id="csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                         <div class="col-md-4">
-                            <input class="list-group-item" type="text" name="material"
-                                   th:field="${currMaterial.material}"
-                                   placeholder="Material"/>
+                            <div class=""
+                                 th:classappend="${#fields.hasErrors('material')} ? 'has-danger'">
+                                <input class="list-group-item" type="text" name="material"
+                                       th:field="${currMaterial.material}"
+                                       placeholder="Material"/>
+                                <div class="feedback"
+                                     th:each="error : ${#fields.errors('material')}"
+                                     th:text="|${error}|"/>
+                            </div>
                         </div>
                         <div class="col-md-4">
+                            <div class=""
+                                 th:classappend="${#fields.hasErrors('abbreviation')} ? 'has-danger'">
                             <input class="list-group-item" type="text" name="abbreviation"
                                    th:field="${currMaterial.abbreviation}"
                                    placeholder="Abbreviation"/>
+                                <div class="feedback"
+                                     th:each="error : ${#fields.errors('abbreviation')}"
+                                     th:text="|${error}|"/>
+                            </div>
                         </div>
                         <div class="col-md-4">
                             <input class="btn btn-default btn-outline btn-circle" type="submit"

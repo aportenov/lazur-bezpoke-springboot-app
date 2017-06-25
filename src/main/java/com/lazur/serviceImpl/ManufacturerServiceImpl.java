@@ -1,8 +1,9 @@
 package com.lazur.serviceImpl;
 
 import com.lazur.entities.specific.Manufacturer;
-import com.lazur.models.view.SpecialSubMaterialBindingModel;
-import com.lazur.models.view.SpecialSubMaterialViewModel;
+import com.lazur.exeptions.ManufacturerNotFoundExeption;
+import com.lazur.models.materials.SpecialSubMaterialBindingModel;
+import com.lazur.models.materials.SpecialSubMaterialViewModel;
 import com.lazur.repositories.ManufacturerRepository;
 import com.lazur.services.ManufacturerService;
 import org.modelmapper.ModelMapper;
@@ -78,7 +79,7 @@ public class ManufacturerServiceImpl implements ManufacturerService {
     public SpecialSubMaterialViewModel findById(Long id) {
         Manufacturer manufacturer = this.manufacturerRepository.findOne(id);
         if (manufacturer == null) {
-            //throw ManufacturerNotFoundExeption();
+            throw new ManufacturerNotFoundExeption();
         }
 
         SpecialSubMaterialViewModel specialSubMaterialViewModel = this.modelMapper.map(manufacturer,SpecialSubMaterialViewModel.class);

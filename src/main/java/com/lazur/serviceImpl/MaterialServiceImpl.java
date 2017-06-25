@@ -1,9 +1,10 @@
 package com.lazur.serviceImpl;
 
-import com.lazur.entities.Material;
-import com.lazur.models.view.MaterialUpdateModel;
-import com.lazur.models.view.MaterialViewBasicModel;
-import com.lazur.models.view.MaterialViewModel;
+import com.lazur.entities.materials.Material;
+import com.lazur.exeptions.MaterialNotFoundExeption;
+import com.lazur.models.materials.MaterialUpdateModel;
+import com.lazur.models.materials.MaterialViewBasicModel;
+import com.lazur.models.materials.MaterialViewModel;
 import com.lazur.repositories.MaterialRepository;
 import com.lazur.services.MaterialService;
 import org.modelmapper.ModelMapper;
@@ -79,7 +80,7 @@ public class MaterialServiceImpl implements MaterialService{
     public MaterialUpdateModel findMaterialById(Long materialId) {
         Material material = this.materialRepository.findOne(materialId);
         if (material == null){
-            //throw exeption
+            throw new MaterialNotFoundExeption();
         }
 
         MaterialUpdateModel materialUpdateModel = this.modelMapper.map(material,MaterialUpdateModel.class);

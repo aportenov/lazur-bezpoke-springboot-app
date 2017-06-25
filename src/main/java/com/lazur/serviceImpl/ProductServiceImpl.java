@@ -1,12 +1,15 @@
 package com.lazur.serviceImpl;
 
 //import com.google.zxing.WriterException;
+
 import com.google.zxing.WriterException;
 import com.lazur.entities.*;
 import com.lazur.entities.specific.SpecificMaterial;
-import com.lazur.models.view.ProductViewBasicModel;
-import com.lazur.models.view.ProductBiningModel;
-import com.lazur.models.view.ProductViewDetailsModel;
+import com.lazur.exeptions.ProductNotFoundExeption;
+import com.lazur.models.products.ProductViewBasicModel;
+import com.lazur.models.products.ProductBiningModel;
+import com.lazur.models.products.ProductViewDetailsModel;
+import com.lazur.models.materials.SpecificMaterialViewBasicModel;
 import com.lazur.repositories.ProductRepository;
 import com.lazur.services.*;
 import com.lazur.utils.BarcodeService;
@@ -73,8 +76,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Page<ProductViewBasicModel> findAllByTypeCategoryAndFamily( String modelName, String category,String family, Pageable pageable) {
-        Page<Product> productList = this.productRepository.findAllByFamilyModelAndCategory(family,modelName, category, pageable);
+    public Page<ProductViewBasicModel> findAllByTypeCategoryAndFamily(String modelName, String category, String family, Pageable pageable) {
+        Page<Product> productList = this.productRepository.findAllByFamilyModelAndCategory(family, modelName, category, pageable);
         List<ProductViewBasicModel> productViewBasicModels = new ArrayList<>();
         for (Product product : productList) {
             ProductViewBasicModel productViewBasicModel = this.modelMapper.map(product, ProductViewBasicModel.class);
@@ -87,42 +90,12 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductViewDetailsModel findProductById(Long productId, HttpServletRequest request) throws IOException, BarcodeException, ConfigurationException, WriterException {
         Product product = this.productRepository.findOne(productId);
-        if (product == null){
-            //throw new ProductNotFoundExeption();
+        if (product == null) {
+            throw new ProductNotFoundExeption();
         }
 
-        ProductViewDetailsModel productViewDetailsModel = this.modelMapper.map(product, ProductViewDetailsModel.class);
-        Material finish = product.getFinish();
-        Material frame = product.getFrame();
-        Material top = product.getTop();
-        SpecificMaterial specificMaterial = product.getSpecificMaterial();
-
-        productViewDetailsModel.setFinishMaterial(finish.getMaterial());
-        String finishType = finish.getTypes().stream().findFirst().orElse(null).getName();
-        productViewDetailsModel.setFinishType(finishType.equalsIgnoreCase(NONE) ? EMPTY_STRING : finishType);
-
-        productViewDetailsModel.setFrameMaterial(frame.getMaterial());
-        String frameType = frame.getTypes().stream().findFirst().orElse(null).getName();
-        productViewDetailsModel.setFrameType(frameType.equalsIgnoreCase(NONE) ? EMPTY_STRING : frameType);
-
-        productViewDetailsModel.setTopMaterial(top.getMaterial());
-        String topType = top.getTypes().stream().findFirst().orElse(null).getName();
-        productViewDetailsModel.setTopType(topType.equalsIgnoreCase(NONE) ? EMPTY_STRING : topType);
-        String specificMaterialConcat = specificMaterial.getCode().equalsIgnoreCase(NONE_CODE) ?
-                NONE : String.format("%s,  %s,  %s,  %s", specificMaterial.getSpecificProduct().getName(),
-                specificMaterial.getColor().getName(),
-                specificMaterial.getManufacturer().getName(),
-                specificMaterial.getManufCode().getName());
-        productViewDetailsModel.setSpecificMaterial(specificMaterialConcat);
-        productViewDetailsModel.setSpecificMaterialId(specificMaterial.getId());
+        ProductViewDetailsModel productViewDetailsModel = mapProductToView(product);
         productViewDetailsModel.setQrCode(this.qrCodeService.getQRCode(request));
-        if (! product.getBarcodeEU().isEmpty()){
-            productViewDetailsModel.setBarcodeEU(this.barcodeService.getEAN13Barcode(product.getBarcodeEU(), product.getSku()));
-        }
-
-        if(! product.getBarcodeUS().isEmpty()){
-            productViewDetailsModel.setBarcodeUS(this.barcodeService.getEAN13Barcode(product.getBarcodeUS(), product.getSku()));
-        }
 
         return productViewDetailsModel;
     }
@@ -130,8 +103,8 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void udpdate(long productId, ProductBiningModel productBiningModel) {
         Product product = this.productRepository.findOne(productId);
-        if (product == null){
-//            throw new ProductNotFoundExeption();
+        if (product == null) {
+            throw new ProductNotFoundExeption();
         }
 
         product = mapProduct(product, productBiningModel);
@@ -141,8 +114,8 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void delete(long productId) {
         Product product = this.productRepository.findOne(productId);
-        if (product == null){
-//            throw new ProductNotFoundExeption();
+        if (product == null) {
+            throw new ProductNotFoundExeption();
         }
 
         this.productRepository.delete(product);
@@ -150,31 +123,31 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Page<ProductViewBasicModel> findAllBySku(String searchedWord, Pageable pageable) {
-        Page<Product> products = this.productRepository.findAllBySku(searchedWord,pageable);
+        Page<Product> products = this.productRepository.findAllBySku(searchedWord, pageable);
         List<ProductViewBasicModel> productViewBasicModels = new ArrayList<>();
         for (Product product : products) {
-            ProductViewBasicModel productViewBasicModel = this.modelMapper.map(product,ProductViewBasicModel.class);
+            ProductViewBasicModel productViewBasicModel = this.modelMapper.map(product, ProductViewBasicModel.class);
             productViewBasicModels.add(productViewBasicModel);
         }
 
-        return new PageImpl<>(productViewBasicModels,pageable, products.getTotalElements());
+        return new PageImpl<>(productViewBasicModels, pageable, products.getTotalElements());
     }
 
     @Override
     public Page<ProductViewBasicModel> findAllByName(String searchOptions, Pageable pageable) {
-        Page<Product> products = this.productRepository.findAllByName(searchOptions,pageable);
+        Page<Product> products = this.productRepository.findAllByName(searchOptions, pageable);
         List<ProductViewBasicModel> productViewBasicModels = new ArrayList<>();
         for (Product product : products) {
-            ProductViewBasicModel productViewBasicModel = this.modelMapper.map(product,ProductViewBasicModel.class);
+            ProductViewBasicModel productViewBasicModel = this.modelMapper.map(product, ProductViewBasicModel.class);
             productViewBasicModels.add(productViewBasicModel);
         }
 
-        return new PageImpl<>(productViewBasicModels,pageable, products.getTotalElements());
+        return new PageImpl<>(productViewBasicModels, pageable, products.getTotalElements());
     }
 
     @Override
     public Page<ProductViewBasicModel> findAllByTypeAndCategory(String modelName, String category, Pageable pageable) {
-        Page<Product> productList = this.productRepository.findAllByModelAndCategory(modelName,category, pageable);
+        Page<Product> productList = this.productRepository.findAllByModelAndCategory(modelName, category, pageable);
         List<ProductViewBasicModel> productViewBasicModels = new ArrayList<>();
         for (Product product : productList) {
             ProductViewBasicModel productViewBasicModel = this.modelMapper.map(product, ProductViewBasicModel.class);
@@ -207,6 +180,71 @@ public class ProductServiceImpl implements ProductService {
         return this.productRepository.findOneBySkuNumber(sku);
     }
 
+    @Override
+    public ProductBiningModel findProductViewById(Long productId) {
+        Product product = this.productRepository.findOne(productId);
+        if (product == null) {
+            throw new ProductNotFoundExeption();
+        }
+
+        Material finish = product.getFinish();
+        Material frame = product.getFrame();
+        Material top = product.getTop();
+        SpecificMaterial specificMaterial = product.getSpecificMaterial();
+        ProductBiningModel productBiningModel = this.modelMapper.map(product, ProductBiningModel.class);
+        productBiningModel.setFinishMaterial(finish.getMaterial());
+        String finishType = finish.getTypes().stream().findFirst().orElse(null).getName();
+        productBiningModel.setFinishType(finishType);
+
+        productBiningModel.setFrameMaterial(frame.getMaterial());
+        String frameType = frame.getTypes().stream().findFirst().orElse(null).getName();
+        productBiningModel.setFrameType(frameType);
+
+        productBiningModel.setTopMaterial(top.getMaterial());
+        String topType = top.getTypes().stream().findFirst().orElse(null).getName();
+        productBiningModel.setTopType(topType);
+        String specificMaterialConcat = convertSpecificMaterialToView(specificMaterial.getSpecificProduct() == null ? EMPTY_STRING : specificMaterial.getSpecificProduct().getName(),
+                specificMaterial.getColor() == null ? EMPTY_STRING : specificMaterial.getColor().getName(),
+                specificMaterial.getManufacturer() == null ? EMPTY_STRING : specificMaterial.getManufacturer().getName(),
+                specificMaterial.getManufCode() == null ? EMPTY_STRING : specificMaterial.getManufCode().getName(),
+                specificMaterial.getCode());
+        productBiningModel.setSpecificMaterialName(specificMaterialConcat);
+        return productBiningModel;
+    }
+
+    @Override
+    public String addSpecificMaterialName(long specificMaterialId) {
+        SpecificMaterialViewBasicModel specificMaterial = this.specificMaterialService.findOneById(specificMaterialId);
+        return convertSpecificMaterialToView(specificMaterial.getSpecificProductName() == null ? EMPTY_STRING : specificMaterial.getSpecificProductName(),
+                specificMaterial.getColorName() == null ? EMPTY_STRING : specificMaterial.getColorName(),
+                specificMaterial.getManufacturerName() == null ? EMPTY_STRING : specificMaterial.getManufacturerName(),
+                specificMaterial.getManufacturerName() == null ? EMPTY_STRING : specificMaterial.getManufacturerName(),
+                specificMaterial.getCode());
+    }
+
+    @Override
+    public ProductViewDetailsModel findProductByBarcodeNumber(String searchedWord) throws BarcodeException, ConfigurationException, IOException {
+        Product product = this.productRepository.findByBarcode(searchedWord);
+        ProductViewDetailsModel productViewDetailsModel  = null;
+        if (product != null) {
+         productViewDetailsModel = mapProductToView(product);
+        }
+
+        return productViewDetailsModel;
+    }
+
+
+    private String convertSpecificMaterialToView(String product, String color, String manufacturer, String manuCode, String code) {
+        return code.equalsIgnoreCase(NONE_CODE) ?
+                NONE : String.format(
+                "%s,  %s,  %s,  %s",
+                product,
+                color,
+                manufacturer,
+                manuCode
+        );
+    }
+
 
     private Product mapProduct(Product product, ProductBiningModel productBiningModel) {
         product.setName(productBiningModel.getName());
@@ -232,10 +270,46 @@ public class ProductServiceImpl implements ProductService {
         product.setFrame(frame);
         Material top = getMaterial(productBiningModel.getTopMaterial(), productBiningModel.getTopType());
         product.setTop(top);
-        SpecificMaterial specificMaterial = this.specificMaterialService.findEntityById(productBiningModel.getSpecificMaterial());
+        SpecificMaterial specificMaterial = this.specificMaterialService.findEntityById(productBiningModel.getSpecificMaterialId());
         product.setSpecificMaterial(specificMaterial);
         product.setSku(this.barcodeService.getSKUNumber(product));
         return product;
     }
+    private ProductViewDetailsModel mapProductToView(Product product) throws BarcodeException, ConfigurationException, IOException {
+        ProductViewDetailsModel productViewDetailsModel = this.modelMapper.map(product, ProductViewDetailsModel.class);
+        Material finish = product.getFinish();
+        Material frame = product.getFrame();
+        Material top = product.getTop();
+        SpecificMaterial specificMaterial = product.getSpecificMaterial();
 
+        productViewDetailsModel.setFinishMaterial(finish.getMaterial());
+        String finishType = finish.getTypes().stream().findFirst().orElse(null).getName();
+        productViewDetailsModel.setFinishType(finishType);
+
+        productViewDetailsModel.setFrameMaterial(frame.getMaterial());
+        String frameType = frame.getTypes().stream().findFirst().orElse(null).getName();
+        productViewDetailsModel.setFrameType(frameType);
+
+        productViewDetailsModel.setTopMaterial(top.getMaterial());
+        String topType = top.getTypes().stream().findFirst().orElse(null).getName();
+        productViewDetailsModel.setTopType(topType);
+        String specificMaterialConcat = convertSpecificMaterialToView(specificMaterial.getSpecificProduct() == null ? EMPTY_STRING : specificMaterial.getSpecificProduct().getName(),
+                specificMaterial.getColor() == null ? EMPTY_STRING : specificMaterial.getColor().getName(),
+                specificMaterial.getManufacturer() == null ? EMPTY_STRING : specificMaterial.getManufacturer().getName(),
+                specificMaterial.getManufCode() == null ? EMPTY_STRING : specificMaterial.getManufCode().getName(),
+                specificMaterial.getCode()
+             );
+        productViewDetailsModel.setSpecificMaterial(specificMaterialConcat);
+        productViewDetailsModel.setSpecificMaterialId(specificMaterial.getId());
+        if (!product.getBarcodeEU().isEmpty()) {
+            productViewDetailsModel.setBarcodeEU(this.barcodeService.getEAN13Barcode(product.getBarcodeEU(), product.getSku()));
+        }
+
+        if (!product.getBarcodeUS().isEmpty()) {
+            productViewDetailsModel.setBarcodeUS(this.barcodeService.getEAN13Barcode(product.getBarcodeUS(), product.getSku()));
+        }
+
+        return productViewDetailsModel;
+    }
 }
+

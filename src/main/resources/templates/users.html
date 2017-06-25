@@ -13,14 +13,14 @@
                     <input type="hidden" id="csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                     <div class="row">
                         <div class="col-md-12 form-group">
-                            <div class="col-md-3">
+                            <div class="col-md-offset-1 col-md-2">
                                 <input class="list-group-item" type="text" name="username" th:value="${user.username}"
                                        placeholder="Username"/>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <input class="list-group-item" type="password" name="password" placeholder="Password"/>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <input class="list-group-item" type="password" name="confirmPassword"
                                        placeholder="Confirm password"/>
                             </div>
@@ -34,32 +34,32 @@
                                 </select>
                             </div>
                             <div class="col-md-1">
-                                <input class="btn btn-default btn-outline btn-circle" type="submit" value="Create"/>
+                                <input class="btn btn-default btn-outline btn-circle" type="submit" value="Create New User"/>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12 form-group">
-                            <div class="col-md-3 form-group"
+                            <div class="col-md-offset-1 col-md-2 form-group"
                                  th:classappend="${#fields.hasErrors('username')} ? 'has-danger'">
                                 <div class="feedback" th:each="error : ${#fields.errors('username')}"
                                      th:text="|Username ${error}|"/>
                             </div>
-                            <div class="col-md-3 form-group"
+                            <div class="col-md-2 form-group"
                                  th:classappend="${#fields.hasErrors('password')} ? 'has-danger'">
                                 <div class="feedback" th:each="error : ${#fields.errors('password')}"
-                                     th:text="|Password ${error}|">
+                                     th:text="|${error}|">
 
                                 </div>
                             </div>
-                            <div class="col-md-3 form-group"
+                            <div class="col-md-2 form-group"
                                  th:classappend="${#fields.hasErrors('global')} ? 'has-danger'">
                                 <div class="feedback" th:each="error : ${#fields.errors('global')}"
-                                     th:text="|Password ${error}|">
+                                     th:text="|${error}|">
 
                                 </div>
                             </div>
-                            <div class="col-md-3 form-group"
+                            <div class="col-md-2 form-group"
                                  th:classappend="${#fields.hasErrors('role')} ? 'has-danger'">
                                 <div class="feedback" th:each="error : ${#fields.errors('role')}"
                                      th:text="${error}">
@@ -98,12 +98,12 @@
                                 <span th:text="${user.role}"/>
                             </td>
                             <td>
-                                <a th:href="'/users?id=' + ${user.id}" class="btn btn-default btn-outline btn-circle">
+                                <a th:href="'/users/edit/' + ${user.id}" class="btn btn-default btn-outline btn-circle">
                                     <span>Edit</span>
                                 </a>
                             </td>
                             <td>
-                                <a href="/users" class="btn btn-default btn-outline btn-circle">
+                                <a th:href="'/users/delete/' + ${user.id}" class="btn btn-default btn-outline btn-circle">
                                     <span>Delete</span>
                                 </a>
                             </td>

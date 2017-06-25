@@ -2,9 +2,9 @@ package com.lazur.services;
 
 
 import com.lazur.entities.Model;
-import com.lazur.models.view.CategoryAndModelUpdateModel;
-import com.lazur.models.view.ModelBindingModel;
-import com.lazur.models.view.ModelViewModel;
+import com.lazur.models.categories.CategoryAndModelUpdateModel;
+import com.lazur.models.models.ModelBindingModel;
+import com.lazur.models.models.ModelViewModel;
 
 import java.util.List;
 

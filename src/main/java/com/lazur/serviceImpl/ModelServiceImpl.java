@@ -4,9 +4,9 @@ import com.lazur.entities.Category;
 import com.lazur.entities.CategoryCode;
 import com.lazur.entities.Model;
 import com.lazur.exeptions.ModelNotFoundExeption;
-import com.lazur.models.view.CategoryAndModelUpdateModel;
-import com.lazur.models.view.ModelBindingModel;
-import com.lazur.models.view.ModelViewModel;
+import com.lazur.models.categories.CategoryAndModelUpdateModel;
+import com.lazur.models.models.ModelBindingModel;
+import com.lazur.models.models.ModelViewModel;
 import com.lazur.repositories.ModelRepository;
 import com.lazur.services.CategoryCodeService;
 import com.lazur.services.CategoryService;
@@ -16,12 +16,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class ModelServiceImpl implements ModelService{
+
+    private static final int SIZE_ONE = 1;
+    private static final int TOTAL_CODE_LENGHT = 9;
 
     private final ModelRepository modelRepository;
     private final ModelMapper modelMapper;
@@ -44,8 +46,8 @@ public class ModelServiceImpl implements ModelService{
         List<CategoryCode> avaiableCodes = this.categoryCodeService.findAllByCategory(modelBindingModel.getType());
         List<String> codes = new ArrayList<>(avaiableCodes.stream().map(e -> e.getCode()).collect(Collectors.toList()));
         List<Model> modelList = this.modelRepository.findAllByType(codes);
-        int codeNumber = (modelList.size() % 9 ) + 1 ;
-        String modelCode = avaiableCodes.get(avaiableCodes.size()-1).getCode() + String.valueOf(codeNumber);
+        int codeNumber = (modelList.size() % TOTAL_CODE_LENGHT ) + SIZE_ONE ;
+        String modelCode = avaiableCodes.get(avaiableCodes.size()- SIZE_ONE).getCode() + String.valueOf(codeNumber);
         Model model = new Model();
         model.setName(modelBindingModel.getName());
         model.setCode(modelCode);
@@ -89,7 +91,7 @@ public class ModelServiceImpl implements ModelService{
     public void update(Long modelId, CategoryAndModelUpdateModel categoryAndModelUpdateModel) {
         Model model = this.modelRepository.findOne(modelId);
         if (model == null){
-            //throw new ModelNotFoundExeption();
+            throw new ModelNotFoundExeption();
         }
 
         String code = String.format("%s%s", categoryAndModelUpdateModel.getOldCode(), categoryAndModelUpdateModel.getCode());

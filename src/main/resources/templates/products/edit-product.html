@@ -7,9 +7,16 @@
 <th:block th:replace="fragments/navbar"/>
 <form method="POST" id="formUrl" enctype="multipart/form-data" th:action="@{'/product/update/' + ${product.id}}">
     <input type="hidden" id="csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+    <input type="hidden" id="id" th:name="id" th:value="${product.id}"/>
     <div class="conteiner col-sm-offset-3" th:object="${product}">
         <div class="row">
             <div class="col-md-8">
+                <th:block th:each="error : ${#fields.errors('global')}">
+                    <div class="alert alert-danger fade in">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <span th:text="|${error}|"/>
+                    </div>
+                </th:block>
                 <div>
                     <input id="type" name="type" th:value="${type}" hidden="hidden"/>
                     <div class="form-group">
@@ -20,38 +27,45 @@
                             <div>
                                 <div class="col-md-12 form-group">
                                     <label>Category</label>
-                                    <!--<div class=""-->
-                                    <!--th:classappend="${#fields.hasErrors('name')} ? 'has-danger'"/>-->
-                                    <div class="selectContainer">
-                                        <select id="editMaterial" onchange="loadModelsBasedOnCategory()" name="categoryName"
-                                                class="form-control" title="Choose Category">
-                                            <option th:text="${product.categoryName}" th:value="${product.categoryName}"/>
-                                            <option value=""><span>Select Category</span></option>
-                                            <th:block th:each="category: ${categories}">
-                                                <option><span th:text="${category.name}" th:value="${category.name}"/>
-                                                </option>
-                                            </th:block>
-                                        </select>
+                                    <div class=""
+                                         th:classappend="${#fields.hasErrors('categoryName')} ? 'has-danger'">
+                                        <div class="selectContainer">
+                                            <select id="categoryName" onchange="loadModelsBasedOnCategory()"
+                                                    name="categoryName"
+                                                    class="editMaterial form-control" title="Choose Category">
+                                                <option th:text="${product.categoryName}"
+                                                        th:value="${product.categoryName}"/>
+                                                <option value=""><span>Select Category</span></option>
+                                                <th:block th:each="category: ${categories}">
+                                                    <option><span th:text="${category.name}"
+                                                                  th:value="${category.name}"/>
+                                                    </option>
+                                                </th:block>
+                                            </select>
+                                        </div>
+                                        <div class="feedback"
+                                             th:each="error : ${#fields.errors('categoryName')}"
+                                             th:text="|${error}|"/>
                                     </div>
-                                    <!--<div class="feedback"-->
-                                    <!--th:each="error : ${#fields.errors('name')}"-->
-                                    <!--th:text="|Name ${error}|"/>-->
                                 </div>
                                 <div>
                                     <div class="col-md-12 form-group">
                                         <label>Model</label>
-                                        <!--<div class=""-->
-                                        <!--th:classappend="${#fields.hasErrors('name')} ? 'has-danger'"/>-->
-                                        <div class="selectContainer">
-                                            <select id="editMaterial" onchange="loadFamiliesBasedOnModel()" name="modelName"
-                                                    class="form-control" title="Choose Model">
-                                                <option th:text="${product.modelName}" th:value="${product.modelName}"/>
-                                                <option value=""><span>Select Model</span></option>
-                                            </select>
+                                        <div class=""
+                                             th:classappend="${#fields.hasErrors('modelName')} ? 'has-danger'">
+                                            <div class="selectContainer">
+                                                <select id="modelName" onchange="loadFamiliesBasedOnModel()"
+                                                        name="modelName"
+                                                        class="editMaterial form-control" title="Choose Model">
+                                                    <option th:text="${product.modelName}"
+                                                            th:value="${product.modelName}"/>
+                                                    <option value=""><span>Select Model</span></option>
+                                                </select>
+                                            </div>
+                                            <div class="feedback"
+                                                 th:each="error : ${#fields.errors('modelName')}"
+                                                 th:text="|${error}|"/>
                                         </div>
-                                        <!--<div class="feedback"-->
-                                        <!--th:each="error : ${#fields.errors('name')}"-->
-                                        <!--th:text="|Name ${error}|"/>-->
                                     </div>
                                 </div>
                                 <div>
@@ -67,41 +81,43 @@
                         <div>
                             <div class="col-md-12 form-group">
                                 <label>Name</label>
-                                <!--<div class=""-->
-                                <!--th:classappend="${#fields.hasErrors('name')} ? 'has-danger'"/>-->
-                                <input id="editMaterial" type="text" name="name" class="form-control"
-                                       placeholder="Specify Name" th:value="${product.name}"/>
-                                <br/>
-                                <!--<div class="feedback"-->
-                                <!--th:each="error : ${#fields.errors('name')}"-->
-                                <!--th:text="|Name ${error}|"/>-->
+                                <div class=""
+                                     th:classappend="${#fields.hasErrors('name')} ? 'has-danger'">
+                                    <input id="editMaterial" type="text" name="name" class="form-control"
+                                           placeholder="Specify Name" th:value="${product.name}"/>
+                                    <br/>
+                                    <div class="feedback"
+                                         th:each="error : ${#fields.errors('name')}"
+                                         th:text="|${error}|"/>
+                                </div>
                             </div>
                         </div>
                         <div class="col-md-12 form-group">
                             <label>Family</label>
-                            <!--<div class=""-->
-                            <!--th:classappend="${#fields.hasErrors('name')} ? 'has-danger'"/>-->
-                            <div class="selectContainer">
-                                <select id="editMaterial" name="familyName"
-                                        class="form-control" title="Choose Family">
-                                    <option th:text="${product.familyName}" th:value="${product.familyName}"/>
-                                    <option value="">Select Family</option>
-                                    <th:block th:each="family: ${families}">
-                                        <option><span th:text="${family.name}" th:value="${family.name}"/>
-                                        </option>
-                                    </th:block>
-                                </select>
+                            <div class=""
+                                 th:classappend="${#fields.hasErrors('familyName')} ? 'has-danger'">
+                                <div class="selectContainer">
+                                    <select id="familyName" name="familyName"
+                                            class="editMaterial form-control" title="Choose Family">
+                                        <option th:text="${product.familyName}" th:value="${product.familyName}"/>
+                                        <option value="">Select Family</option>
+                                        <th:block th:each="family: ${families}">
+                                            <option><span th:text="${family.name}" th:value="${family.name}"/>
+                                            </option>
+                                        </th:block>
+                                    </select>
+                                </div>
+                                <div class="feedback"
+                                     th:each="error : ${#fields.errors('familyName')}"
+                                     th:text="|${error}|"/>
                             </div>
                         </div>
-
                         <div>
                             <div class="col-md-12 form-group">
                                 <label>Frame</label>
-                                <!--<div class=""-->
-                                <!--th:classappend="${#fields.hasErrors('name')} ? 'has-danger'"/>-->
                                 <div class="selectContainer">
-                                    <select id="editMaterial" onchange="loadFrameTypes()" name="frameMaterial"
-                                            class="form-control" title="Choose Frame">
+                                    <select id="frameMaterial" onchange="loadFrameTypes()" name="frameMaterial"
+                                            class="editMaterial form-control" title="Choose Frame">
                                         <option th:text="${product.frameMaterial}" th:value="${product.frameMaterial}"/>
                                         <option value="">Select Frame</option>
                                         <th:block th:each="frame: ${frames}">
@@ -112,24 +128,27 @@
                                 </div>
                                 <br/>
                                 <div class="selectContainer">
-                                    <select id="editMaterial" name="frameType" class="form-control" title="Choose Frame">
-                                        <option th:text="${product.frameType}" th:value="${product.frameType}"/>
-                                    </select>
+                                    <div class=""
+                                         th:classappend="${#fields.hasErrors('frameType')} ? 'has-danger'">
+                                        <select id="frameType" name="frameType" class="editMaterial form-control"
+                                                title="Choose Frame">
+                                            <option th:text="${product.frameType}" th:value="${product.frameType}"/>
+                                        </select>
+                                        <div class="feedback"
+                                             th:each="error : ${#fields.errors('frameType')}"
+                                             th:text="${error}"/>
+                                    </div>
                                 </div>
-                                <!--<div class="feedback"-->
-                                <!--th:each="error : ${#fields.errors('name')}"-->
-                                <!--th:text="|Name ${error}|"/>-->
                             </div>
                         </div>
                         <div>
                             <div class="col-md-12 form-group">
                                 <label>Finish</label>
-                                <!--<div class=""-->
-                                <!--th:classappend="${#fields.hasErrors('name')} ? 'has-danger'"/>-->
                                 <div class="selectContainer">
-                                    <select id="editMaterial" onchange="loadFinishTypes()" name="finishMaterial"
-                                            class="form-control" title="Choose Finish">
-                                        <option th:text="${product.finishMaterial}" th:value="${product.finishMaterial}"/>
+                                    <select id="finishMaterial" onchange="loadFinishTypes()" name="finishMaterial"
+                                            class="editMaterial form-control" title="Choose Finish">
+                                        <option th:text="${product.finishMaterial}"
+                                                th:value="${product.finishMaterial}"/>
                                         <option value="">Select Finish</option>
                                         <th:block th:each="finish: ${finishes}">
                                             <option><span th:text="${finish.material}" th:value="${finish.material}"/>
@@ -139,14 +158,17 @@
                                 </div>
                                 <br/>
                                 <div class="selectContainer">
-                                    <select id="editMaterial" name="finishType" class="form-control"
-                                            title="Choose Finish">
-                                        <option th:text="${product.finishType}" th:value="${product.finishType}"/>
-                                    </select>
+                                    <div class=""
+                                         th:classappend="${#fields.hasErrors('finishType')} ? 'has-danger'">
+                                        <select id="finishType" name="finishType" class="editMaterial form-control"
+                                                title="Choose Finish">
+                                            <option th:text="${product.finishType}" th:value="${product.finishType}"/>
+                                        </select>
+                                        <div class="feedback"
+                                             th:each="error : ${#fields.errors('finishType')}"
+                                             th:text="${error}"/>
+                                    </div>
                                 </div>
-                                <!--<div class="feedback"-->
-                                <!--th:each="error : ${#fields.errors('name')}"-->
-                                <!--th:text="|Name ${error}|"/>-->
                             </div>
                         </div>
                         <div>
@@ -155,8 +177,8 @@
                                 <!--<div class=""-->
                                 <!--th:classappend="${#fields.hasErrors('name')} ? 'has-danger'"/>-->
                                 <div class="selectContainer">
-                                    <select id="editMaterial" onchange="loadTopTypes()" name="topMaterial"
-                                            class="form-control" title="Choose Top">
+                                    <select id="topMaterial" onchange="loadTopTypes()" name="topMaterial"
+                                            class="editMaterial form-control" title="Choose Top">
                                         <option th:text="${product.topMaterial}" th:value="${product.topMaterial}"/>
                                         <option value="">Select Tops/Seat</option>
                                         <th:block th:each="top: ${tops}">
@@ -167,53 +189,70 @@
                                 </div>
                                 <br/>
                                 <div class="selectContainer">
-                                    <select id="editMaterial" name="topType" class="form-control" title="Choose Top">
-                                        <option th:text="${product.topType}" th:value="${product.topType}"/>
-                                    </select>
+                                    <div class=""
+                                         th:classappend="${#fields.hasErrors('topType')} ? 'has-danger'">
+                                        <select id="topType" name="topType" class="editMaterial form-control"
+                                                title="Choose Top">
+                                            <option th:text="${product.topType}" th:value="${product.topType}"/>
+                                        </select>
+                                        <div class="feedback"
+                                             th:each="error : ${#fields.errors('topType')}"
+                                             th:text="|${error}|"/>
+                                    </div>
                                 </div>
-                                <!--<div class="feedback"-->
-                                <!--th:each="error : ${#fields.errors('name')}"-->
-                                <!--th:text="|Name ${error}|"/>-->
                             </div>
                         </div>
                         <div>
                             <div class="col-md-12 form-group">
                                 <label>Specific Materials</label>
-                                <!--<div class=""-->
-                                <!--th:classappend="${#fields.hasErrors('name')} ? 'has-danger'"/>-->
-                                <div class="selectContainer">
-                                    <select id="editMaterial" name="specificMaterial" class="form-control"
-                                            title="Choose specific materials">
-                                        <option th:text="${product.specificMaterial}" th:value="${product.specificMaterialId}"/>
-                                        <option value="">Select Specific Material</option>
-                                        <th:block th:each="specificMatterial : ${specificMaterials}">
-                                            <option th:value="${specificMatterial.id}">
+                                <div class=""
+                                     th:classappend="${#fields.hasErrors('specificMaterialId')} ? 'has-danger'">
+                                    <div class="selectContainer">
+                                        <select id="editMaterial" name="specificMaterialId" class="form-control"
+                                                title="Choose specific materials">
+                                            <th:block th:if="${product.specificMaterialName} != null">
+                                                <option th:text="${product.specificMaterialName}"
+                                                        th:value="${product.specificMaterialId}"/>
+                                            </th:block>
+                                            <option value="">Select Specific Material</option>
+                                            <th:block th:each="specificMatterial : ${specificMaterials}">
+                                                <option th:value="${specificMatterial.id}">
+                                                    <th:block th:if="${specificMatterial.specificProductName} ==  null">
+                                                        <span th:text="None"/>
+                                                    </th:block>
+                                                    <th:block th:if="${specificMatterial.specificProductName} !=  null">
                                                 <span th:text="|${specificMatterial.specificProductName},
                                                 ${specificMatterial.colorName},
                                                 ${specificMatterial.manufacturerName},
-                                                ${specificMatterial.manufCodeName}|"/>
-                                            </option>
-                                        </th:block>
-                                    </select>
+                                                ${specificMatterial.manufCodeName},
+                                                ${specificMatterial.code}|"/>
+                                                    </th:block>
+                                                </option>
+                                            </th:block>
+                                        </select>
+                                        <div class="feedback"
+                                             th:each="error : ${#fields.errors('specificMaterialId')}"
+                                             th:text="|Please specify Specific Materials|"/>
+                                    </div>
                                 </div>
-                                <!--<div class="feedback"-->
-                                <!--th:each="error : ${#fields.errors('name')}"-->
-                                <!--th:text="|Name ${error}|"/>-->
                             </div>
                         </div>
                         <div>
                             <div class="col-md-12 form-group">
                                 <label>Barcode EU/US</label>
-                                <!--<div class=""-->
-                                <!--th:classappend="${#fields.hasErrors('name')} ? 'has-danger'"/>-->
-                                <input id="editMaterial" name="barcodeEU" class="list-group-item col-md-12" type="text"
-                                       placeholder="EU" th:field="${product.barcodeEU}" />
+                                <div class=""
+                                     th:classappend="${#fields.hasErrors('global')} ? 'has-danger'">
+                                    <input id="editMaterial" name="barcodeEU" class="list-group-item col-md-12"
+                                           type="text"
+                                           placeholder="EU" th:field="${product.barcodeEU}"/>
 
-                                <input id="editMaterial" name="barcodeUS" class="list-group-item col-md-12" type="text"
-                                       placeholder="US" th:field="${product.barcodeUS}"/>
-                                <!--<div class="feedback"-->
-                                <!--th:each="error : ${#fields.errors('name')}"-->
-                                <!--th:text="|Name ${error}|"/>-->
+                                    <input id="editMaterial" name="barcodeUS" class="list-group-item col-md-12"
+                                           type="text"
+                                           placeholder="US" th:field="${product.barcodeUS}"/>
+                                    <div class="feedback"
+                                         th:each="error : ${#fields.errors('global')}"
+                                         th:text="|${error}|"/>
+                                </div>
                             </div>
                         </div>
                         <div>
@@ -222,8 +261,9 @@
                                 <!--<div class=""-->
                                 <!--th:classappend="${#fields.hasErrors('name')} ? 'has-danger'"/>-->
                                 <div class="textbox">
-                                    <textarea id="editMaterial" class="form-control" name="description"  type="text"
-                                              row="5" placeholder="Write Product Description" th:field="${product.description}"/>
+                                    <textarea id="editMaterial" class="form-control" name="description" type="text"
+                                              row="5" placeholder="Write Product Description"
+                                              th:field="${product.description}"/>
                                 </div>
                                 <!--<div class="feedback"-->
                                 <!--th:each="error : ${#fields.errors('name')}"-->
@@ -250,23 +290,39 @@
                             </div>
                             <div>
                                 <input type="number" step="0.01" id="editMaterial"
-                                       class="list-group-item col-md-offset-1 col-md-2" name="width" th:field="${product.width}"/>
+                                       class="list-group-item col-md-offset-1 col-md-2" name="width"
+                                       th:field="${product.width}"/>
                             </div>
                             <div>
                                 <input type="number" step="0.01" id="editMaterial"
-                                       class="list-group-item col-md-offset-1  col-md-2" name="height" th:field="${product.height}"/>
+                                       class="list-group-item col-md-offset-1  col-md-2" name="height"
+                                       th:field="${product.height}"/>
                             </div>
                             <div>
                                 <input type="number" step="0.01" id="editMaterial"
-                                       class="list-group-item col-md-offset-1 col-md-2" name="weight" th:field="${product.weight}"/>
+                                       class="list-group-item col-md-offset-1 col-md-2" name="weight"
+                                       th:field="${product.weight}"/>
                             </div>
+                            <div class="col-md-3 feedback"
+                                 th:each="error : ${#fields.errors('length')}"
+                                 th:text="|${error}|"/>
+                            <div class="col-md-3 feedback"
+                                 th:each="error : ${#fields.errors('width')}"
+                                 th:text="|${error}|"/>
+                            <div class="col-md-3 feedback"
+                                 th:each="error : ${#fields.errors('height')}"
+                                 th:text="|${error}|"/>
+                            <div class="col-md-3 feedback"
+                                 th:each="error : ${#fields.errors('weight')}"
+                                 th:text="|${error}|"/>
                         </div>
                         <div class="col-md-12">
                             <button id="update" type="submit"
                                     class="btn-hover btn btn-default btn-outline btn-circle col-md-11">Update product
                             </button>
                             <button id="create" type="submit" onclick="setCreateRoute()"
-                                    class="btn-hover btn btn-default btn-outline btn-circle col-md-11">Create New Product
+                                    class="btn-hover btn btn-default btn-outline btn-circle col-md-11">Create New
+                                Product
                             </button>
                         </div>
                     </div>

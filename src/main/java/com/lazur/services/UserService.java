@@ -1,8 +1,7 @@
 package com.lazur.services;
 
-import com.lazur.models.view.UserBindingModel;
-import com.lazur.models.view.UserEditBindingModel;
-import com.lazur.models.view.UserViewModel;
+import com.lazur.models.users.UserBindingModel;
+import com.lazur.models.users.UserViewModel;
 import javassist.NotFoundException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
@@ -17,8 +16,11 @@ public interface UserService  extends UserDetailsService{
 
     UserViewModel findById(Long userId) throws NotFoundException;
 
-    void updateUser(Long id, UserEditBindingModel userBindingModel) throws RoleNotFoundException;
+    void updateUser(Long id, UserBindingModel userBindingModel) throws RoleNotFoundException;
+
+    void deleteUser(Long id) throws NotFoundException;
 }
+
 
 
 

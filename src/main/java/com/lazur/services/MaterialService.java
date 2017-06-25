@@ -1,9 +1,9 @@
 package com.lazur.services;
 
-import com.lazur.entities.Material;
-import com.lazur.models.view.MaterialUpdateModel;
-import com.lazur.models.view.MaterialViewBasicModel;
-import com.lazur.models.view.MaterialViewModel;
+import com.lazur.entities.materials.Material;
+import com.lazur.models.materials.MaterialUpdateModel;
+import com.lazur.models.materials.MaterialViewBasicModel;
+import com.lazur.models.materials.MaterialViewModel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

@@ -182,9 +182,9 @@
                                 <!--<div class=""-->
                                 <!--th:classappend="${#fields.hasErrors('name')} ? 'has-danger'"/>-->
                                 <div class="selectContainer">
-                                    <select id="deleteMaterial" name="specificMaterial" class="form-control"
+                                    <select id="deleteMaterial" name="specificMaterialId" class="form-control"
                                             title="Choose specific materials">
-                                        <option th:text="${product.specificMaterial}" th:value="${product.specificMaterial}"/>
+                                        <option th:text="${product.specificMaterialName}" th:value="${product.specificMaterialId}"/>
                                         <option value="">Select Specific Material</option>
                                         <th:block th:each="specificMatterial : ${specificMaterials}">
                                             <option th:value="${specificMatterial.id}">

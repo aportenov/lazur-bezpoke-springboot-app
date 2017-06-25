@@ -1,10 +1,11 @@
 package com.lazur.serviceImpl;
 
-import com.lazur.entities.Frame;
-import com.lazur.entities.Material;
-import com.lazur.models.view.MaterialBindingModel;
-import com.lazur.models.view.MaterialUpdateModel;
-import com.lazur.models.view.MaterialViewBasicModel;
+import com.lazur.entities.materials.Frame;
+import com.lazur.entities.materials.Material;
+import com.lazur.exeptions.FrameNotFoundExeption;
+import com.lazur.models.materials.MaterialBindingModel;
+import com.lazur.models.materials.MaterialUpdateModel;
+import com.lazur.models.materials.MaterialViewBasicModel;
 import com.lazur.repositories.MaterialRepository;
 import com.lazur.services.FrameService;
 import org.modelmapper.ModelMapper;
@@ -17,6 +18,7 @@ import java.util.List;
 
 @Service
 public class FrameServiceImpl implements FrameService{
+    private static final String FRAME = "frame";
 
     private final ModelMapper modelMapper;
     private final MaterialRepository materialRepository;
@@ -31,7 +33,7 @@ public class FrameServiceImpl implements FrameService{
 
     @Override
     public List<MaterialViewBasicModel> findAll() {
-       List<Material> materials = this.materialRepository.findAllWhereNameIs("frame");
+       List<Material> materials = this.materialRepository.findAllWhereNameIs(FRAME);
        List<MaterialViewBasicModel> materialViewBasicModels = new ArrayList<>();
         for (Material material : materials) {
             MaterialViewBasicModel materialViewBasicModel = this.modelMapper.map(material, MaterialViewBasicModel.class);
@@ -45,19 +47,17 @@ public class FrameServiceImpl implements FrameService{
     @Transactional
     public void save(MaterialBindingModel materialBindingModel) {
         Frame frame = this.modelMapper.map(materialBindingModel, Frame.class);
-        Material isExist = this.materialRepository.findOneByMaterialAndName(materialBindingModel.getMaterial(), "frame");
+        Material isExist = this.materialRepository.findOneByMaterialAndName(materialBindingModel.getMaterial(), FRAME);
         if (isExist == null){
-
+            this.materialRepository.save(frame);
         }
-
-        this.materialRepository.save(frame);
     }
 
     @Override
     public void update(Long materialId, MaterialUpdateModel materialUpdateModel) {
         Material material = this.materialRepository.findOne(materialId);
         if (material == null){
-            //throw exeption
+            throw new FrameNotFoundExeption();
         }
 
         material.setAbbreviation(materialUpdateModel.getAbbreviation());

@@ -50,6 +50,7 @@ public class Product implements Serializable {
     @Column(nullable = true)
     private Float weight;
 
+    @Column(name = "sku", unique = true)
     private String sku;
 
     @ManyToOne(cascade = CascadeType.MERGE)

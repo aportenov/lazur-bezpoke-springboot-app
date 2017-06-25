@@ -1,8 +1,7 @@
 package com.lazur.services;
 
 import com.lazur.entities.specific.Color;
-import com.lazur.models.view.SpecialSubMaterialBindingModel;
-import com.lazur.models.view.SpecialSubMaterialViewModel;
+import com.lazur.models.materials.SpecialSubMaterialViewModel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

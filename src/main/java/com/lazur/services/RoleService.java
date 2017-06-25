@@ -2,7 +2,7 @@ package com.lazur.services;
 
 
 import com.lazur.entities.Role;
-import com.lazur.models.view.RoleViewModel;
+import com.lazur.models.users.RoleViewModel;
 
 import javax.management.relation.RoleNotFoundException;
 import java.util.List;

@@ -1,6 +1,6 @@
 package com.lazur.validations;
 
-import com.lazur.models.view.UserBindingModel;
+import com.lazur.models.users.UserBindingModel;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

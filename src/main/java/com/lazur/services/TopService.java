@@ -1,9 +1,9 @@
 package com.lazur.services;
 
 
-import com.lazur.models.view.MaterialBindingModel;
-import com.lazur.models.view.MaterialUpdateModel;
-import com.lazur.models.view.MaterialViewBasicModel;
+import com.lazur.models.materials.MaterialBindingModel;
+import com.lazur.models.materials.MaterialUpdateModel;
+import com.lazur.models.materials.MaterialViewBasicModel;
 
 import java.util.List;
 

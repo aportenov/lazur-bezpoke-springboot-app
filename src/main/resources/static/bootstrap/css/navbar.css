@@ -53,7 +53,7 @@ Follow me on Twitter @maridlcrmn
     font-size: small;
 }
 
-#editMaterial {
+#editMaterial, .editMaterial {
     background-color: rgba(44, 147, 255, 0.35);
 }
 

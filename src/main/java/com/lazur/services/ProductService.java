@@ -2,11 +2,11 @@ package com.lazur.services;
 
 //import com.google.zxing.WriterException;
 import com.google.zxing.WriterException;
-import com.lazur.entities.Material;
+import com.lazur.entities.materials.Material;
 import com.lazur.entities.Product;
-import com.lazur.models.view.ProductViewBasicModel;
-import com.lazur.models.view.ProductBiningModel;
-import com.lazur.models.view.ProductViewDetailsModel;
+import com.lazur.models.products.ProductViewBasicModel;
+import com.lazur.models.products.ProductBiningModel;
+import com.lazur.models.products.ProductViewDetailsModel;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.krysalis.barcode4j.BarcodeException;
 import org.springframework.data.domain.Page;
@@ -38,7 +38,14 @@ public interface ProductService {
     Material getMaterial(String material, String type);
 
     Product findBySku(String sku);
+
+    ProductBiningModel findProductViewById(Long productId);
+
+    String addSpecificMaterialName(long specificMaterialId);
+
+    ProductViewDetailsModel findProductByBarcodeNumber(String searchedWord) throws BarcodeException, ConfigurationException, IOException;
 }
+
 
 
 

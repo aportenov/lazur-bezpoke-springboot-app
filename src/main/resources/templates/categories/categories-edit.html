@@ -10,8 +10,14 @@
     <div class="row">
         <div class="page">
             <div class="row">
-                <form th:action="@{'/categories/update/' + ${currCategory.id}}" method="POST" th:object="${currCategory}">
+                <form th:action="@{/categories/update/{type}/{id}(type=${type}, id=${currCategory.id})}" method="POST" th:object="${currCategory}">
                     <div class="col-md-12">
+                        <th:block th:each="error : ${#fields.errors('global')}">
+                            <div class="alert alert-danger fade in">
+                                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                <span th:text="|${error}|"/>
+                            </div>
+                        </th:block>
                         <input type="hidden" id="csrf" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                         <div class="col-md-3" th:classappend="${#fields.hasErrors('name')} ? 'has-danger'">
                             <input id="editMaterial" class="list-group-item" type="text" name="name"
@@ -24,7 +30,7 @@
                                 <select id="editMaterial" name="oldCode"
                                         class="list-group-item" title="Choose Color">
                                     <option value="">Select Code for edit</option>
-                                    <th:block th:each="code: ${currCategory.code}">
+                                    <th:block th:each="code: ${categoryCodes}">
                                         <option><span th:text="${code}" th:value="${code}"/>
                                         </option>
                                     </th:block>
