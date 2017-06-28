@@ -5,7 +5,7 @@ Follow me on Twitter @maridlcrmn
 
 .navbar-brand { position: relative; z-index: 2; }
 
-.navbar-nav.navbar-right .btn { position: relative; z-index: 2; padding: 4px 20px; margin: 10px auto; }
+.navbar-nav.navbar-right .btn { position: relative; z-index: 2; padding: 4px 20px; margin: 4px; }
 
 .navbar .navbar-collapse { position: relative; }
 .navbar .navbar-collapse .navbar-right > li:last-child { padding-left: 22px; }
@@ -34,15 +34,16 @@ Follow me on Twitter @maridlcrmn
 }
 
 .form-rounded {
-    margin-top: 8px;
+    margin-top: 3px;
+    width: 80px;
     height: 32px;
     border-radius: 5rem;
 }
 
 .form-rounded[type="text"]:focus{
-    margin-top: 8px;
+    margin-top: 3px;
     height: 32px;
-    width: 300px;
+    width: 200px;
     border-radius: 5rem;
 }
 
@@ -60,3 +61,4 @@ Follow me on Twitter @maridlcrmn
 #deleteMaterial {
     background-color: rgba(255, 0, 0, 0.35);
 }
+

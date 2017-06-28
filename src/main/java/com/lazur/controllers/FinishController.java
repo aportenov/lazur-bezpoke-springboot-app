@@ -1,7 +1,6 @@
 package com.lazur.controllers;
 
 import com.lazur.models.materials.*;
-import com.lazur.models.view.*;
 import com.lazur.services.FinishService;
 import com.lazur.services.TypeService;
 import org.springframework.beans.factory.annotation.Autowired;

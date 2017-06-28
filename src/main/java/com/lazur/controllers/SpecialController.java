@@ -29,6 +29,7 @@ public class SpecialController {
     private static final String MANUF_CODE = "manufcode";
     private static final String COMA_SPLIT = ",";
     private static final int ARRAY_SIZE_ZERO = 0;
+    private static final String EMPTY_STRING = "";
 
     private final SpecificMaterialService specificMaterialService;
     private final SpecificProductService specificProductService;
@@ -79,10 +80,10 @@ public class SpecialController {
                               RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             specificBindingModel.setId(id);
-            specificBindingModel.setSpecificProductName(specificBindingModel.getSpecificProductName().replace(",",""));
-            specificBindingModel.setColorName(specificBindingModel.getColorName().replace(",",""));
-            specificBindingModel.setManufacturerName(specificBindingModel.getManufacturerName().replace(",",""));
-            specificBindingModel.setManufCodeName(specificBindingModel.getManufCodeName().replace(",",""));
+            specificBindingModel.setSpecificProductName(specificBindingModel.getSpecificProductName().replace(COMA_SPLIT,EMPTY_STRING));
+            specificBindingModel.setColorName(specificBindingModel.getColorName().replace(COMA_SPLIT,EMPTY_STRING));
+            specificBindingModel.setManufacturerName(specificBindingModel.getManufacturerName().replace(COMA_SPLIT,EMPTY_STRING));
+            specificBindingModel.setManufCodeName(specificBindingModel.getManufCodeName().replace(COMA_SPLIT,EMPTY_STRING));
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.special", bindingResult);
             redirectAttributes.addFlashAttribute(SPECIAL, specificBindingModel);
             return String.format("redirect:/materials/special/edit/%d", id);

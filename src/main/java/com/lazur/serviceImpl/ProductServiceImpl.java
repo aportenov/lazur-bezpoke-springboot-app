@@ -4,6 +4,7 @@ package com.lazur.serviceImpl;
 
 import com.google.zxing.WriterException;
 import com.lazur.entities.*;
+import com.lazur.entities.materials.Material;
 import com.lazur.entities.specific.SpecificMaterial;
 import com.lazur.exeptions.ProductNotFoundExeption;
 import com.lazur.models.products.ProductViewBasicModel;
@@ -107,7 +108,12 @@ public class ProductServiceImpl implements ProductService {
             throw new ProductNotFoundExeption();
         }
 
+        String image = product.getImage();
         product = mapProduct(product, productBiningModel);
+        if (product.getImage() == null || product.getImage().isEmpty()){
+            product.setImage(image);
+        }
+
         this.productRepository.save(product);
     }
 
@@ -309,6 +315,7 @@ public class ProductServiceImpl implements ProductService {
             productViewDetailsModel.setBarcodeUS(this.barcodeService.getEAN13Barcode(product.getBarcodeUS(), product.getSku()));
         }
 
+        productViewDetailsModel.setSku(this.barcodeService.getSKUNumber(product));
         return productViewDetailsModel;
     }
 }

@@ -1,14 +1,12 @@
 package com.lazur.entities;
 
 
+import com.lazur.entities.materials.Material;
 import com.lazur.entities.specific.SpecificMaterial;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
-import javax.validation.Valid;
 import java.io.Serializable;
-import java.util.*;
+
 
 @Entity
 @Table(name = "products")

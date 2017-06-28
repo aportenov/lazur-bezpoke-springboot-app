@@ -5,7 +5,6 @@ import com.lazur.models.families.FamilyBidnignModel;
 import com.lazur.models.families.FamilyViewModel;
 import com.lazur.models.models.ModelBindingModel;
 import com.lazur.models.models.ModelEditModel;
-import com.lazur.models.view.*;
 import com.lazur.services.CategoryService;
 import com.lazur.services.FamilyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +32,12 @@ public class CategoryController {
     private static final String CURR_FAMILY = "currFamily";
     private static final String FAMILY_TYPE = "familyType";
     private static final String CATEGORY_CODES = "categoryCodes";
+    private static final String TITLE = "title";
+    private static final String EDIT = "Edit";
+    private static final String DELETE = "Delete";
+
+
+
     @Autowired
     private CategoryService categoryService;
 
@@ -47,6 +52,7 @@ public class CategoryController {
             model.addAttribute(CATEGORY, new CategoryBindingModel());
         }
 
+        model.addAttribute(TITLE, CATEGORIES);
         return "/categories/categories";
     }
 
@@ -73,6 +79,7 @@ public class CategoryController {
             model.addAttribute(CURR_MODEL, new ModelBindingModel());
         }
 
+        model.addAttribute(TITLE, category);
         return "/categories/models";
     }
 
@@ -88,6 +95,7 @@ public class CategoryController {
             model.addAttribute(FAMILY, new FamilyBidnignModel());
         }
 
+        model.addAttribute(TITLE, TYPE);
         return "/categories/families";
     }
 
@@ -102,7 +110,7 @@ public class CategoryController {
         model.addAttribute(FAMILY_NAME, family);
         model.addAttribute(CURR_CATEGORY, category);
         model.addAttribute(TYPE, modelName);
-
+        model.addAttribute(TITLE, FAMILY);
         return "/categories/products";
     }
 
@@ -119,6 +127,7 @@ public class CategoryController {
             model.addAttribute(CURR_CATEGORY, categoryEditViewModel);
         }
 
+        model.addAttribute(TITLE,String.format("%s %s",EDIT,category));
         return "/categories/categories-edit";
     }
 
@@ -147,6 +156,7 @@ public class CategoryController {
         addCategoryToTable(category, model);
         model.addAttribute(TYPE, category);
         model.addAttribute(CURR_CATEGORY, categoryEditModel);
+        model.addAttribute(TITLE,String.format("%s %s",DELETE,category));
         return "/categories/categories-delete";
     }
 
@@ -179,6 +189,7 @@ public class CategoryController {
         addCategoryToTable(category, model);
         model.addAttribute(TYPE, modelName);
         model.addAttribute(CURR_MODEL, categoryEditModel);
+        model.addAttribute(TITLE,String.format("%s %s",EDIT,MODEL_NAME));
         return "/categories/models-delete";
     }
 
@@ -199,6 +210,7 @@ public class CategoryController {
             model.addAttribute(CURR_FAMILY, familyViewModel);
         }
 
+        model.addAttribute(TITLE,String.format("%s %s",EDIT,TYPE));
         return "/categories/families-edit";
     }
 
@@ -214,6 +226,7 @@ public class CategoryController {
         model.addAttribute(TYPE, familyName);
         model.addAttribute(FAMILY_TYPE, modelName);
         model.addAttribute(CURR_FAMILY, familyViewModel);
+        model.addAttribute(TITLE,String.format("%s %s",DELETE,FAMILY_NAME));
         return "/categories/families-delete";
     }
 

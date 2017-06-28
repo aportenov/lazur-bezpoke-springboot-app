@@ -3,14 +3,13 @@ package com.lazur.controllers;
 //import com.google.zxing.WriterException;
 
 import com.google.zxing.WriterException;
-import com.lazur.entities.specific.SpecificMaterial;
+
 import com.lazur.models.categories.CategoryViewModel;
 import com.lazur.models.materials.MaterialViewBasicModel;
 import com.lazur.models.materials.SpecificMaterialViewBasicModel;
 import com.lazur.models.products.ProductBiningModel;
 import com.lazur.models.products.ProductViewBasicModel;
 import com.lazur.models.products.ProductViewDetailsModel;
-import com.lazur.models.view.*;
 import com.lazur.services.*;
 import org.apache.avalon.framework.configuration.ConfigurationException;
 import org.krysalis.barcode4j.BarcodeException;
@@ -54,6 +53,10 @@ public class ProductController {
     private static final int PAGE_SIZE = 9;
     private static final int SIZE_ZERO = 0;
     private static final String BASE64_PNG = "data:image/png;base64,";
+    private static final String TITLE = "title";
+    private static final String NEW = "New";
+    private static final String EDIT = "Edit";
+    private static final String DELETE = "Delete";
 
     private final ProductService productService;
     private final CategoryService categoryService;
@@ -74,6 +77,7 @@ public class ProductController {
     public String getCategoryPage(Model model) {
         List<CategoryViewModel> categoryList = this.categoryService.getCategories();
         model.addAttribute(CATEGORIES, categoryList);
+        model.addAttribute(TITLE,PRODUCTS);
         return "/products/products";
     }
 
@@ -85,6 +89,7 @@ public class ProductController {
             model.addAttribute(PRODUCT, new ProductBiningModel());
         }
 
+        model.addAttribute(TITLE, String.format("%s %s", NEW, PRODUCT));
         return "/products/add-product";
 
     }

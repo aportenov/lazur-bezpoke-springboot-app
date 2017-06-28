@@ -22,6 +22,12 @@ import java.util.List;
 @Controller
 public class UserController {
 
+    private static final String TITLE = "title";
+    private static final String SIGN_IN = "Sign In";
+    private static final String USERS = "Users";
+    private static final String EDIT_USERS = "Edit User";
+    private static final String DELETE_USERS = "Delete User";
+
     @Autowired
     private UserService userService;
 
@@ -34,6 +40,7 @@ public class UserController {
             model.addAttribute("error", Errors.INVALID_CREDENTIALS);
         }
 
+        model.addAttribute(TITLE, SIGN_IN);
         return "login";
     }
 
@@ -45,6 +52,7 @@ public class UserController {
             model.addAttribute("user", new UserBindingModel());
         }
 
+        model.addAttribute(TITLE, USERS);
         return "users";
     }
 
@@ -73,6 +81,7 @@ public class UserController {
             model.addAttribute("user", userViewModel);
         }
 
+        model.addAttribute(TITLE, EDIT_USERS);
         return "users-edit";
     }
 
@@ -101,6 +110,7 @@ public class UserController {
         addUserFields(model);
         UserViewModel userViewModel = this.userService.findById(id);
         model.addAttribute("user", userViewModel);
+        model.addAttribute(TITLE, DELETE_USERS);
         return "users-delete";
     }
 

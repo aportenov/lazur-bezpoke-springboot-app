@@ -4,7 +4,6 @@ import com.lazur.entities.Model;
 import com.lazur.models.categories.CategoryAndModelUpdateModel;
 import com.lazur.models.models.ModelBindingModel;
 import com.lazur.models.models.ModelViewModel;
-import com.lazur.models.view.*;
 import com.lazur.services.ModelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

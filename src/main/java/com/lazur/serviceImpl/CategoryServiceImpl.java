@@ -7,7 +7,6 @@ import com.lazur.exeptions.CategoryNotFoundExeption;
 import com.lazur.exeptions.ModelNotFoundExeption;
 import com.lazur.models.categories.*;
 import com.lazur.models.models.ModelEditModel;
-import com.lazur.models.view.*;
 import com.lazur.repositories.CategoryRepository;
 import com.lazur.services.CategoryCodeService;
 import com.lazur.services.CategoryService;
@@ -122,11 +121,19 @@ public class CategoryServiceImpl implements CategoryService {
             throw new CategoryNotFoundExeption();
         }
 
-        CategoryCode categoryCode = this.categoryCodeService.getCode(categoryId, categoryUpdateModel.getOldCode());
-        category.setName(categoryUpdateModel.getName());
-        categoryCode.setCode(categoryUpdateModel.getCode());
+        CategoryCode categoryCode = null;
+        if (categoryUpdateModel.getOldCode() == null) {
+            categoryCode = new CategoryCode();
+            categoryCode.setCode(categoryUpdateModel.getCode());
+            category.addCategoryCodes(categoryCode);
+        } else {
+            categoryCode = this.categoryCodeService.getCode(categoryId, categoryUpdateModel.getOldCode());
+            category.setName(categoryUpdateModel.getName());
+            categoryCode.setCode(categoryUpdateModel.getCode());
+            this.modelService.updateCodes(category.getName(), categoryUpdateModel.getOldCode(), categoryUpdateModel.getCode());
+        }
+
         this.categoryCodeService.update(categoryCode);
-        this.modelService.updateCodes(category.getName(), categoryUpdateModel.getOldCode(), categoryUpdateModel.getCode());
     }
 
     @Override

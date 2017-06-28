@@ -1,14 +1,10 @@
 package com.lazur.entities.specific;
 
-
 import com.lazur.entities.Product;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "specific_materials")

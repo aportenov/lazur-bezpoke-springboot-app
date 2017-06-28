@@ -2,7 +2,6 @@ package com.lazur.controllers;
 
 import com.lazur.exeptions.SpecialSubMaterialNotFound;
 import com.lazur.models.materials.*;
-import com.lazur.models.view.*;
 import com.lazur.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -47,6 +46,9 @@ public class MaterialController {
     private static final String SPECIFIC_PRODUCTS = "specificProducts";
     private static final String MANUFACTURERS = "manufacturers";
     private static final int PAGE_SIZE = 20;
+    private static final String TITLE = "title";
+    private static final String EDIT = "Edit";
+    private static final String DELETE = "Delete";
 
 
     private final MaterialService materialService;
@@ -79,6 +81,7 @@ public class MaterialController {
     @GetMapping("/materials")
     public String getMaterialsPage(Model model) {
         addMaterialsToModel(model);
+        model.addAttribute(TITLE, MATERIALS);
         return "/materials/materials";
     }
 
@@ -95,6 +98,7 @@ public class MaterialController {
             model.addAttribute(CURR_MATERIAL, new MaterialBindingModel());
         }
 
+        model.addAttribute(TITLE, name);
         return "/materials/materials-create";
 
     }
@@ -110,6 +114,7 @@ public class MaterialController {
             model.addAttribute(SPECIAL, new SpecificBindingModel());
         }
 
+        model.addAttribute(TITLE, MATERIALS);
         return "/materials/materials-special";
 
     }
@@ -128,6 +133,7 @@ public class MaterialController {
             model.addAttribute(SUB_MATERIAL, new TypeBindingModel());
         }
 
+        model.addAttribute(TITLE, product);
         return "/materials/materials-add";
 
     }
@@ -147,6 +153,7 @@ public class MaterialController {
             model.addAttribute(MATERIAL, materialViewModel);
         }
 
+        model.addAttribute(TITLE,String.format("%s %s",EDIT,name));
         return "/materials/materials-edit";
     }
 
@@ -161,6 +168,7 @@ public class MaterialController {
         model.addAttribute(MATERIAL, materialViewModel);
         model.addAttribute(MATERIALS, materialViewModels);
         model.addAttribute(TYPE, name);
+        model.addAttribute(TITLE,String.format("%s %s",DELETE,name));
         return "/materials/materials-delete";
     }
 
@@ -179,6 +187,7 @@ public class MaterialController {
         }
         model.addAttribute(MATERIALS, materialViewModels);
         model.addAttribute(TYPE, name);
+        model.addAttribute(TITLE,String.format("%s %s",EDIT,product));
         return "/materials/materials-edit-type";
     }
 
@@ -194,6 +203,7 @@ public class MaterialController {
         model.addAttribute(MATERIAL, typeViewModel);
         model.addAttribute(MATERIALS, materialViewModels);
         model.addAttribute(TYPE, name);
+        model.addAttribute(TITLE,String.format("%s %s",DELETE,product));
         return "/materials/materials-delete-type";
     }
 
@@ -211,6 +221,7 @@ public class MaterialController {
             model.addAttribute(SPECIAL, specificMaterialViewBasicModel);
         }
 
+        model.addAttribute(TITLE,EDIT);
         return "/materials/materials-special-edit";
 
     }
@@ -226,6 +237,7 @@ public class MaterialController {
         model.addAttribute(SPECIAL, specificMaterialViewBasicModel);
         model.addAttribute(MATERIALS, materialViewModels);
         getSpecificProductMaterials(model);
+        model.addAttribute(TITLE,DELETE);
         return "/materials/materials-special-delete";
 
     }
@@ -241,6 +253,7 @@ public class MaterialController {
         }
 
         model.addAttribute(TYPE, product);
+        model.addAttribute(TITLE,product);
         return "/materials/materials-add-special";
 
     }
@@ -258,6 +271,7 @@ public class MaterialController {
         }
 
         model.addAttribute(TYPE, product);
+        model.addAttribute(TITLE,String.format("%s %s",EDIT,product));
         return "/materials/materials-edit-special";
 
     }
@@ -272,6 +286,7 @@ public class MaterialController {
         addMaterialsToModel(model);
         model.addAttribute(SPECIAL_PRODUCT, specialSubMaterialViewModel);
         model.addAttribute(TYPE, product);
+        model.addAttribute(TITLE,String.format("%s %s",DELETE,product));
         return "/materials/materials-delete-special";
 
     }

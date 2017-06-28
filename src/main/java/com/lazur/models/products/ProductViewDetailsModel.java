@@ -38,6 +38,8 @@ public class ProductViewDetailsModel {
 
     private Float width;
 
+    private String sku;
+
     private String qrCode;
 
     private String barcodeEU;
@@ -220,5 +222,13 @@ public class ProductViewDetailsModel {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getSku() {
+        return sku;
+    }
+
+    public void setSku(String sku) {
+        this.sku = sku;
     }
 }

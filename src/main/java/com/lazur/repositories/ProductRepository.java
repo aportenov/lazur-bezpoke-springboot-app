@@ -54,6 +54,12 @@ public interface ProductRepository extends JpaRepository<Product , Long> {
             "WHERE p.barcodeEU = :searchedWord " +
             "OR p.barcodeUS = :searchedWord")
     Product findByBarcode(@Param("searchedWord") String searchedWord);
+
+    @Query(value = "SELECT p FROM Product AS p " +
+            "WHERE p.barcodeEU = :searchedWord " +
+            "OR p.barcodeUS = :searchedWord " +
+            "AND NOT p.id = :id")
+    Product findByBarcodeAndId(@Param("searchedWord") String searchedWord, @Param("id") Long id);
 }
 
 
