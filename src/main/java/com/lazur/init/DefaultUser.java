@@ -14,8 +14,8 @@ public class DefaultUser {
 
     private final String ROLE_ADMIN = "ROLE_ADMIN";
     private final String ROLE_GUEST = "ROLE_GUEST";
-    private final String USERNAME = "1";
-    private final String PASSWORD = "1";
+    private final String USERNAME = "admin";
+    private final String PASSWORD = "password";
 
 
     private final RoleRepository roleRepository;

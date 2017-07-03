@@ -176,6 +176,7 @@ public class CategoryController {
         addCategoryToTable(category, model);
         model.addAttribute(TYPE, modelName);
         model.addAttribute(CURR_MODEL, categoryEditModel);
+        model.addAttribute(TITLE,String.format("%s %s",DELETE,modelName));
         return "/categories/models-edit";
     }
 

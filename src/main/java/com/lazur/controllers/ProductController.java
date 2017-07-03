@@ -1,6 +1,5 @@
 package com.lazur.controllers;
 
-//import com.google.zxing.WriterException;
 
 import com.google.zxing.WriterException;
 
@@ -102,6 +101,7 @@ public class ProductController {
         List<CategoryViewModel> categoryList = this.categoryService.getCategories();
         model.addAttribute(CATEGORIES, categoryList);
         model.addAttribute(PRODUCTS, productPage);
+        model.addAttribute(TITLE, category);
         return "/products/products";
     }
 
@@ -119,6 +119,7 @@ public class ProductController {
             model.addAttribute(PRODUCT, productBiningModel);
         }
 
+        model.addAttribute(TITLE,String.format("%s %s",EDIT,product));
         return "/products/edit-product";
     }
 
@@ -133,6 +134,7 @@ public class ProductController {
         ProductBiningModel productBiningModel = this.productService.findProductViewById(productId);
         addMaterials(model);
         model.addAttribute(PRODUCT, productBiningModel);
+        model.addAttribute(TITLE,String.format("%s %s",DELETE,product));
         return "/products/delete-product";
     }
 
@@ -145,6 +147,7 @@ public class ProductController {
         List<CategoryViewModel> categoryList = this.categoryService.getCategories();
         model.addAttribute(CATEGORIES, categoryList);
         model.addAttribute(PRODUCTS, productPage);
+        model.addAttribute(TITLE,modelName);
         return "/products/products";
 
     }
@@ -159,6 +162,7 @@ public class ProductController {
         List<CategoryViewModel> categoryList = this.categoryService.getCategories();
         model.addAttribute(CATEGORIES, categoryList);
         model.addAttribute(PRODUCTS, productPage);
+        model.addAttribute(TITLE,family);
         return "/products/products";
     }
 
@@ -195,6 +199,7 @@ public class ProductController {
                                         Model model) throws IOException, BarcodeException, ConfigurationException, WriterException {
         ProductViewDetailsModel productViewDetailsModel = this.productService.findProductById(productId, request);
         model.addAttribute(PRODUCT, productViewDetailsModel);
+        model.addAttribute(TITLE,productViewDetailsModel.getName());
         return "products/product-details";
     }
 
