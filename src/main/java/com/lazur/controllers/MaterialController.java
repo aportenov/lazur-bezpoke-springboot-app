@@ -87,7 +87,7 @@ public class MaterialController {
 
 
     @GetMapping("/materials/{name}")
-    public String getAddFramePage(@PathVariable(NAME) String name,
+    public String getMaterialsPage(@PathVariable(NAME) String name,
                                   @PageableDefault(size = PAGE_SIZE) Pageable pageable, Model model) {
 
         Page<MaterialViewModel> materialViewModels = getMaterials(name, pageable);

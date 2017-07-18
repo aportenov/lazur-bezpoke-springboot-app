@@ -3,6 +3,7 @@ package com.lazur.serviceImpl;
 
 import com.lazur.entities.materials.Material;
 import com.lazur.entities.types.Type;
+import com.lazur.exeptions.MaterialNotFoundExeption;
 import com.lazur.exeptions.TypeNotFoundExeption;
 import com.lazur.models.materials.TypeBindingModel;
 import com.lazur.models.materials.TypeUpdateModel;
@@ -60,7 +61,7 @@ public class TypeServiceImpl implements TypeService{
         List<Type> types = this.typeRepository.findAllWhereMaterialIs(product);
         Material material = this.materialService.findOneByMaterialAndName(product, typeBindingModel.getType().toLowerCase());
         if (material == null) {
-
+            throw new MaterialNotFoundExeption();
         }
 
         type.addMaterials(material);

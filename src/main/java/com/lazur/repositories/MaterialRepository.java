@@ -28,13 +28,15 @@ public interface MaterialRepository extends JpaRepository<Material, Long>{
 
     @Query("SELECT m FROM Material AS m " +
             "LEFT JOIN m.types AS t " +
-            "WHERE LOWER(m.name) = LOWER(:name)")
+            "WHERE LOWER(m.name) = LOWER(:name) " +
+            "GROUP BY m.material")
     Page<Material> findAllPageWhereMaterialIs(@Param("name") String name, Pageable pageable);
 
     @Query("SELECT m FROM Material AS m " +
             "LEFT JOIN m.types AS t " +
             "WHERE LOWER(m.name) = LOWER(:name) " +
-            "AND LOWER(m.material) LIKE LOWER(:product)")
+            "AND LOWER(m.material) LIKE LOWER(:product) " +
+            "GROUP BY m.material")
     Page<Material> findAllPageWhereMaterialAndTypeAre(@Param("name") String name, @Param("product") String product, Pageable pageable);
 
     @Query(value = "SELECT m FROM Material AS m " +
