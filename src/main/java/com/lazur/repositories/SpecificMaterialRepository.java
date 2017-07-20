@@ -42,12 +42,12 @@ public interface SpecificMaterialRepository extends JpaRepository<SpecificMateri
             "LEFT JOIN s.manufacturer AS m " +
             "LEFT JOIN s.manufCode AS mc " +
             "LEFT JOIN s.color AS c " +
-            "WHERE NOT s.id =:id " +
-            "OR s.id IS NULL " +
+            "WHERE ( NOT s.id =:id " +
+            "OR s.id IS NULL) " +
             "AND LOWER(c.name) = LOWER(:colorName) " +
             "AND LOWER(sp.name) = LOWER(:specificProductName) " +
             "AND LOWER(m.name) = LOWER(:manufacturerName) " +
-            "AND LOWER(mc.name) = LOWER(:manufCodeName)")
+            "AND LOWER(mc.name) = LOWER(:manufCodeName))")
     List<SpecificMaterial> findOneWithSpecification(
                                               @Param("id") Long id,
                                               @Param("specificProductName") String specificProductName,

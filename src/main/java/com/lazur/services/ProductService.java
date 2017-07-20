@@ -44,7 +44,10 @@ public interface ProductService {
     String addSpecificMaterialName(long specificMaterialId);
 
     ProductViewDetailsModel findProductByBarcodeNumber(String searchedWord) throws BarcodeException, ConfigurationException, IOException;
+
+    Page<ProductViewBasicModel> findAll(Pageable pageable);
 }
+
 
 
 

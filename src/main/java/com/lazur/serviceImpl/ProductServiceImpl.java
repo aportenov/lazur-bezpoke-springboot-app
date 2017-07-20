@@ -152,6 +152,19 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public Page<ProductViewBasicModel> findAll(Pageable pageable) {
+        Page<Product> products = this.productRepository.findAll(pageable);
+        List<ProductViewBasicModel> productViewBasicModels = new ArrayList<>();
+        for (Product product : products) {
+            ProductViewBasicModel productViewBasicModel = this.modelMapper.map(product, ProductViewBasicModel.class);
+            productViewBasicModels.add(productViewBasicModel);
+        }
+
+        return new PageImpl<>(productViewBasicModels, pageable, products.getTotalElements());
+    }
+
+
+    @Override
     public Page<ProductViewBasicModel> findAllByTypeAndCategory(String modelName, String category, Pageable pageable) {
         Page<Product> productList = this.productRepository.findAllByModelAndCategory(modelName, category, pageable);
         List<ProductViewBasicModel> productViewBasicModels = new ArrayList<>();
@@ -238,7 +251,6 @@ public class ProductServiceImpl implements ProductService {
 
         return productViewDetailsModel;
     }
-
 
     private String convertSpecificMaterialToView(String product, String color, String manufacturer, String manuCode, String code) {
         return code.equalsIgnoreCase(NONE_CODE) ?

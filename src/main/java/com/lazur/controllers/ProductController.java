@@ -49,7 +49,7 @@ public class ProductController {
     private static final String CATEGORY = "category";
     private static final String FAMILY = "family";
     private static final String PRODUCT_ID = "productId";
-    private static final int PAGE_SIZE = 9;
+    private static final int PAGE_SIZE = 18;
     private static final int SIZE_ZERO = 0;
     private static final String BASE64_PNG = "data:image/png;base64,";
     private static final String TITLE = "title";
@@ -73,10 +73,13 @@ public class ProductController {
     }
 
     @GetMapping("/products")
-    public String getCategoryPage(Model model) {
+    public String getCategoryPage(Model model,
+                                  @PageableDefault(size = PAGE_SIZE) Pageable pageable) {
+        Page<ProductViewBasicModel> productPage = this.productService.findAll(pageable);
         List<CategoryViewModel> categoryList = this.categoryService.getCategories();
         model.addAttribute(CATEGORIES, categoryList);
         model.addAttribute(TITLE,PRODUCTS);
+        model.addAttribute(PRODUCTS, productPage);
         return "/products/products";
     }
 
@@ -190,7 +193,7 @@ public class ProductController {
         }
 
         this.productService.save(productBiningModel);
-        return "redirect:/products/products";
+        return "redirect:/products";
     }
 
     @GetMapping("/product/details/{productId}")
@@ -227,14 +230,14 @@ public class ProductController {
         }
 
         this.productService.udpdate(productId, productBiningModel);
-        return "redirect:/products/product-details";
+        return "redirect:/products";
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @PostMapping("/product/delete/{productId}")
     public String updateProductPage(@PathVariable(PRODUCT_ID) long productId) {
         this.productService.delete(productId);
-        return "redirect:/products/product-details";
+        return "redirect:/products";
     }
 
 

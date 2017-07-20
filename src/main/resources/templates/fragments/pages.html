@@ -50,7 +50,7 @@
             <!--Numbers-->
             <th:block th:if="${products.getTotalPages() > 1}">
                 <li class="page-item" th:each="i : ${#numbers.sequence(0, products.getTotalPages() - 1)}"
-                    th:classappend="${events.getNumber()==i} ? 'active'">
+                    th:classappend="${products.getNumber()==i} ? 'active'">
                     <a class="page-link" href="" th:href="'' + '?page=' + ${i}" th:text="${i + 1}">1</a>
                 </li>
             </th:block>

@@ -33,11 +33,11 @@
         </div>
     </div>
     <div class="container" id="cnt1">
-        <div class="row feature">
+        <div class=" row feature">
             <div class="col-md-4" th:each="product : ${products}">
                 <div>
                     <h2><span th:text="${product.name}"/></h2>
-                    <img th:src="${product.image}" class="img-thumbnail"/>
+                    <img id="productGalery" th:src="${product.image}" class="img-thumbnail"/>
                     <a th:href="@{'/product/details/' + ${product.id}}"
                        class="btn btn-default btn-outline btn-circle">See
                         More Details</a>
@@ -47,6 +47,6 @@
     </div>
 </div>
 <th:block th:replace="scripts/script::home"/>
-<th:block th:replace="fragments/pages::products"/>
 </body>
+<th:block th:replace="fragments/pages::products"/>
 </html>

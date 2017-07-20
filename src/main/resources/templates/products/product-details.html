@@ -17,7 +17,7 @@
                     <h3><span th:text="${product.familyName}"/></h3>
                 </div>
             </div>
-            <div class="col-md-5">
+            <div id="imageDetails" class="col-md-5">
                 <img th:src="${product.image}" class="img-thumbnail"/>
             </div>
             <div class="col-md-7">
@@ -54,7 +54,7 @@
                         </th:block>
                     </tr>
                     <tr>
-                        <td>Tops-Seats:</td>
+                        <td>Top-Seat:</td>
                         <th:block th:if="${#strings.equalsIgnoreCase(product.topMaterial,'NONE')}">
                             <td><span th:text="|${product.topMaterial}"/></td>
                         </th:block>
@@ -63,13 +63,9 @@
                         </th:block>
                     </tr>
                     <tr>
-                        <td>Materials Tops Seats:</td>
+                        <td>Material Top-Seat:</td>
                         <td><span th:text="|${product.specificMaterial}|"/></td>
                     </tr>
-                    <!--<tr>-->
-                    <!--<td>Materials Tops/Seats:</td>-->
-                    <!--<td><span th:text="${product.specialName}"/></td>-->
-                    <!--</tr>-->
                     <tr>
                         <td><span>Dimensions :</span></td>
                         <td><span

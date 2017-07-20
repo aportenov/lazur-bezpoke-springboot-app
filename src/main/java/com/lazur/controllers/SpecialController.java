@@ -80,10 +80,10 @@ public class SpecialController {
                               RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             specificBindingModel.setId(id);
-            specificBindingModel.setSpecificProductName(specificBindingModel.getSpecificProductName().replace(COMA_SPLIT,EMPTY_STRING));
-            specificBindingModel.setColorName(specificBindingModel.getColorName().replace(COMA_SPLIT,EMPTY_STRING));
-            specificBindingModel.setManufacturerName(specificBindingModel.getManufacturerName().replace(COMA_SPLIT,EMPTY_STRING));
-            specificBindingModel.setManufCodeName(specificBindingModel.getManufCodeName().replace(COMA_SPLIT,EMPTY_STRING));
+            specificBindingModel.setSpecificProductName(getCorrectName(specificBindingModel.getSpecificProductName()));
+            specificBindingModel.setColorName(getCorrectName(specificBindingModel.getColorName()));
+            specificBindingModel.setManufacturerName(getCorrectName(specificBindingModel.getManufacturerName()));
+            specificBindingModel.setManufCodeName(getCorrectName(specificBindingModel.getManufCodeName()));
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.special", bindingResult);
             redirectAttributes.addFlashAttribute(SPECIAL, specificBindingModel);
             return String.format("redirect:/materials/special/edit/%d", id);
@@ -169,5 +169,16 @@ public class SpecialController {
                 specificBindingModel.getManufCodeName().split(COMA_SPLIT).length == ARRAY_SIZE_ZERO ||
                 specificBindingModel.getColorName().split(COMA_SPLIT).length == ARRAY_SIZE_ZERO ||
                 specificBindingModel.getManufacturerName().split(COMA_SPLIT).length == ARRAY_SIZE_ZERO;
+    }
+
+    private String getCorrectName(String specificProductName) {
+        String[] array = specificProductName.split(COMA_SPLIT);
+        if (! array[0].isEmpty()) {
+            return array[0];
+        }else if (! array[1].isEmpty()){
+            return array[1];
+        }
+
+        return EMPTY_STRING;
     }
 }

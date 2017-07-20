@@ -10,7 +10,7 @@ public class HomepageController {
 
     @GetMapping("")
     public String getHomePage(){
-        return "redirect:/products/products";
+        return "redirect:/products";
 
     }
 }

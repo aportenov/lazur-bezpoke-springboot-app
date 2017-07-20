@@ -46,7 +46,7 @@ public class CategoryController {
 
 
     @GetMapping("/categories")
-    public String getEditCategoryPage(Model model) {
+    public String getCategoryPage(Model model) {
         addCategoryToDropDown(model);
         if (!model.containsAttribute(CATEGORY)) {
             model.addAttribute(CATEGORY, new CategoryBindingModel());
