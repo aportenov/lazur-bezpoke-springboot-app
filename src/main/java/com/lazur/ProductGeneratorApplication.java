@@ -19,5 +19,3 @@ public class ProductGeneratorApplication extends SpringBootServletInitializer {
 }
 
 
-
-
