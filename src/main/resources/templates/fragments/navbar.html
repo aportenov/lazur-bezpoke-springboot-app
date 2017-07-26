@@ -1,59 +1,145 @@
 <div lang="en"
      xmlns:th="http://www.thymeleaf.org"
      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-    <nav class="navbar navbar-default">
-        <div class="container">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
-                <img class="navbar-brand" id="logoImage"
-                    src="/../../static/img/lazur.jpg" th:src="@{/img/lazur.jpg}"/>
-            </div>
-
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="navbar-collapse-1">
+    <div id='cssmenu'>
+        <ul>
+            <li sec:authorize="isAnonymous()">
+                <a href="/login">Log In</a>
+            </li>
+            <li sec:authorize="isAuthenticated()">
+                <a href="/logout">Log Out</a>
+            </li>
+            <li sec:authorize="hasRole('ROLE_ADMIN')">
+                <a href="/products/create">New Product</a>
+            </li>
+            <li sec:authorize="hasRole('ROLE_ADMIN')">
+                <a href="/users">Users</a>
+            </li>
+            <li sec:authorize="hasRole('ROLE_ADMIN')" class="active">
+                <a href="/categories">Categories</a>
+                <ul th:if="${categories} != null">
+                    <li th:each="category : ${categories}">
+                        <a th:href="@{'/categories/' + ${category.name}}">
+                            <h5><span th:text="${category.name}"/></h5>
+                        </a>
+                        <ul>
+                            <li th:each="model : ${category.models}">
+                                <a th:href="@{/categories/{category}/{model}(category=${category.name},model=${model.name})}"><span
+                                        th:text="${model.name}"/> </a>
+                                <ul>
+                                    <li th:each="family : ${model.families}">
+                                        <a th:href="@{/categories/{category}/{model}/{family}(category=${category.name},model=${model.name},family=${family.name})}">
+                                            <span th:text="${family.name}"/>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li sec:authorize="hasRole('ROLE_ADMIN')" class="active"><a href="/materials">Materials</a>
+                <ul>
+                    <li th:if="${frames} != null">
+                        <a th:href="@{'/materials/Frame'}">
+                            <h5>Frame</h5>
+                        </a>
+                        <ul>
+                            <li th:each="frame : ${frames}">
+                                <a th:href="@{/materials/Frame/{product}(product=${frame.material})}">
+                                    <span th:text="${frame.material}"/>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li th:if="${finish} != null">
+                        <a th:href="@{'/materials/Finish'}">
+                            <h5>Finish</h5>
+                        </a>
+                        <ul>
+                            <li th:each="fin : ${finish}">
+                                <a th:href="@{/materials/Finish/{product}(product=${fin.material})}">
+                                    <span th:text="${fin.material}"/>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li th:if="${tops} != null">
+                        <a th:href="@{'/materials/Top'}">
+                            <h5>Tops-Seats</h5>
+                        </a>
+                        <ul>
+                            <li th:each="top : ${tops}">
+                                <a th:href="@{/materials/Top/{product}(product=${top.material})}">
+                                    <span th:text="${top.material}"/>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li th:if="${frames} != null">
+                        <a th:href="@{'/materials/special'}">
+                            <h5>Materials Tops/Seats</h5>
+                        </a>
+                        <ul>
+                            <li>
+                                <a th:href="@{/materials/special/product}">
+                                    <span>Product</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a th:href="@{/materials/special/color}">
+                                    <span>Color</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a th:href="@{/materials/special/manufacturer}">
+                                    <span>Manufaturer</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a th:href="@{/materials/special/manufcode}">
+                                    <span>Manuf Code</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li sec:authorize="isAuthenticated()" class='active'><a href="/products">Products</a>
+                <ul th:if="${categories} != null">
+                    <li th:each="category : ${categories}">
+                        <a th:href="@{'/products/' + ${category.name}}">
+                            <h5><span th:text="${category.name}"/></h5><b class="caret"></b>
+                        </a>
+                        <ul>
+                            <li th:each="model : ${category.models}">
+                                <a th:href="@{/products/{category}/{model}(category=${category.name},model=${model.name})}"><span
+                                        th:text="${model.name}"/> </a>
+                                <ul>
+                                    <li th:each="family : ${model.families}">
+                                        <a th:href="@{/products/{category}/{model}/{family}(category=${category.name},model=${model.name},family=${family.name})}">
+                                            <span th:text="${family.name}"/>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li sec:authorize="isAuthenticated()">
                 <form method="GET" action="/products/search">
-                    <ul class="nav navbar-nav navbar-right">
-                        <th:block sec:authorize="isAuthenticated()">
-                            <li>
-                                <input id="search" type="text" name="searchedWord" class="form-control form-rounded"
-                                       placeholder="Search..."/>
-                            </li>
-                            <li>
-                                <select id="searchOptions" name="searchOptions" class="btn btn-default btn-outline btn-circle"
-                                        title="Search Options">
-                                    <option value="">Search by</option>
-                                    <option value="sku">SKU</option>
-                                    <option value="name">Name</option>
-                                </select>
-                            </li>
-                            <li>
-                                <a href="/products" class="btn btn-default btn-outline btn-circle">Products</a>
-                            </li>
-                            <th:block sec:authorize="hasRole('ROLE_ADMIN')">
-                                <li>
-                                    <a href="/products/create" class="btn btn-default btn-outline btn-circle">New
-                                        Product</a>
-                                </li>
-                                <li>
-                                    <a href="/categories" class="btn btn-default btn-outline btn-circle">Categories</a>
-                                </li>
-                                <li>
-                                    <a href="/materials" class="btn btn-default btn-outline btn-circle">Materials</a>
-                                </li>
-                                <li>
-                                    <a href="/users" class="btn btn-default btn-outline btn-circle">Users</a>
-                                </li>
-                            </th:block>
-                        </th:block>
-                        <li sec:authorize="isAnonymous()">
-                            <a href="/login" class="btn btn-default btn-outline btn-circle">Log In</a>
-                        </li>
-                        <li sec:authorize="isAuthenticated()">
-                            <a href="/logout" class="btn btn-default btn-outline btn-circle">Log Out</a>
-                        </li>
-                    </ul>
+                    <input class="form-rounded" id="search" type="text" name="searchedWord" placeholder="Search..."/>
+                    <select class="form-rounded" id="searchOptions" name="searchOptions" title="Search Options">
+                        <option value="">Filter</option>
+                        <option value="sku">SKU</option>
+                        <option value="name">Name</option>
+                    </select>
                 </form>
-            </div><!-- /.navbar-collapse -->
-        </div><!-- /.container -->
-    </nav><!-- /.navbar -->
+            </li>
+        </ul>
+    </div>
+    <a href="http://www.lazurbespoke.com"><img id="logoImage"
+                                               src="/../../static/img/lazur.jpg"
+                                               th:src="@{/img/lazur.jpg}"/></a>
 </div>

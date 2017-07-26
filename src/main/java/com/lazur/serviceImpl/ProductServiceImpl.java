@@ -290,7 +290,10 @@ public class ProductServiceImpl implements ProductService {
         product.setTop(top);
         SpecificMaterial specificMaterial = this.specificMaterialService.findEntityById(productBiningModel.getSpecificMaterialId());
         product.setSpecificMaterial(specificMaterial);
-        product.setSku(this.barcodeService.getSKUNumber(product));
+        product.setSku(this.barcodeService.getSKUNumber(product,
+                productBiningModel.getFinishType(),
+                productBiningModel.getFrameType(),
+                productBiningModel.getTopType()));
         return product;
     }
     private ProductViewDetailsModel mapProductToView(Product product) throws BarcodeException, ConfigurationException, IOException {
@@ -327,7 +330,7 @@ public class ProductServiceImpl implements ProductService {
             productViewDetailsModel.setBarcodeUS(this.barcodeService.getEAN13Barcode(product.getBarcodeUS(), product.getSku()));
         }
 
-        productViewDetailsModel.setSku(this.barcodeService.getSKUNumber(product));
+        productViewDetailsModel.setSku(product.getSku());
         return productViewDetailsModel;
     }
 }

@@ -30,29 +30,6 @@
                 </form>
             </div>
         </div>
-
-        <div id="Navigation">
-            <ul class="Navigation">
-                <li th:each="category : ${categories}">
-                    <a th:href="@{'/categories/' + ${category.name}}">
-                        <h5><span th:text="${category.name}"/></h5><b class="caret"></b>
-                    </a>
-                    <ul th:each="model : ${category.models}">
-                        <li>
-                            <a th:href="@{/categories/{category}/{model}(category=${category.name},model=${model.name})}"><span
-                                    th:text="${model.name}"/> </a>
-                            <ul class="dropdown" th:each="family : ${model.families}">
-                                <li>
-                                    <a th:href="@{/categories/{category}/{model}/{family}(category=${category.name},model=${model.name},family=${family.name})}">
-                                        <span th:text="${family.name}"/>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
         <div class="conteiner">
             <table class="text-center table table-hover">
                 <thead>

@@ -27,48 +27,12 @@
                 </form>
             </div>
         </div>
-        <div id="positionMaterials" class="row">
-            <div id="Navigation">
-                <ul class="Navigation">
-                    <li>
-                        <a th:href="@{'/materials/Frame'}">
-                            <h5>Frame</h5><b class="caret"></b>
-                        </a>
-                        <ul th:each="frame : ${frames}">
-                            <li>
-                                <a th:href="@{/materials/Frame/{product}(product=${frame.material})}">
-                                    <span th:text="${frame.material}"/>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a th:href="@{'/materials/Finish'}">
-                            <h5>Finish</h5><b class="caret"></b>
-                        </a>
-                        <ul th:each="fin : ${finish}">
-                            <li>
-                                <a th:href="@{/materials/Finish/{product}(product=${fin.material})}">
-                                    <span th:text="${fin.material}"/>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a th:href="@{'/materials/Top'}">
-                            <h5>Tops-Seats</h5><b class="caret"></b>
-                        </a>
-                        <ul th:each="top : ${tops}">
-                            <li>
-                                <a th:href="@{/materials/Top/{product}(product=${top.material})}">
-                                    <span th:text="${top.material}"/>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
+        <div id="positionMaterials">
+            <div id='cssmenu'>
+                <ul>
+                    <li class="active">
                         <a th:href="@{'/materials/special'}">
-                            <h5>Materials Tops/Seats</h5><b class="caret"></b>
+                            Materials Tops/Seats
                         </a>
                         <ul>
                             <li>
@@ -91,6 +55,33 @@
                                     <span>Manuf Code</span>
                                 </a>
                             </li>
+                        </ul>
+                    </li>
+                    <li class="active"><a th:href="@{'/materials/Frame'}">Frames</a>
+                        <ul>
+                            <li th:each="fr : ${frames}">
+                                <a th:href="@{/materials/Frame/{product}(product=${fr.material})}">
+                                    <span th:text="${fr.material}"/></a>
+                            </li>
+
+                        </ul>
+                    </li>
+                    <li class="active"><a th:href="@{'/materials/Finish'}">Finish</a>
+                        <ul>
+                            <li th:each="fin : ${finish}">
+                                <a th:href="@{/materials/Finish/{product}(product=${fin.material})}">
+                                    <span th:text="${fin.material}"/></a>
+                            </li>
+
+                        </ul>
+                    </li>
+                    <li class="active"><a th:href="@{'/materials/Top'}">Top</a>
+                        <ul>
+                            <li th:each="top : ${tops}">
+                                <a th:href="@{/materials/Top/{product}(product=${top.material})}">
+                                    <span th:text="${top.material}"/></a>
+                            </li>
+
                         </ul>
                     </li>
                 </ul>

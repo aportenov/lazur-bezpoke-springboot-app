@@ -2,27 +2,22 @@
     background-color: rgba(255, 255, 255, 0.88);
     width:80%;
     margin-bottom:70px;
-    margin-top: 150px;
+    margin-top: 50px;
 }
 
 .feature{
     text-align: center;
-
-}
-.feature > div > div{
     width: 250px;
     padding: 10px;
     border: 1px ;/*transparent*/
     border-radius: 4px;
     transition: 0.2s;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
+
 }
-.feature > div:hover > div{
-    margin-top: -10px;
-    border: 1px solid rgb(128, 128, 128);
-    box-shadow: rgba(0, 0, 0, 0.1) 0px 5px 5px 5px;
-    background: rgba(232, 215, 215, 0.10);
-    transition: 0.3s;
+
+.feature:hover{
+    -webkit-transform: scale(1.25);
 
 }
 
@@ -43,6 +38,7 @@ label{
 
 .btn:hover{
     -webkit-transform: scale(1.1);
+    background-color: #ccc !important;
 }
 
 .feedback {
@@ -89,7 +85,7 @@ label{
     margin: 0 auto;
     width:60%;
     margin-bottom:70px;
-    margin-top: 150px;
+    margin-top: 10px;
 }
 
 #productGalery {

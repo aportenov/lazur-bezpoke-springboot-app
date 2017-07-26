@@ -49,7 +49,7 @@ public class ProductController {
     private static final String CATEGORY = "category";
     private static final String FAMILY = "family";
     private static final String PRODUCT_ID = "productId";
-    private static final int PAGE_SIZE = 18;
+    private static final int PAGE_SIZE = 9;
     private static final int SIZE_ZERO = 0;
     private static final String BASE64_PNG = "data:image/png;base64,";
     private static final String TITLE = "title";
