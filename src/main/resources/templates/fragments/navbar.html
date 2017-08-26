@@ -3,19 +3,19 @@
      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <div id='cssmenu'>
         <ul>
-            <li sec:authorize="isAnonymous()">
+            <li id="menu-list-button" sec:authorize="isAnonymous()">
                 <a href="/login">Log In</a>
             </li>
-            <li sec:authorize="isAuthenticated()">
+            <li id="menu-list-button" sec:authorize="isAuthenticated()">
                 <a href="/logout">Log Out</a>
             </li>
-            <li sec:authorize="hasRole('ROLE_ADMIN')">
+            <li id="menu-list-button"  sec:authorize="hasRole('ROLE_ADMIN')">
                 <a href="/products/create">New Product</a>
             </li>
-            <li sec:authorize="hasRole('ROLE_ADMIN')">
+            <li id="menu-list-button" sec:authorize="hasRole('ROLE_ADMIN')">
                 <a href="/users">Users</a>
             </li>
-            <li sec:authorize="hasRole('ROLE_ADMIN')" class="active">
+            <li id="menu-list-button" sec:authorize="hasRole('ROLE_ADMIN')" class="active">
                 <a href="/categories">Categories</a>
                 <ul th:if="${categories} != null">
                     <li th:each="category : ${categories}">
@@ -38,7 +38,7 @@
                     </li>
                 </ul>
             </li>
-            <li sec:authorize="hasRole('ROLE_ADMIN')" class="active"><a href="/materials">Materials</a>
+            <li id="menu-list-button" sec:authorize="hasRole('ROLE_ADMIN')" class="active"><a href="/materials">Materials</a>
                 <ul>
                     <li th:if="${frames} != null">
                         <a th:href="@{'/materials/Frame'}">
@@ -105,7 +105,7 @@
                     </li>
                 </ul>
             </li>
-            <li sec:authorize="isAuthenticated()" class='active'><a href="/products">Products</a>
+            <li id="menu-list-button" sec:authorize="isAuthenticated()" class='active'><a href="/products">Products</a>
                 <ul th:if="${categories} != null">
                     <li th:each="category : ${categories}">
                         <a th:href="@{'/products/' + ${category.name}}">

@@ -179,7 +179,10 @@
 #cssmenu ul ul > li.has-sub:hover > a:before {
     top: 17px;
     height: 0;
+
 }
+
+
 @media all and (max-width: 768px), only screen and (-webkit-min-device-pixel-ratio: 2) and (max-width: 1024px), only screen and (min--moz-device-pixel-ratio: 2) and (max-width: 1024px), only screen and (-o-min-device-pixel-ratio: 2/1) and (max-width: 1024px), only screen and (min-device-pixel-ratio: 2) and (max-width: 1024px), only screen and (min-resolution: 192dpi) and (max-width: 1024px), only screen and (min-resolution: 2dppx) and (max-width: 1024px) {
     #cssmenu {
         width: 100%;
@@ -340,6 +343,10 @@
     #cssmenu .submenu-button.submenu-opened:before {
         display: none;
     }
+}
+
+#menu-list-button:hover, #searchOptions:hover {
+    -webkit-transform: scale(1.1);
 }
 
 #logoImage{

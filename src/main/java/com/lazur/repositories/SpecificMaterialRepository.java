@@ -47,7 +47,7 @@ public interface SpecificMaterialRepository extends JpaRepository<SpecificMateri
             "AND LOWER(c.name) = LOWER(:colorName) " +
             "AND LOWER(sp.name) = LOWER(:specificProductName) " +
             "AND LOWER(m.name) = LOWER(:manufacturerName) " +
-            "AND LOWER(mc.name) = LOWER(:manufCodeName))")
+            "AND LOWER(mc.name) = LOWER(:manufCodeName)")
     List<SpecificMaterial> findOneWithSpecification(
                                               @Param("id") Long id,
                                               @Param("specificProductName") String specificProductName,
